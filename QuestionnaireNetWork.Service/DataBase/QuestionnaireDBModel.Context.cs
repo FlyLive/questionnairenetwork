@@ -13,10 +13,10 @@ namespace QuestionnaireNetWork.Service.DataBase
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class QuestionnaireDBEntities : DbContext
+    public partial class QuestionnaireDBContext : DbContext
     {
-        public QuestionnaireDBEntities()
-            : base("name=QuestionnaireDBEntities")
+        public QuestionnaireDBContext()
+            : base("name=QuestionnaireDBContext")
         {
         }
     

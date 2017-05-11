@@ -392,7 +392,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="QuestionnaireDBEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="QuestionnaireDBContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Admin" EntityType="Self.Admin" />
           <EntitySet Name="Answer" EntityType="Self.Answer" />
           <EntitySet Name="ChoiceAnswerOptions" EntityType="Self.ChoiceAnswerOptions" />
@@ -439,7 +439,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="QuestionnaireDBModelStoreContainer" CdmEntityContainer="QuestionnaireDBEntities">
+        <EntityContainerMapping StorageEntityContainer="QuestionnaireDBModelStoreContainer" CdmEntityContainer="QuestionnaireDBContext">
           <EntitySetMapping Name="Admin">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Admin">
               <MappingFragment StoreEntitySet="Admin">

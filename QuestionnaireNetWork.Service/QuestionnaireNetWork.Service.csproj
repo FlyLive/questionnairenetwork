@@ -95,32 +95,30 @@
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="DataBase\QuestionnaireDBModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireDBModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
     <None Include="DataBase\QuestionnaireDBModel.edmx.diagram">
       <DependentUpon>QuestionnaireDBModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="DataBase\QuestionnaireDBModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>QuestionnaireDBModel.Context.cs</LastGenOutput>
       <DependentUpon>QuestionnaireDBModel.edmx</DependentUpon>
+      <LastGenOutput>QuestionnaireDBModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="DataBase\QuestionnaireDBModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>QuestionnaireDBModel.edmx</DependentUpon>
       <LastGenOutput>QuestionnaireDBModel.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
