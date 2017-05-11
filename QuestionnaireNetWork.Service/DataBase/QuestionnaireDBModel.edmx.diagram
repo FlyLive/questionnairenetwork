@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0903185adff04e0e81d0033508b17b6d" Name="Diagram1">
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Admin" Width="1.5" PointX="7.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Answer" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.ChoiceAnswerOptions" Width="1.5" PointX="7.5" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.ChoiceQuestion" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Completion" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.CompletionAnswerOptions" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Option" Width="1.5" PointX="5.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Questionnaire" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_OPTION" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_CHOICEQU_REFERENCE_QUESTION" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_OPTION_REFERENCE_CHOICEQU" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI" ManuallyRouted="false" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
