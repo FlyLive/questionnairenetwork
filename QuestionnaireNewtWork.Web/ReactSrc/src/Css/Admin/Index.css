@@ -1,0 +1,42 @@
+﻿#content {
+    background-image: url("../../images/diagonal-stripe.png");
+}
+
+ul li {
+    list-style: none;
+}
+
+.navbar-header {
+    float: left;
+}
+
+.navbar-header a {
+    font-size: 25px;
+    padding-left: 20px;
+    font-family: "Work Sans", Arial, sans-serif;
+    color: white;
+}
+
+.menu {
+    background-color: #4ea5d6;
+}
+
+.menu ul {
+    text-align: right;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.menu li:hover {
+    background-color: #2d8abf;
+}
+
+.menu li a {
+    color: white;
+}

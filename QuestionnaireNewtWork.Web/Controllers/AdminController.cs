@@ -21,6 +21,17 @@ namespace QuestionnaireNewtWork.Web.Controllers
         }
 
         [HttpGet]
+        public ActionResult Registe()
+        {
+            return View();
+        }
+
+        public ActionResult Registe(string account,string password)
+        {
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
         public ActionResult AdminCenter()
         {
             return View();
