@@ -1,4 +1,5 @@
 var path = require('path');
+var proxy = require('http-proxy-middleware')
 const { resolve } = require('path');
 const webpack = require('webpack');
 
@@ -13,6 +14,16 @@ module.exports = {
     devServer: {
         hot: true,
         // 开启服务器的模块热替换（HMR）
+        /* 自定义端口 */
+        // host: 'localhost',
+        // port: '3011',
+        /* 前端跨域 */
+        // proxy: {
+        //     '/': {
+        //         target: 'http://localhost:50979',
+        //         secure: false
+        //     }
+        // }
     },
     module: {
         loaders: [
@@ -21,6 +32,11 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        }),
         new webpack.HotModuleReplacementPlugin(),
         // 开启全局的模块热替换（HMR）
 

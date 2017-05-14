@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-
 class Footer extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {liked : false};
+        this.state = { liked: false };
     }
 
-    handleClick(e){
-        this.setState({liked:!this.state.liked});
+    handleClick(e) {
+        this.setState({ liked: !this.state.liked });
     }
 
-    render(){
+    render() {
         const text = this.state.liked ? 'like' : 'haven\'t liked';
-        return(
-            <p onClick={this.handleClick.bind(this)}>
-                You {text} this. Click to toggle.
-            </p>
+        return (
+            <div className="footer">
+                <p onClick={this.handleClick.bind(this)}>
+                    You {text} this. Click to toggle.
+                </p>
+            </div>
         );
     }
 }
 
-render(
-    <Footer />,
-);
+module.exports = Footer;
