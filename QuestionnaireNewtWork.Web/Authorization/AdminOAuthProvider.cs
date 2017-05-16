@@ -43,27 +43,36 @@ namespace QuestionnaireNewtWork.Web.Authorization
         {
             var identity = new ClaimsIdentity("JWT");
             identity.AddClaim(new Claim("account", account));
-            identity.AddClaim(new Claim("nickName", nick));
+            identity.AddClaim(new Claim("nick", nick));
             return identity;
         }
 
         private static bool CheckCredential(string account, string password, out string nick)
         {
-            AdminService adminService = new AdminService();
+            //    AdminService adminService = new AdminService();
             var success = false;
             // 用户名和密码验证
-            var admin = adminService.Login(account, password);
-            if(admin != null)
+            //var admin = adminService.Login(account, password);
+            //if(admin != null)
+            //{
+            //    AdminViewModel adminVM = new AdminViewModel
+            //    {
+            //        Account = admin.Account,
+            //        Password = admin.Password,
+            //        NickName = admin.Nickname
+            //    };
+            //    account = adminVM.Account;
+            //    password = adminVM.Password;
+            //    nick = adminVM.NickName;
+            //    success = true;
+            //}
+            //else
+            //{
+            //    nick = "";
+            //}
+            if (account == "admin" && password == "admin")
             {
-                AdminViewModel adminVM = new AdminViewModel
-                {
-                    Account = admin.Account,
-                    Password = admin.Password,
-                    NickName = admin.Nickname
-                };
-                account = adminVM.Account;
-                password = adminVM.Password;
-                nick = adminVM.NickName;
+                nick = "1";
                 success = true;
             }
             else

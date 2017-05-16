@@ -16,7 +16,7 @@ namespace QuestionnaireNetWork.Service.DataBase
     {
         public int Id { get; set; }
         public Nullable<int> AnswerId { get; set; }
-        public Nullable<int> QuestionId { get; set; }
+        public Nullable<int> ChoiceId { get; set; }
         public Nullable<int> OptionId { get; set; }
     
         public virtual Answer Answer { get; set; }

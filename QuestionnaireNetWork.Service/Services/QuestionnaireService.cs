@@ -15,20 +15,278 @@ namespace QuestionnaireNetWork.Service.Services
         {
             _db = new QuestionnaireDBContext();
         }
-        
-        public Questionnaire CreateQuest()
+
+        public bool SubmitQuest(int questId)
         {
-            Questionnaire quest = null;
-            _db.Questionnaire.Add(quest);
             _db.SaveChanges();
-            return quest;
+            return true;
         }
-        
-        public Questionnaire ModifyQuest(int questId)
+
+        #region 选择题选项
+        public Option GetOptionById(int id)
+        {
+            Option option = _db.Option.SingleOrDefault(c => c.OptionId == id);
+            return option;
+        }
+
+        public List<Option> GetAllOptionByCQId(int cqId)
+        {
+            ChoiceQuestion choice = GetChoiceQuestionById(cqId);
+            List<Option> options = choice.Option.ToList();
+            return options;
+        }
+
+        public bool CreateOption(int choiceId, string content)
+        {
+            try
+            {
+                _db.Option.Add(new Option
+                {
+                    ChoiceId = choiceId,
+                    OptionContent = content,
+                });
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        public bool ModifyOption(int id, string content)
+        {
+            try
+            {
+                Option option = GetOptionById(id);
+                option.OptionContent = content;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        public bool DeletOption(int id)
+        {
+            try
+            {
+                Option option = GetOptionById(id);
+                _db.Option.Remove(option);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        #region 选择题
+        public ChoiceQuestion GetChoiceQuestionById(int id)
+        {
+            ChoiceQuestion question = _db.ChoiceQuestion
+                .Include("Option")
+                .SingleOrDefault(c => c.ChoiceId == id);
+            return question;
+        }
+
+        public List<ChoiceQuestion> GetAllChoiceQuestion(int questId)
         {
             Questionnaire quest = GetQuestByQuestId(questId);
-            _db.SaveChanges();
-            return quest;
+            List<ChoiceQuestion> questions = quest.ChoiceQuestion.ToList();
+            return questions;
+        }
+
+        public bool CreateChoiceQuestion(int questId,string title,bool type)
+        {
+            try
+            {
+                _db.ChoiceQuestion.Add(new ChoiceQuestion
+                {
+                    Title = title,
+                    Type = type
+                });
+                _db.SaveChanges();
+            }catch(Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        public bool ModifyChoiceQuestion(int id,string title,bool type)
+        {
+            try
+            {
+                ChoiceQuestion choice = GetChoiceQuestionById(id);
+                choice.Title = title;
+                choice.Type = type;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        public bool DeletChoiceQuestion(int id)
+        {
+            try
+            {
+                ChoiceQuestion choice = GetChoiceQuestionById(id);
+                _db.ChoiceQuestion.Remove(choice);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        #region 简答题
+        public List<Completion> GetAllCompletion(int questId)
+        {
+            Questionnaire quest = GetQuestByQuestId(questId);
+            List<Completion> completions = quest.Completion.ToList();
+            return completions;
+        }
+
+        public Completion GetCompletionById(int id)
+        {
+            Completion completion = _db.Completion.SingleOrDefault(c => c.CompletionId == id);
+            return completion;
+        }
+
+        public bool CreateCompletion(int questId,string title)
+        {
+            try
+            {
+                _db.Completion.Add(new Completion
+                {
+                    Qid = questId,
+                    Title = title,
+                });
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        public bool ModifyCompletion(int id, string title)
+        {
+            try
+            {
+                Completion completion = GetCompletionById(id);
+                completion.Title = title;
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        public bool DeletCompletion(int id)
+        {
+            try
+            {
+                Completion completion = GetCompletionById(id);
+                _db.Completion.Remove(completion);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+        #endregion
+        
+        #region 问卷
+        /// <summary>
+        /// 获取问卷的现有问题数
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public int GetQuestNumByQuestId(int id)
+        {
+            var choice = GetQuestByQuestId(id);
+            int count = choice.ChoiceQuestion.Count + choice.Completion.Count;
+            return count;
+        }
+
+        /// <summary>
+        /// 创建问卷
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="maxNum"></param>
+        /// <returns></returns>
+        public bool CreateQuest(string title, int? maxNum)
+        {
+            try
+            {
+                _db.Questionnaire.Add(new Questionnaire
+                {
+                    Title = title,
+                    MaxQuestNum = maxNum < 30 ? (int)maxNum : 30,
+                    CreateTime = new DateTime(),
+                });
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 修改问卷
+        /// </summary>
+        /// <param name="questId"></param>
+        /// <param name="title"></param>
+        /// <param name="maxNum"></param>
+        /// <returns></returns>
+        public bool ModifyQuest(int questId, string title, int? maxNum)
+        {
+            try
+            {
+                int currentNum = GetQuestNumByQuestId(questId);
+                maxNum = maxNum < currentNum ? currentNum : maxNum;
+
+                Questionnaire quest = GetQuestByQuestId(questId);
+                quest.Title = title;
+                quest.MaxQuestNum = maxNum < 30 ? (int)maxNum : 30;
+
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -39,18 +297,12 @@ namespace QuestionnaireNetWork.Service.Services
         public bool DeletQuest(int questId)
         {
             var quest = GetQuestByQuestId(questId);
-            if(quest != null)
+            if (quest != null)
             {
                 _db.Questionnaire.Remove(quest);
                 _db.SaveChanges();
             }
             return false;
-        }
-
-        public bool SubmitQuest(int questId)
-        {
-            _db.SaveChanges();
-            return true;
         }
 
         /// <summary>
@@ -69,8 +321,12 @@ namespace QuestionnaireNetWork.Service.Services
         /// <returns></returns>
         public Questionnaire GetQuestByQuestId(int questId)
         {
-            var quest = _db.Questionnaire.SingleOrDefault(q => q.Qid == questId);
+            var quest = _db.Questionnaire
+                .Include("ChoiceQuestion")
+                .Include("Completion")
+                .SingleOrDefault(q => q.Qid == questId);
             return quest;
         }
+        #endregion
     }
 }

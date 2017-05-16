@@ -211,6 +211,7 @@
     <Compile Include="Authorization\AdminJwtFormat.cs" />
     <Compile Include="Authorization\AdminOAuthProvider.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />

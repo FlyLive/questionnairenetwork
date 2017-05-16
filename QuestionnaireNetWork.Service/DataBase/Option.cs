@@ -21,8 +21,8 @@ namespace QuestionnaireNetWork.Service.DataBase
         }
     
         public int OptionId { get; set; }
-        public Nullable<int> QuestionId { get; set; }
-        public string OptionContent_选项内容_ { get; set; }
+        public int ChoiceId { get; set; }
+        public string OptionContent { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChoiceAnswerOptions> ChoiceAnswerOptions { get; set; }

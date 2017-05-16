@@ -22,7 +22,9 @@ namespace QuestionnaireNetWork.Service.DataBase
         }
     
         public int Qid { get; set; }
-        public Nullable<System.DateTime> CreateTime { get; set; }
+        public System.DateTime CreateTime { get; set; }
+        public string Title { get; set; }
+        public int MaxQuestNum { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChoiceQuestion> ChoiceQuestion { get; set; }

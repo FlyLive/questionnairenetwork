@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 class Total extends Component{
     render(){
         return (
-            <div>Total</div>
+            <div>统计</div>
         );
     }
 }

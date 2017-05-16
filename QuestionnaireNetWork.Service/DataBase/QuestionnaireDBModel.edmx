@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="QuestionnaireDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="QuestionnaireDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Account" />
@@ -27,14 +27,14 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AnswerId" Type="int" />
-          <Property Name="QuestionId" Type="int" />
+          <Property Name="ChoiceId" Type="int" />
           <Property Name="OptionId" Type="int" />
         </EntityType>
         <EntityType Name="ChoiceQuestion">
           <Key>
-            <PropertyRef Name="QuestionId" />
+            <PropertyRef Name="ChoiceId" />
           </Key>
-          <Property Name="QuestionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChoiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Qid" Type="int" />
           <Property Name="Title" Type="nvarchar" MaxLength="200" />
           <Property Name="Type" Type="bit" />
@@ -61,15 +61,17 @@
             <PropertyRef Name="OptionId" />
           </Key>
           <Property Name="OptionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="QuestionId" Type="int" />
-          <Property Name="OptionContent(选项内容)" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChoiceId" Type="int" Nullable="false" />
+          <Property Name="OptionContent" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Questionnaire">
           <Key>
             <PropertyRef Name="Qid" />
           </Key>
           <Property Name="Qid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaxQuestNum" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_CHOICEAN_REFERENCE_ANSWER">
           <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
@@ -88,10 +90,10 @@
           <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ChoiceQuestion">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Principal>
             <Dependent Role="ChoiceAnswerOptions">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -156,14 +158,14 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OPTION_REFERENCE_CHOICEQU">
-          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="0..1" />
+          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="1" />
           <End Role="Option" Type="Self.Option" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ChoiceQuestion">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Principal>
             <Dependent Role="Option">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -209,16 +211,57 @@
             <End Role="Option" EntitySet="Option" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QuestionnaireDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="QuestionnaireDBContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Admin" EntityType="QuestionnaireDBModel.Admin" />
+          <EntitySet Name="Answer" EntityType="QuestionnaireDBModel.Answer" />
+          <EntitySet Name="ChoiceAnswerOptions" EntityType="QuestionnaireDBModel.ChoiceAnswerOptions" />
+          <EntitySet Name="ChoiceQuestion" EntityType="QuestionnaireDBModel.ChoiceQuestion" />
+          <EntitySet Name="Completion" EntityType="QuestionnaireDBModel.Completion" />
+          <EntitySet Name="CompletionAnswerOptions" EntityType="QuestionnaireDBModel.CompletionAnswerOptions" />
+          <EntitySet Name="Option" EntityType="QuestionnaireDBModel.Option" />
+          <EntitySet Name="Questionnaire" EntityType="QuestionnaireDBModel.Questionnaire" />
+          <AssociationSet Name="FK_CHOICEAN_REFERENCE_ANSWER" Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER">
+            <End Role="Answer" EntitySet="Answer" />
+            <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COMPLETI_REFERENCE_ANSWER" Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER">
+            <End Role="Answer" EntitySet="Answer" />
+            <End Role="CompletionAnswerOptions" EntitySet="CompletionAnswerOptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CHOICEAN_REFERENCE_CHOICEQU" Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU">
+            <End Role="ChoiceQuestion" EntitySet="ChoiceQuestion" />
+            <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CHOICEAN_REFERENCE_OPTION" Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_OPTION">
+            <End Role="Option" EntitySet="Option" />
+            <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CHOICEQU_REFERENCE_QUESTION" Association="QuestionnaireDBModel.FK_CHOICEQU_REFERENCE_QUESTION">
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+            <End Role="ChoiceQuestion" EntitySet="ChoiceQuestion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OPTION_REFERENCE_CHOICEQU" Association="QuestionnaireDBModel.FK_OPTION_REFERENCE_CHOICEQU">
+            <End Role="ChoiceQuestion" EntitySet="ChoiceQuestion" />
+            <End Role="Option" EntitySet="Option" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COMPLETI_REFERENCE_COMPLETI" Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI">
+            <End Role="Completion" EntitySet="Completion" />
+            <End Role="CompletionAnswerOptions" EntitySet="CompletionAnswerOptions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_COMPLETI_REFERENCE_QUESTION" Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION">
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+            <End Role="Completion" EntitySet="Completion" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="Admin">
           <Key>
             <PropertyRef Name="Account" />
           </Key>
-          <Property Name="Account" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Account" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Nickname" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
@@ -229,8 +272,8 @@
           <Property Name="AnswerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IpAddress" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="CreateTime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ChoiceAnswerOptions" Relationship="Self.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="Answer" ToRole="ChoiceAnswerOptions" />
-          <NavigationProperty Name="CompletionAnswerOptions" Relationship="Self.FK_COMPLETI_REFERENCE_ANSWER" FromRole="Answer" ToRole="CompletionAnswerOptions" />
+          <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="Answer" ToRole="ChoiceAnswerOptions" />
+          <NavigationProperty Name="CompletionAnswerOptions" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" FromRole="Answer" ToRole="CompletionAnswerOptions" />
         </EntityType>
         <EntityType Name="ChoiceAnswerOptions">
           <Key>
@@ -238,23 +281,23 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AnswerId" Type="Int32" />
-          <Property Name="QuestionId" Type="Int32" />
+          <Property Name="ChoiceId" Type="Int32" />
           <Property Name="OptionId" Type="Int32" />
-          <NavigationProperty Name="Answer" Relationship="Self.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="ChoiceAnswerOptions" ToRole="Answer" />
-          <NavigationProperty Name="ChoiceQuestion" Relationship="Self.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceAnswerOptions" ToRole="ChoiceQuestion" />
-          <NavigationProperty Name="Option" Relationship="Self.FK_CHOICEAN_REFERENCE_OPTION" FromRole="ChoiceAnswerOptions" ToRole="Option" />
+          <NavigationProperty Name="Answer" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="ChoiceAnswerOptions" ToRole="Answer" />
+          <NavigationProperty Name="ChoiceQuestion" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceAnswerOptions" ToRole="ChoiceQuestion" />
+          <NavigationProperty Name="Option" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_OPTION" FromRole="ChoiceAnswerOptions" ToRole="Option" />
         </EntityType>
         <EntityType Name="ChoiceQuestion">
           <Key>
-            <PropertyRef Name="QuestionId" />
+            <PropertyRef Name="ChoiceId" />
           </Key>
-          <Property Name="QuestionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Qid" Type="Int32" />
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Boolean" />
-          <NavigationProperty Name="ChoiceAnswerOptions" Relationship="Self.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="ChoiceAnswerOptions" />
-          <NavigationProperty Name="Questionnaire" Relationship="Self.FK_CHOICEQU_REFERENCE_QUESTION" FromRole="ChoiceQuestion" ToRole="Questionnaire" />
-          <NavigationProperty Name="Option" Relationship="Self.FK_OPTION_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="Option" />
+          <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="ChoiceAnswerOptions" />
+          <NavigationProperty Name="Questionnaire" Relationship="QuestionnaireDBModel.FK_CHOICEQU_REFERENCE_QUESTION" FromRole="ChoiceQuestion" ToRole="Questionnaire" />
+          <NavigationProperty Name="Option" Relationship="QuestionnaireDBModel.FK_OPTION_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="Option" />
         </EntityType>
         <EntityType Name="Completion">
           <Key>
@@ -263,8 +306,8 @@
           <Property Name="CompletionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Qid" Type="Int32" />
           <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="CompletionAnswerOptions" Relationship="Self.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="Completion" ToRole="CompletionAnswerOptions" />
-          <NavigationProperty Name="Questionnaire" Relationship="Self.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Completion" ToRole="Questionnaire" />
+          <NavigationProperty Name="CompletionAnswerOptions" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="Completion" ToRole="CompletionAnswerOptions" />
+          <NavigationProperty Name="Questionnaire" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Completion" ToRole="Questionnaire" />
         </EntityType>
         <EntityType Name="CompletionAnswerOptions">
           <Key>
@@ -274,31 +317,33 @@
           <Property Name="CompletionId" Type="Int32" />
           <Property Name="AnswerContent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AnswerId" Type="Int32" />
-          <NavigationProperty Name="Answer" Relationship="Self.FK_COMPLETI_REFERENCE_ANSWER" FromRole="CompletionAnswerOptions" ToRole="Answer" />
-          <NavigationProperty Name="Completion" Relationship="Self.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="CompletionAnswerOptions" ToRole="Completion" />
+          <NavigationProperty Name="Answer" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" FromRole="CompletionAnswerOptions" ToRole="Answer" />
+          <NavigationProperty Name="Completion" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="CompletionAnswerOptions" ToRole="Completion" />
         </EntityType>
         <EntityType Name="Option">
           <Key>
             <PropertyRef Name="OptionId" />
           </Key>
           <Property Name="OptionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="QuestionId" Type="Int32" />
-          <Property Name="OptionContent_选项内容_" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ChoiceAnswerOptions" Relationship="Self.FK_CHOICEAN_REFERENCE_OPTION" FromRole="Option" ToRole="ChoiceAnswerOptions" />
-          <NavigationProperty Name="ChoiceQuestion" Relationship="Self.FK_OPTION_REFERENCE_CHOICEQU" FromRole="Option" ToRole="ChoiceQuestion" />
+          <Property Name="ChoiceId" Type="Int32" Nullable="false" />
+          <Property Name="OptionContent" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_OPTION" FromRole="Option" ToRole="ChoiceAnswerOptions" />
+          <NavigationProperty Name="ChoiceQuestion" Relationship="QuestionnaireDBModel.FK_OPTION_REFERENCE_CHOICEQU" FromRole="Option" ToRole="ChoiceQuestion" />
         </EntityType>
         <EntityType Name="Questionnaire">
           <Key>
             <PropertyRef Name="Qid" />
           </Key>
           <Property Name="Qid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreateTime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ChoiceQuestion" Relationship="Self.FK_CHOICEQU_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="ChoiceQuestion" />
-          <NavigationProperty Name="Completion" Relationship="Self.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="Completion" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MaxQuestNum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ChoiceQuestion" Relationship="QuestionnaireDBModel.FK_CHOICEQU_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="ChoiceQuestion" />
+          <NavigationProperty Name="Completion" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="Completion" />
         </EntityType>
         <Association Name="FK_CHOICEAN_REFERENCE_ANSWER">
-          <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
-          <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
               <PropertyRef Name="AnswerId" />
@@ -309,8 +354,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_ANSWER">
-          <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
-          <End Role="CompletionAnswerOptions" Type="Self.CompletionAnswerOptions" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.CompletionAnswerOptions" Role="CompletionAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
               <PropertyRef Name="AnswerId" />
@@ -321,20 +366,20 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_CHOICEQU">
-          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="0..1" />
-          <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ChoiceQuestion">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Principal>
             <Dependent Role="ChoiceAnswerOptions">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_OPTION">
-          <End Role="Option" Type="Self.Option" Multiplicity="0..1" />
-          <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.Option" Role="Option" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Option">
               <PropertyRef Name="OptionId" />
@@ -345,8 +390,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEQU_REFERENCE_QUESTION">
-          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="0..1" />
-          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
               <PropertyRef Name="Qid" />
@@ -357,20 +402,20 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OPTION_REFERENCE_CHOICEQU">
-          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="0..1" />
-          <End Role="Option" Type="Self.Option" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="1" />
+          <End Type="QuestionnaireDBModel.Option" Role="Option" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ChoiceQuestion">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Principal>
             <Dependent Role="Option">
-              <PropertyRef Name="QuestionId" />
+              <PropertyRef Name="ChoiceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_COMPLETI">
-          <End Role="Completion" Type="Self.Completion" Multiplicity="0..1" />
-          <End Role="CompletionAnswerOptions" Type="Self.CompletionAnswerOptions" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.Completion" Role="Completion" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.CompletionAnswerOptions" Role="CompletionAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Completion">
               <PropertyRef Name="CompletionId" />
@@ -381,8 +426,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_QUESTION">
-          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="0..1" />
-          <End Role="Completion" Type="Self.Completion" Multiplicity="*" />
+          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Completion" Role="Completion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
               <PropertyRef Name="Qid" />
@@ -392,49 +437,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="QuestionnaireDBContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Admin" EntityType="Self.Admin" />
-          <EntitySet Name="Answer" EntityType="Self.Answer" />
-          <EntitySet Name="ChoiceAnswerOptions" EntityType="Self.ChoiceAnswerOptions" />
-          <EntitySet Name="ChoiceQuestion" EntityType="Self.ChoiceQuestion" />
-          <EntitySet Name="Completion" EntityType="Self.Completion" />
-          <EntitySet Name="CompletionAnswerOptions" EntityType="Self.CompletionAnswerOptions" />
-          <EntitySet Name="Option" EntityType="Self.Option" />
-          <EntitySet Name="Questionnaire" EntityType="Self.Questionnaire" />
-          <AssociationSet Name="FK_CHOICEAN_REFERENCE_ANSWER" Association="Self.FK_CHOICEAN_REFERENCE_ANSWER">
-            <End Role="Answer" EntitySet="Answer" />
-            <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_COMPLETI_REFERENCE_ANSWER" Association="Self.FK_COMPLETI_REFERENCE_ANSWER">
-            <End Role="Answer" EntitySet="Answer" />
-            <End Role="CompletionAnswerOptions" EntitySet="CompletionAnswerOptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CHOICEAN_REFERENCE_CHOICEQU" Association="Self.FK_CHOICEAN_REFERENCE_CHOICEQU">
-            <End Role="ChoiceQuestion" EntitySet="ChoiceQuestion" />
-            <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CHOICEAN_REFERENCE_OPTION" Association="Self.FK_CHOICEAN_REFERENCE_OPTION">
-            <End Role="Option" EntitySet="Option" />
-            <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_CHOICEQU_REFERENCE_QUESTION" Association="Self.FK_CHOICEQU_REFERENCE_QUESTION">
-            <End Role="Questionnaire" EntitySet="Questionnaire" />
-            <End Role="ChoiceQuestion" EntitySet="ChoiceQuestion" />
-          </AssociationSet>
-          <AssociationSet Name="FK_OPTION_REFERENCE_CHOICEQU" Association="Self.FK_OPTION_REFERENCE_CHOICEQU">
-            <End Role="ChoiceQuestion" EntitySet="ChoiceQuestion" />
-            <End Role="Option" EntitySet="Option" />
-          </AssociationSet>
-          <AssociationSet Name="FK_COMPLETI_REFERENCE_COMPLETI" Association="Self.FK_COMPLETI_REFERENCE_COMPLETI">
-            <End Role="Completion" EntitySet="Completion" />
-            <End Role="CompletionAnswerOptions" EntitySet="CompletionAnswerOptions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_COMPLETI_REFERENCE_QUESTION" Association="Self.FK_COMPLETI_REFERENCE_QUESTION">
-            <End Role="Questionnaire" EntitySet="Questionnaire" />
-            <End Role="Completion" EntitySet="Completion" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -443,74 +446,76 @@
           <EntitySetMapping Name="Admin">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Admin">
               <MappingFragment StoreEntitySet="Admin">
-                <ScalarProperty Name="Account" ColumnName="Account" />
-                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Answer">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Answer">
               <MappingFragment StoreEntitySet="Answer">
-                <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
-                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ChoiceAnswerOptions">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.ChoiceAnswerOptions">
               <MappingFragment StoreEntitySet="ChoiceAnswerOptions">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
                 <ScalarProperty Name="OptionId" ColumnName="OptionId" />
+                <ScalarProperty Name="ChoiceId" ColumnName="ChoiceId" />
+                <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ChoiceQuestion">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.ChoiceQuestion">
               <MappingFragment StoreEntitySet="ChoiceQuestion">
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="Qid" ColumnName="Qid" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Qid" ColumnName="Qid" />
+                <ScalarProperty Name="ChoiceId" ColumnName="ChoiceId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Completion">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Completion">
               <MappingFragment StoreEntitySet="Completion">
-                <ScalarProperty Name="CompletionId" ColumnName="CompletionId" />
-                <ScalarProperty Name="Qid" ColumnName="Qid" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Qid" ColumnName="Qid" />
+                <ScalarProperty Name="CompletionId" ColumnName="CompletionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CompletionAnswerOptions">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.CompletionAnswerOptions">
               <MappingFragment StoreEntitySet="CompletionAnswerOptions">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CompletionId" ColumnName="CompletionId" />
-                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
                 <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
+                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
+                <ScalarProperty Name="CompletionId" ColumnName="CompletionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Option">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Option">
               <MappingFragment StoreEntitySet="Option">
+                <ScalarProperty Name="OptionContent" ColumnName="OptionContent" />
+                <ScalarProperty Name="ChoiceId" ColumnName="ChoiceId" />
                 <ScalarProperty Name="OptionId" ColumnName="OptionId" />
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="OptionContent_选项内容_" ColumnName="OptionContent(选项内容)" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Questionnaire">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Questionnaire">
               <MappingFragment StoreEntitySet="Questionnaire">
-                <ScalarProperty Name="Qid" ColumnName="Qid" />
+                <ScalarProperty Name="MaxQuestNum" ColumnName="MaxQuestNum" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Qid" ColumnName="Qid" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

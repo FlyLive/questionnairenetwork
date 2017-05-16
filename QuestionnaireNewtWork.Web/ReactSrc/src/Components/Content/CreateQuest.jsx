@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 
-class CreateQuest extends Component{
-
-    render(){
-        return(
+class CreateQuest extends Component {
+    render() {
+        return (
             <div>
-                CreateQuest
+                创建问卷
+                <div>
+                </div>
             </div>
         );
     }

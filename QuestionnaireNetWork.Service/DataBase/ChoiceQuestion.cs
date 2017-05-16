@@ -21,7 +21,7 @@ namespace QuestionnaireNetWork.Service.DataBase
             this.Option = new HashSet<Option>();
         }
     
-        public int QuestionId { get; set; }
+        public int ChoiceId { get; set; }
         public Nullable<int> Qid { get; set; }
         public string Title { get; set; }
         public Nullable<bool> Type { get; set; }

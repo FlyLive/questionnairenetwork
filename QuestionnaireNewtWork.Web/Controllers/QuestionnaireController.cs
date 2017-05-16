@@ -12,37 +12,44 @@ namespace QuestionnaireNewtWork.Web.Controllers
     public class QuestionnaireController : ApiController
     {
         private QuestionnaireService _questService = new QuestionnaireService();
-        // GET api/<controller>
-        public List<Questionnaire> Get()
+        
+        [HttpGet]
+        public List<Questionnaire> GetAllQuest()
         {
             List<Questionnaire> quests = _questService.GetAllQuest();
             return quests;
         }
-
-        // GET api/<controller>/5
-        public Questionnaire Get(int id)
+        
+        [HttpGet]
+        public Questionnaire GetQuest(int id)
         {
             var quest = _questService.GetQuestByQuestId(id);
             return quest;
         }
 
-        // POST api/<controller>
-        [HttpPost]
-        public Questionnaire Post([FromBody]string value)
+        [HttpGet]
+        public int GetQuestNum(int id)
         {
-            var result = _questService.CreateQuest();
+            var count = _questService.GetQuestNumByQuestId(id);
+            return count;
+        }
+        
+        [HttpPost]
+        public bool CreateQuest(string title,int ? maxNum)
+        {
+            var result = _questService.CreateQuest(title,maxNum);
             return result;
         }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
+        
+        [HttpPost]
+        public bool ModifyQuest(int id, string title,int ? maxNum)
         {
-
+            var result = _questService.ModifyQuest(id,title,maxNum);
+            return result;
         }
-
-        // DELETE api/<controller>/5
+        
         [HttpDelete]
-        public bool Delete(int id)
+        public bool DeleteQuest(int id)
         {
             var result = _questService.DeletQuest(id);
             return result;
