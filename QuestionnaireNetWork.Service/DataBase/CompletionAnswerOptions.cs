@@ -15,9 +15,9 @@ namespace QuestionnaireNetWork.Service.DataBase
     public partial class CompletionAnswerOptions
     {
         public int Id { get; set; }
-        public Nullable<int> CompletionId { get; set; }
+        public int CompletionId { get; set; }
         public string AnswerContent { get; set; }
-        public Nullable<int> AnswerId { get; set; }
+        public int AnswerId { get; set; }
     
         public virtual Answer Answer { get; set; }
         public virtual Completion Completion { get; set; }

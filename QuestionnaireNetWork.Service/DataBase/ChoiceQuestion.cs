@@ -22,9 +22,9 @@ namespace QuestionnaireNetWork.Service.DataBase
         }
     
         public int ChoiceId { get; set; }
-        public Nullable<int> Qid { get; set; }
+        public int Qid { get; set; }
         public string Title { get; set; }
-        public Nullable<bool> Type { get; set; }
+        public bool Type { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChoiceAnswerOptions> ChoiceAnswerOptions { get; set; }

@@ -11,50 +11,50 @@
           </Key>
           <Property Name="Account" Type="nvarchar" MaxLength="15" Nullable="false" />
           <Property Name="Nickname" Type="nvarchar" MaxLength="10" />
-          <Property Name="Password" Type="nvarchar" MaxLength="20" />
+          <Property Name="Password" Type="nvarchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="AnswerId" />
           </Key>
           <Property Name="AnswerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IpAddress" Type="nvarchar" MaxLength="30" />
-          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="IpAddress" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ChoiceAnswerOptions">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="AnswerId" Type="int" />
-          <Property Name="ChoiceId" Type="int" />
-          <Property Name="OptionId" Type="int" />
+          <Property Name="AnswerId" Type="int" Nullable="false" />
+          <Property Name="ChoiceId" Type="int" Nullable="false" />
+          <Property Name="OptionId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ChoiceQuestion">
           <Key>
             <PropertyRef Name="ChoiceId" />
           </Key>
           <Property Name="ChoiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Qid" Type="int" />
-          <Property Name="Title" Type="nvarchar" MaxLength="200" />
-          <Property Name="Type" Type="bit" />
+          <Property Name="Qid" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Type" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Completion">
           <Key>
             <PropertyRef Name="CompletionId" />
           </Key>
           <Property Name="CompletionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Qid" Type="int" />
-          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="Qid" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
         </EntityType>
         <EntityType Name="CompletionAnswerOptions">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CompletionId" Type="int" />
-          <Property Name="AnswerContent" Type="nvarchar" MaxLength="200" />
-          <Property Name="AnswerId" Type="int" />
+          <Property Name="CompletionId" Type="int" Nullable="false" />
+          <Property Name="AnswerContent" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="AnswerId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Option">
           <Key>
@@ -74,7 +74,7 @@
           <Property Name="MaxQuestNum" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_CHOICEAN_REFERENCE_ANSWER">
-          <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="1" />
           <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
@@ -86,7 +86,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_CHOICEQU">
-          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="0..1" />
+          <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="1" />
           <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ChoiceQuestion">
@@ -98,7 +98,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_OPTION">
-          <End Role="Option" Type="Self.Option" Multiplicity="0..1" />
+          <End Role="Option" Type="Self.Option" Multiplicity="1" />
           <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Option">
@@ -110,7 +110,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEQU_REFERENCE_QUESTION">
-          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="0..1" />
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="1" />
           <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
@@ -122,7 +122,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_ANSWER">
-          <End Role="Answer" Type="Self.Answer" Multiplicity="0..1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="1" />
           <End Role="CompletionAnswerOptions" Type="Self.CompletionAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
@@ -134,7 +134,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_COMPLETI">
-          <End Role="Completion" Type="Self.Completion" Multiplicity="0..1" />
+          <End Role="Completion" Type="Self.Completion" Multiplicity="1" />
           <End Role="CompletionAnswerOptions" Type="Self.CompletionAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Completion">
@@ -146,7 +146,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_QUESTION">
-          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="0..1" />
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="1" />
           <End Role="Completion" Type="Self.Completion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
@@ -263,15 +263,15 @@
           </Key>
           <Property Name="Account" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="Nickname" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Answer">
           <Key>
             <PropertyRef Name="AnswerId" />
           </Key>
           <Property Name="AnswerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IpAddress" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
-          <Property Name="CreateTime" Type="DateTime" Precision="3" />
+          <Property Name="IpAddress" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="Answer" ToRole="ChoiceAnswerOptions" />
           <NavigationProperty Name="CompletionAnswerOptions" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" FromRole="Answer" ToRole="CompletionAnswerOptions" />
         </EntityType>
@@ -280,9 +280,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AnswerId" Type="Int32" />
-          <Property Name="ChoiceId" Type="Int32" />
-          <Property Name="OptionId" Type="Int32" />
+          <Property Name="AnswerId" Type="Int32" Nullable="false" />
+          <Property Name="ChoiceId" Type="Int32" Nullable="false" />
+          <Property Name="OptionId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Answer" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="ChoiceAnswerOptions" ToRole="Answer" />
           <NavigationProperty Name="ChoiceQuestion" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceAnswerOptions" ToRole="ChoiceQuestion" />
           <NavigationProperty Name="Option" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_OPTION" FromRole="ChoiceAnswerOptions" ToRole="Option" />
@@ -292,9 +292,9 @@
             <PropertyRef Name="ChoiceId" />
           </Key>
           <Property Name="ChoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Qid" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Boolean" />
+          <Property Name="Qid" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="ChoiceAnswerOptions" />
           <NavigationProperty Name="Questionnaire" Relationship="QuestionnaireDBModel.FK_CHOICEQU_REFERENCE_QUESTION" FromRole="ChoiceQuestion" ToRole="Questionnaire" />
           <NavigationProperty Name="Option" Relationship="QuestionnaireDBModel.FK_OPTION_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="Option" />
@@ -304,8 +304,8 @@
             <PropertyRef Name="CompletionId" />
           </Key>
           <Property Name="CompletionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Qid" Type="Int32" />
-          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Qid" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CompletionAnswerOptions" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="Completion" ToRole="CompletionAnswerOptions" />
           <NavigationProperty Name="Questionnaire" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Completion" ToRole="Questionnaire" />
         </EntityType>
@@ -314,9 +314,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CompletionId" Type="Int32" />
-          <Property Name="AnswerContent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AnswerId" Type="Int32" />
+          <Property Name="CompletionId" Type="Int32" Nullable="false" />
+          <Property Name="AnswerContent" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AnswerId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Answer" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" FromRole="CompletionAnswerOptions" ToRole="Answer" />
           <NavigationProperty Name="Completion" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="CompletionAnswerOptions" ToRole="Completion" />
         </EntityType>
@@ -342,7 +342,7 @@
           <NavigationProperty Name="Completion" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="Completion" />
         </EntityType>
         <Association Name="FK_CHOICEAN_REFERENCE_ANSWER">
-          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
@@ -354,7 +354,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_ANSWER">
-          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.CompletionAnswerOptions" Role="CompletionAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Answer">
@@ -366,7 +366,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_CHOICEQU">
-          <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ChoiceQuestion">
@@ -378,7 +378,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_OPTION">
-          <End Type="QuestionnaireDBModel.Option" Role="Option" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Option" Role="Option" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Option">
@@ -390,7 +390,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_CHOICEQU_REFERENCE_QUESTION">
-          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
@@ -414,7 +414,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_COMPLETI">
-          <End Type="QuestionnaireDBModel.Completion" Role="Completion" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Completion" Role="Completion" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.CompletionAnswerOptions" Role="CompletionAnswerOptions" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Completion">
@@ -426,7 +426,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_COMPLETI_REFERENCE_QUESTION">
-          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="0..1" />
+          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.Completion" Role="Completion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">

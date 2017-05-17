@@ -15,9 +15,9 @@ namespace QuestionnaireNetWork.Service.DataBase
     public partial class ChoiceAnswerOptions
     {
         public int Id { get; set; }
-        public Nullable<int> AnswerId { get; set; }
-        public Nullable<int> ChoiceId { get; set; }
-        public Nullable<int> OptionId { get; set; }
+        public int AnswerId { get; set; }
+        public int ChoiceId { get; set; }
+        public int OptionId { get; set; }
     
         public virtual Answer Answer { get; set; }
         public virtual ChoiceQuestion ChoiceQuestion { get; set; }
