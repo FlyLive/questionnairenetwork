@@ -233,11 +233,42 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="ReactSrc\index.html" />
+    <Content Include="ReactSrc\src\build\95d64a3d5f5958f597b0a1003e927d3f.gif" />
+    <Content Include="ReactSrc\src\build\bundle.js" />
+    <Content Include="ReactSrc\src\build\dfd12f82cf16c17b673b22a56ab45f9e.jpg" />
+    <Content Include="ReactSrc\src\Components\Content\AdminInfo.jsx" />
+    <Content Include="ReactSrc\src\Components\Content\CreateQuest.jsx" />
+    <Content Include="ReactSrc\src\Components\Content\ModifyQuest.jsx" />
+    <Content Include="ReactSrc\src\Components\Content\Total.jsx" />
+    <Content Include="ReactSrc\src\Components\footer.jsx" />
+    <Content Include="ReactSrc\src\Components\header.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestionBox\CreateChoice.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestionBox\CreateCompletion.jsx" />
+    <Content Include="ReactSrc\src\Components\Questionnaire\Questionnaire.jsx" />
+    <Content Include="ReactSrc\src\Components\routerExample.jsx" />
+    <Content Include="ReactSrc\src\Components\Router\headRouter.jsx" />
+    <Content Include="ReactSrc\src\Css\Admin\AdminCenter.css" />
+    <Content Include="ReactSrc\src\Css\Admin\Index.css" />
+    <Content Include="ReactSrc\src\Css\Admin\Login.css" />
+    <Content Include="ReactSrc\src\Css\Admin\styles.css" />
+    <Content Include="ReactSrc\src\Css\Home\animate.css" />
+    <Content Include="ReactSrc\src\Css\Home\flexslider.css" />
+    <Content Include="ReactSrc\src\Css\Home\Home.css" />
+    <Content Include="ReactSrc\src\Css\Home\magnific-popup.css" />
+    <Content Include="ReactSrc\src\Css\Home\style.css" />
+    <Content Include="ReactSrc\src\entry.jsx" />
+    <Content Include="ReactSrc\src\Images\diagonal-stripe.png" />
+    <Content Include="ReactSrc\src\Images\img_bg_1.jpg" />
+    <Content Include="ReactSrc\src\Images\loader.gif" />
+    <Content Include="ReactSrc\webpack.config.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="ReactSrc\.babelrc" />
+    <Content Include="ReactSrc\package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -264,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="ReactSrc\src\Components\Reducers\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
