@@ -9,7 +9,7 @@ class Header extends Component {
                 <div className="navbar-header">
                     <a href="index.html" className="navbar-brand" data-section="body">云翳</a>
                 </div>
-                <HeadRouter></HeadRouter>
+                <HeadRouter/>
             </div>
         );
     };

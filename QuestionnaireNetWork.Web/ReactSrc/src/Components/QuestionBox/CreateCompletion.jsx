@@ -5,16 +5,25 @@ import { Form, Switch, Input, Button, Icon } from 'antd'
 const FormItem = Form.Item
 
 class CreateCompletion extends Component {
+    constructor(props){
+        super(props);
+        this.state={}
+    }
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                var questId = this.props.questId;
+                if(questId == undefined){
+                    message.error("出错啦");
+                    return false;
+                }
                 var title = values["title"];
 
                 $.ajax({
                     type: 'post',
                     url: '',
-                    data: {},
+                    data: {"questId":questId,"title":title},
                     success: function () {
 
                     },
@@ -52,5 +61,6 @@ class CreateCompletion extends Component {
         );
     }
 }
+
 
 export default Form.create()(CreateCompletion);

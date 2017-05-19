@@ -6,6 +6,12 @@ const FormItem = Form.Item
 
 let uuid = 1;
 class CreateChoice extends Component {
+    constructor(props){
+        super(props);
+        this.state={}
+    }
+    componentWillReceiveProps(props){
+    }
     remove(k) {
         const { form } = this.props;
         // can use data-binding to get
@@ -38,6 +44,11 @@ class CreateChoice extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
+                var questId = this.props.questId;
+                if(questId == undefined){
+                    message.error("出错啦");
+                    return false;
+                }
                 var title = values["title"];
                 var type = values["switch"] == true ? true : false;
 
@@ -49,7 +60,7 @@ class CreateChoice extends Component {
                 $.ajax({
                     type: 'post',
                     url: '',
-                    data: {},
+                    data: {"questId":questId,"title":title,"type":type},
                     success: function () {
 
                     },

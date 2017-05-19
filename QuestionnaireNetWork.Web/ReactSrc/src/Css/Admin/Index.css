@@ -2,6 +2,20 @@
     background-image: url("../../images/diagonal-stripe.png");
 }
 
+.app>.container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0 !important;
+}
+
+#main-menu>.router {
+    width: 80%;
+    margin: 5% auto 0 auto;
+}
+
+#main-menu>.router .ant-spin-nested-loading {
+    background-color: white;
+}
+
 .head {
     min-height: 630px;
 }
@@ -48,4 +62,20 @@ ul li {
 
 .menu li a:checked {
     text-decoration: none;
+}
+
+.custom-filter-dropdown {
+    padding: 8px;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+}
+
+.custom-filter-dropdown input {
+    width: 130px;
+    margin-right: 8px;
+}
+
+.highlight {
+    color: #f50;
 }
