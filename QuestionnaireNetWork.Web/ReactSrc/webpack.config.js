@@ -6,10 +6,12 @@ const webpack = require('webpack');
 module.exports = {
     entry: {
         "app": path.resolve(__dirname, "./src/entry.jsx"),
+        "admin": path.resolve(__dirname, "./src/Components/Content/AdminCenter.jsx"),
+        "questionnaire": path.resolve(__dirname, "./src/Components/Questionnaire/Questionnaire.jsx"),
     },
     output: {
         path: path.resolve(__dirname, "./src/build"),
-        filename: "bundle.js" // main.js || bundle.js || [name].js || index.js
+        filename: "[name].js" // main.js || bundle.js || [name].js || index.js
     },
     devServer: {
         hot: true,
@@ -27,7 +29,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /.(png)|(jpg)|(gif)$/, loader: 'url-loader?limit=8192' },
+            { test: /\.(png|jpg|gif|svg|mp4)$/, loader: 'file-loader' },
             { test: /\.js|jsx$/, exclude: /node_modules/, loaders: ['babel-loader'] },
             { test: /\.css$/, loader: 'style-loader!css-loader' },
         ]

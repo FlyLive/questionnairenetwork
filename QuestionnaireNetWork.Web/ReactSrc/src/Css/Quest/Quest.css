@@ -1,0 +1,52 @@
+.quest header {
+    background-image: url("../../Images/问卷1.jpg");
+    background-size: cover;
+    background-position: top center;
+    background-repeat: no-repeat;
+    height: 300px;
+}
+
+.quest-content,
+.quest header>div {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px 0px;
+}
+
+.quest-content {
+    margin: 30px auto;
+}
+
+.quest .title-content {
+    font-size: 40px;
+    color: white;
+    text-align: center;
+}
+
+.quest-info {
+    text-align: right;
+}
+
+.quest-content {
+    min-height: 800px;
+    background-color: white;
+}
+
+.web-title {
+    font-size: 24px;
+    font-weight: 800;
+}
+
+.web-title a {
+    margin: 0px 20px;
+    color: white;
+}
+
+.quest-title a:hover {
+    color: #108ee9;
+}
+
+.footer p {
+    margin: 0;
+    padding: 0;
+}

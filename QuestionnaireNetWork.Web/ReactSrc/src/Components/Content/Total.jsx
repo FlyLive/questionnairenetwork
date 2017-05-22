@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Input, Button, Icon, message, Table, Tabs, Progress, Badge } from 'antd'
 
+import ChartDetail from '../Content/ChartDetail.jsx'
+import DataDetail from '../Content/DataDetail.jsx'
+
 const TabPane = Tabs.TabPane
 
 const data = [{
@@ -102,12 +105,10 @@ class Total extends Component {
                 <Table /*rowKey="id"*/ columns={columns} dataSource={this.state.data} onRowClick={this.onSelected.bind(this)} bordered title={() => '查看问卷结果'} />
                 <Tabs defaultActiveKey="1">
                     <TabPane tab={<span><Icon type="pie-chart" />图表类</span>} key="1">
-                        <Badge count={5}>
-                        <Progress type="circle" percent={80} width={80}/>
-                        </Badge>
+                        <ChartDetail questId={this.state.selected}/>
                     </TabPane>
                     <TabPane tab={<span><Icon type="bars" />详细数据</span>} key="2">
-                        {this.state.selected}
+                        <DataDetail questId={this.state.selected} />
                     </TabPane>
                 </Tabs>
             </div>

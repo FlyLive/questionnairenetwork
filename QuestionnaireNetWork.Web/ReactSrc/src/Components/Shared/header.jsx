@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import HeadRouter from '../Components/Router/headRouter.jsx'
+import HeadRouter from '../Router/headRouter.jsx'
 
 class Header extends Component {
     render() {

@@ -62,7 +62,7 @@ class OptionDetail extends Component {
                 pagination={false}
                 scroll={{ y: 240 }}
                 size="small"
-                title={() => <p style={{ textAlign: "center" }}>选项</p>} />
+                title={() => <p style={{ textAlign: "center",margin:0 }}>选项</p>} />
         );
     }
 }

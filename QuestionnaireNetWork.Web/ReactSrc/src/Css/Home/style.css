@@ -5,24 +5,33 @@
 * ======================================================= */
 
 @media (min-width: 768px) {
-    .container {
+    .container,
+    .quest-menu {
         width: 750px;
     }
 }
 
 @media (min-width: 992px) {
-    .container {
+    .container,
+    .quest-menu {
         width: 970px;
     }
 }
 
 @media (min-width: 1200px) {
-    .container {
+    .container,
+    .quest-menu {
         width: 1170px;
     }
 }
 
-.container {
+.admin-center,
+.quest {
+    background-image: url("../../images/diagonal-stripe.png");
+}
+
+.container,
+.quest-menu {
     margin-right: auto;
     margin-left: auto;
     padding-left: 15px;
@@ -70,13 +79,16 @@ body {
 }
 
 a {
-    color: #EA9215;
-    -webkit-transition: 0.5s;
-    -o-transition: 0.5s;
-    transition: 0.5s;
+    color: #108ee9;
+    background: transparent;
     text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    transition: color .3s ease;
 }
 
+
+/*
 a:hover,
 a:active,
 a:focus {
@@ -87,7 +99,7 @@ a:focus {
 
 p {
     margin-bottom: 20px;
-}
+}*/
 
 h1,
 h2,
@@ -136,7 +148,7 @@ figure {
 }
 
 .fh5co-nav .top-menu {
-    padding: 28px 0;
+    padding: 14px 0;
 }
 
 .fh5co-nav .top {

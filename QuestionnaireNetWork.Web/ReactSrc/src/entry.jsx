@@ -1,24 +1,28 @@
-﻿import '../src/Css/Admin/AdminCenter.css'
+﻿import React, { Component } from 'react';
+import { render } from 'react-dom';
+import { Modal, Button, Input } from 'antd'
+import $ from 'jquery'
+import axios from 'axios'
+
+import Footer from '../src/Components/Shared/footer.jsx';
+import LoginModal from '../src/Components/Content/LoginModal.jsx'
+import QuestMenu from '../src/Components/Questionnaire/QuestMenu.jsx';
+
 import '../src/Css/Admin/Index.css'
-import '../src/Css/Admin/styles.css'
+import '../src/Css/Admin/Login.css'
 
 import '../src/Css/Home/animate.css'
 import '../src/Css/Home/style.css'
 import '../src/Css/Home/flexslider.css'
 import '../src/Css/Home/magnific-popup.css'
-import $ from 'jquery'
-import axios from 'axios'
-
-
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import Header from '../src/Components/header.jsx';
-import Footer from '../src/Components/footer.jsx';
 
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {data:true};
+        this.state = {
+            data: null,
+            visible: false,
+        };
     }
     componentDidMount() {
         // axios.get("http://localhost:50979/api/values")
@@ -41,24 +45,31 @@ class App extends Component {
         //     }.bind(this)
         // });
     }
-
+    onLogin(e) {
+        this.setState({ visible: true });
+    }
+    onCancleLogin(e) {
+        this.setState({ visible: false });
+    }
     render() {
-        const isLogin = this.state.data ? (
+        const isLogin = this.state.data === null ? (
             <ul>
-                <li className="active"><a href="#">主页</a></li>
-                <li><a href="#">管理中心</a></li>
-                <li><a href="#">问卷详情</a></li>
-                <li><a href="#">统计</a></li>
-                <li><a href="#">注销</a></li>
+                <li className="active"><a>主页</a></li>
+                <li><a>管理中心</a></li>
+                <li><a>问卷详情</a></li>
+                <li><a>统计</a></li>
+                <li><a>注销</a></li>
             </ul>
-            ) : (
-            <ul>
-                <li className="active"><a href="#">主页</a></li>
-                <li className="btn-cta"><a href="#"><span>Login</span></a></li>
-            </ul>);
+        ) : (
+                <ul>
+                    <li className="active"><a >主页</a></li>
+                    <li className="btn-cta" onClick={this.onLogin.bind(this)}><a><span>Login</span></a></li>
+                </ul>);
         return (
             <div className="app">
-                <Header></Header>
+                <Modal className="login-modal" wrapClassName="vertical-center-modal" width="400px" title="登录" visible={this.state.visible} footer={null} onCancel={this.onCancleLogin.bind(this)}>
+                    <LoginModal />
+                </Modal>
                 <div id="page">
                     <nav className="fh5co-nav" role="navigation">
                         <div className="top">
@@ -93,7 +104,7 @@ class App extends Component {
                                         <div className="display-tc animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
                                             <h1>云翳问卷网</h1>
                                             <h2>只为你设计的<a href="#" target="_blank" title="前往提交">问卷</a>网</h2>
-                                            <p><a className="btn btn-primary btn-lg popup-vimeo btn-video" href="http://localhost:50979/">前往填表</a></p>
+                                            <p><a className="btn btn-primary btn-lg popup-vimeo btn-video" href="#quest-menu">前往填表</a></p>
                                         </div>
                                     </div>
                                 </div>
@@ -101,6 +112,7 @@ class App extends Component {
                         </div>
                     </header>
                 </div>
+                <QuestMenu />
                 <Footer></Footer>
             </div>
         );
@@ -109,7 +121,5 @@ class App extends Component {
 
 render(
     <App />,
-    document.getElementById('content')
+    document.getElementById('app')
 );
-
-module.exports = App;/* export default CommentBox */

@@ -15,23 +15,6 @@ namespace QuestionnaireNetWork.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Login()
-        {
-            return RedirectToAction("Index","Home");
-        }
-
-        [HttpGet]
-        public ActionResult Registe()
-        {
-            return View();
-        }
-
-        public ActionResult Registe(string account,string password)
-        {
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
         public ActionResult AdminCenter()
         {
             return View();
