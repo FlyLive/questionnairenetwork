@@ -27,6 +27,16 @@ class RadioChoiceDetail extends Component {
     }
     onDeletChoice(key) {
         alert(key);
+        $.ajax({
+            type:'post',
+            url:'',
+            data:{},
+            success:function(){
+
+            },error:function(){
+                
+            }
+        })
     }
     render() {
         const choiceColumns = [

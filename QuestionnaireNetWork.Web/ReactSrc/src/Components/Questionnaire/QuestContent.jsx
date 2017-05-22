@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Radio, Checkbox, Row, Col } from 'antd'
+import { Radio, Checkbox, Row, Col, Input, Form, Button } from 'antd'
 
+const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const CheckboxGroup = Checkbox.Group
 const radio = [
@@ -70,81 +71,124 @@ class QuestContent extends Component {
             radio: [],
             checkbox: [],
             completion: [],
-            value: null
         }
     }
-    
+
     componentWillMount() {
-        this.setState({})
-    }
+        // $.ajax({
+        //     type: 'get',
+        //     url: '',
+        //     data: {},
+        //     success: function (data) {
 
-    handleSubmit() {
-
-    }
-
-    radioOnChange(e) {
+        //     }, error: function () {
+        //         window.location.href=""
+        //     }
+        // })
         this.setState({
-            value: e.target.value,
-        });
-        console.log('radio checked = ', e.target.value);
+            radio: radio,
+            checkbox: checkbox,
+            completion: completion
+        })
     }
 
-    checkBoxOnChange(checkedValues) {
-        console.log('checked = ', checkedValues);
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log('Received values of form: ', values);
+            }
+        });
+    }
+
+    handleReset(e) {
+        this.props.form.resetFields();
     }
 
     optionContent(choice) {
+        const { getFieldDecorator } = this.props.form;
         return (
-            choice.Type ? (<RadioGroup onChange={this.radioOnChange.bind(this)} value={this.state.value}>
-                {choice.Option.map(option => <Radio value={option.OptionId}>{option.OptionContent}</Radio>)}
-            </RadioGroup>
-            ) : (<CheckboxGroup onChange={this.checkBoxOnChange.bind(TouchList)}>
-                <Row>
-                    {choice.Option.map(option => <Col span={5}><Checkbox value={option.OptionId}>{option.OptionContent}</Checkbox></Col>)}
-                </Row>
-            </CheckboxGroup>)
+            choice.Type ? (<FormItem>
+                {getFieldDecorator('radio-group-' + (choice.ChoiceId + this.state.radio.length), {
+                    rules: [
+                        { required: true, message: '请将所有题做完!' },
+                    ],
+                })(<CheckboxGroup>
+                    <Row gutter={5}>
+                        {choice.Option.map(option => <Col key={option.OptionId} span={8}><Checkbox className="checkbox-input" value={option.OptionId}>{option.OptionContent}</Checkbox></Col>)}
+                    </Row>
+                </CheckboxGroup>)}
+            </FormItem>
+            ) : (<FormItem>
+                {getFieldDecorator('radio-group-' + choice.ChoiceId, {
+                    rules: [
+                        { required: true, message: '请将所有题做完!' },
+                    ],
+                })(<RadioGroup>
+                    {choice.Option.map(option => <Radio className="radio-input" key={option.OptionId} value={option.OptionId}>{option.OptionContent}</Radio>)}
+                </RadioGroup>
+                    )}
+            </FormItem>)
         )
     }
-    
-    choiceContent(choice) {
-        return (
-            choice.Type ? (<li key={"radio" + choice.ChoiceId}>
-                <p>{choice.Title}</p>
 
-            </li>) : (<li key={"checkbox" + choice.ChoiceId}>
-                <p>{choice.Title}</p>
+    choiceContent(index, choice) {
+        const { getFieldDecorator } = this.props.form;
+        return (
+            choice.Type ? (<li key={"checkbox" + choice.ChoiceId}>
+                <p className="choice-title">{(index + 1 + this.state.radio.length) + "、" + choice.Title}&emsp;{"(可多选)"}</p>
+                {this.optionContent(choice)}
+            </li>) : (<li key={"radio" + choice.ChoiceId}>
+                <p className="choice-title">{(index + 1) + "、" + choice.Title}&emsp;{"(单选)"}</p>
+                {this.optionContent(choice)}
             </li>)
         )
     }
 
-    completionContent(completion) {
+    completionContent(index, completion) {
+        const { getFieldDecorator } = this.props.form;
+        const currentIndex = index + 1 + this.state.radio.length + this.state.checkbox.length;
         return (
             <li key={"completion" + completion.CompletionId}>
-                <p>{completion.Title}</p>
+                <p className="choice-title">{currentIndex + "、" + completion.Title}</p>
+                <FormItem>{getFieldDecorator('radio-group-' + currentIndex, {
+                    rules: [
+                        { required: true, message: '请将所有题做完!' },
+                    ],
+                })(
+                    <Input className="completion-input" type="textarea" placeholder="请根据题目发表您的意见" autosize={{ minRows: 3, maxRows: 6 }} />
+                    )}
+                </FormItem>
             </li>
         )
     }
 
     render() {
-        const radioList = (this.state.radio.map(radio => this.choiceContent(radio)))
-        const checkboxList = (this.state.checkbox.map(checkbox => this.choiceContent(checkbox)))
-        const completionList = (this.state.completion.map(completion => this.completionContent(completion)))
+        const { getFieldDecorator } = this.props.form;
+        const radioList = (this.state.radio.map((radio, index, array) => this.choiceContent(index, radio)))
+        const checkboxList = (this.state.checkbox.map((checkbox, index, array) => this.choiceContent(index, checkbox)))
+        const completionList = (this.state.completion.map((completion, index, array) => this.completionContent(index, completion)))
 
         return (
             <div className="quest-content">
-                content
-                <ul className="radio-list">
-                    {radioList}
-                </ul>
-                <ul className="checkbox-list">
-                    {checkboxList}
-                </ul>
-                <ul className="completion-list">
-                    {completionList}
-                </ul>
+                <Form onSubmit={this.handleSubmit.bind(this)}>
+                    <ul className="radio-list">
+                        {radioList}
+                    </ul>
+                    <ul className="checkbox-list">
+                        {checkboxList}
+                    </ul>
+                    <ul className="completion-list">
+                        {completionList}
+                    </ul>
+                    <FormItem wrapperCol={{ span: 12, offset: 6 }}>
+                        <Button className="button" type="primary" htmlType="submit">提交</Button>
+                        <Button className="button" onClick={this.handleReset.bind(this)}>清空</Button>
+                    </FormItem>
+                </Form>
             </div>
         )
     }
 }
 
-export default QuestContent
+export default Form.create()(QuestContent)

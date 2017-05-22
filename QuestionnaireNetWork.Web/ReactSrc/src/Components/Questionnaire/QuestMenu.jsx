@@ -40,12 +40,33 @@ class QuestMenu extends Component {
             searchResult: []
         }
     }
+    
     componentWillMount() {
+        // $.ajax({
+        //     type: 'get',
+        //     url: '',
+        //     success: function (data) {
+        //         this.setState({ quests: data })
+        //     }, error: function () {
+
+        //     }
+        // })
         this.setState({ quests: data })
     }
+
     handleSearch(Search) {
+        // $.ajax({
+        //     type: 'get',
+        //     url: '',
+        //     success: function (data) {
+
+        //     }, error: function () {
+
+        //     }
+        // })
         this.setState({ searchResult: data1 })
     }
+
     searchResult() {
         return (
             <div className="search-result">
@@ -54,6 +75,7 @@ class QuestMenu extends Component {
             </div>
         )
     }
+
     questItem(quest) {
         return (<div className="post-slide" key={quest.QId}>
             <div className="post-content">
@@ -71,6 +93,7 @@ class QuestMenu extends Component {
             </div>
         </div>)
     }
+
     render() {
         const quests = this.state.quests
         const questMenu = (quests === null ? function () {
