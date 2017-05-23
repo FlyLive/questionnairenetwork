@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Table, Popconfirm } from 'antd'
+import { Table, Popconfirm, message } from 'antd'
 
-import OptionDetail from '../QuestionBox/OptionDetail.jsx'
+import OptionDetail from './OptionDetail.jsx'
 
 const data = [
     { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
@@ -15,29 +15,66 @@ class RadioChoiceDetail extends Component {
         super(props);
         this.state = {
             questId: props.questId,
-            data: data,
+            data: [],
         };
+    }
+    componentWillMount(){
+        $.ajax({
+            type:'post',
+            url:'',
+            data:{},
+            success:function(data){
+                this.setState({data:data})
+            },error:function(){
+            }
+        })
     }
     componentWillReceiveProps(nextProps) {
         let questId = nextProps.questId;
         this.setState({ quest: questId });
     }
+
     onModifyChoice(key) {
         alert(key);
+        // $.ajax({
+        //     type:'post',
+        //     url:'',
+        //     data:{},
+        //     success:function(){
+        //         message.success('修改成功');
+        //     },error:function(){
+        //         message.error('出错了');
+        //     }
+        // })
     }
+
+    submitModify() {
+        // $.ajax({
+        //     type: 'post',
+        //     url: '',
+        //     data: {},
+        //     success: function () {
+        //         message.success('修改成功');
+        //     }, error: function () {
+        //         message.error('出错了');
+        //     }
+        // })
+    }
+
     onDeletChoice(key) {
         alert(key);
-        $.ajax({
-            type:'post',
-            url:'',
-            data:{},
-            success:function(){
-
-            },error:function(){
-                
-            }
-        })
+        // $.ajax({
+        //     type:'post',
+        //     url:'',
+        //     data:{},
+        //     success:function(){
+        //         message.success('删除成功');
+        //     },error:function(){
+        //         message.error('出错了');
+        //     }
+        // })
     }
+
     render() {
         const choiceColumns = [
             { title: 'Name', dataIndex: 'name', key: 'name', width: 100 },

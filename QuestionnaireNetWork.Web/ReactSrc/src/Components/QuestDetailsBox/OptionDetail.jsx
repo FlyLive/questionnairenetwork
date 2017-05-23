@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Table,Popconfirm } from "antd"
+import { Table, Popconfirm } from "antd"
 
 const data = [
     { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
@@ -25,8 +25,19 @@ class OptionDetail extends Component {
         super(props);
         this.state = {
             choiceId: props.choiceId,
-            data: data,
+            data: [],
         };
+    }
+    componentWillMount() {
+        // $.ajax({
+        //     type: 'post',
+        //     url: '',
+        //     data: {},
+        //     success: function (data) {
+        //         this.setState({ data: data })
+        //     }, error: function () {
+        //     }
+        // })
     }
     componentWillReceiveProps(nextProps) {
         let choiceId = nextProps.choiceId;
@@ -35,7 +46,7 @@ class OptionDetail extends Component {
     onModifyChoice(key) {
         alert(key);
     }
-    onDeletOption(key){
+    onDeletOption(key) {
         alert(key);
     }
     render() {
@@ -45,14 +56,14 @@ class OptionDetail extends Component {
             { title: 'Address', dataIndex: 'address', key: 'address', width: 100 },
             {
                 title: '操作', dataIndex: '', width: 100,
-                render: (text, record,index) => (
-                <span>
-                    <a onClick={() => this.onModifyChoice(record.key)}>修改</a>
-                    <span className="ant-divider" />
-                    <Popconfirm title="确定要删除该选项？" onConfirm={() => this.onDeletOption(record.key)} okText="删除">
-                        <a>删除</a>
-                    </Popconfirm>
-                </span>
+                render: (text, record, index) => (
+                    <span>
+                        <a onClick={() => this.onModifyChoice(record.key)}>修改</a>
+                        <span className="ant-divider" />
+                        <Popconfirm title="确定要删除该选项？" onConfirm={() => this.onDeletOption(record.key)} okText="删除">
+                            <a>删除</a>
+                        </Popconfirm>
+                    </span>
                 )
             },
         ];
@@ -62,7 +73,7 @@ class OptionDetail extends Component {
                 pagination={false}
                 scroll={{ y: 240 }}
                 size="small"
-                title={() => <p style={{ textAlign: "center",margin:0 }}>选项</p>} />
+                title={() => <p style={{ textAlign: "center", margin: 0 }}>选项</p>} />
         );
     }
 }

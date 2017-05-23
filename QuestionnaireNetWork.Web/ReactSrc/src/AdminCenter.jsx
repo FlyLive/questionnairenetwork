@@ -3,15 +3,15 @@ import { render } from 'react-dom';
 import $ from 'jquery'
 import axios from 'axios'
 
-import Header from '../Shared/header.jsx';
-import Footer from '../Shared/footer.jsx';
-import '../../../src/Css/Admin/AdminCenter.css'
-import '../../../src/Css/Admin/Index.css'
+import Header from './Components/Shared/header.jsx';
+import Footer from './Components/Shared/footer.jsx';
+import './Css/Admin/AdminCenter.css'
+import './Css/Admin/Index.css'
 
-import '../../../src/Css/Home/animate.css'
-import '../../../src/Css/Home/style.css'
-import '../../../src/Css/Home/flexslider.css'
-import '../../../src/Css/Home/magnific-popup.css'
+import './Css/Home/animate.css'
+import './Css/Home/style.css'
+import './Css/Home/flexslider.css'
+import './Css/Home/magnific-popup.css'
 
 class AdminCenter extends Component {
     render() {

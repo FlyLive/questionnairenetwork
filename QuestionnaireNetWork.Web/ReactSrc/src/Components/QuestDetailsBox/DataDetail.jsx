@@ -18,6 +18,16 @@ class DataDetail extends Component {
     }
     componentWillReceiveProps(nextProps) {
         let questId = nextProps.questId;
+        // $.ajax({
+        //     type:'post',
+        //     url:'',
+        //     data:{},
+        //     success:function(){
+        //         message.success('修改成功');
+        //     },error:function(){
+        //         message.error('出错了');
+        //     }
+        // })
         this.setState({ quest: questId });
     }
     render() {

@@ -23,10 +23,9 @@ class ModifyPassword extends Component {
                     url: '',
                     data: { "password": fPassword },
                     success: function () {
-
-                    },
-                    error: function () {
-
+                        message.success('修改成功');
+                    }, error: function () {
+                        message.error('出错了');
                     }
                 });
             }

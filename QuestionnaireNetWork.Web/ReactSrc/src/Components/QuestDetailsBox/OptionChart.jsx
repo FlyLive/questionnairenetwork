@@ -16,6 +16,17 @@ class OptionChart extends Component {
             data: data,
         };
     }
+    componentWillMount(){
+        // $.ajax({
+        //     type:'post',
+        //     url:'',
+        //     data:{},
+        //     success:function(data){
+        //         this.setState({data:data})
+        //     },error:function(){
+        //     }
+        // })
+    }
     componentWillReceiveProps(nextProps) {
         let questId = nextProps.questId;
         this.setState({ quest: questId });

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Table } from 'antd'
 
-import OptionDetail from '../QuestionBox/OptionDetail.jsx'
+import OptionDetail from './OptionDetail.jsx'
 
 const data = [
     { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
@@ -15,8 +15,19 @@ class CheckChoiceDetail extends Component {
         super(props);
         this.state = {
             questId: props.questId,
-            data: data,
+            data: [],
         };
+    }
+    componentWillMount(){
+        // $.ajax({
+        //     type:'post',
+        //     url:'',
+        //     data:{},
+        //     success:function(data){
+        //         this.setState({data:data})
+        //     },error:function(){
+        //     }
+        // })
     }
     componentWillReceiveProps(nextProps) {
         let questId = nextProps.questId;

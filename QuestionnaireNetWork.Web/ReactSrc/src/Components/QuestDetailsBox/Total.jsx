@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Input, Button, Icon, message, Table, Tabs, Progress, Badge } from 'antd'
 
-import ChartDetail from '../Content/ChartDetail.jsx'
-import DataDetail from '../Content/DataDetail.jsx'
+import ChartDetail from './ChartDetail.jsx'
+import DataDetail from './DataDetail.jsx'
 
 const TabPane = Tabs.TabPane
 
@@ -34,11 +34,22 @@ class Total extends Component {
         super(props);
         this.state = {
             filterDropdownVisible: false,
-            data,
+            data:[],
             searchText: '',
             filtered: false,
             selected: data == null ? null : data[0].key,
         }
+    }
+    componentWillMount(){
+        $.ajax({
+            type:'post',
+            url:'',
+            data:{},
+            success:function(data){
+                this.setState({data:data})
+            },error:function(){
+            }
+        })
     }
     onInputChange(e) {
         this.setState({ searchText: e.target.value });

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { message, Form, Icon, Input, Button, Modal, Tooltip } from 'antd'
 
-import ModifyPassword from '../Content/ModifyPassword.jsx'
+import ModifyPassword from './ModifyPassword.jsx'
 
 import $ from 'jquery'
 import axios from 'axios'
@@ -69,10 +69,10 @@ class AdminInfo extends Component {
             type: 'post',
             url: 'http://localhost:50979/api/values',
             data: { "nickName": nick },
-            success: function (data) {
-
-            },
-            error: function () {
+            success:function(){
+                message.success('修改成功');
+            },error:function(){
+                message.error('出错了');
             }
         });
     }

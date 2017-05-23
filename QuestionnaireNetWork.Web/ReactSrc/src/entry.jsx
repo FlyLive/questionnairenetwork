@@ -4,17 +4,20 @@ import { Modal, Button, Input } from 'antd'
 import $ from 'jquery'
 import axios from 'axios'
 
-import Footer from '../src/Components/Shared/footer.jsx';
-import LoginModal from '../src/Components/Content/LoginModal.jsx'
-import QuestMenu from '../src/Components/Questionnaire/QuestMenu.jsx';
+import Footer from './Components/Shared/footer.jsx';
+import LoginModal from './Components/ManageCenterBox/LoginModal.jsx'
+import QuestMenu from './Components/QuestionnaireBox/QuestMenu.jsx';
 
-import '../src/Css/Admin/Index.css'
-import '../src/Css/Admin/Login.css'
+import './Css/Admin/Index.css'
+import './Css/Admin/Login.css'
 
-import '../src/Css/Home/animate.css'
-import '../src/Css/Home/style.css'
-import '../src/Css/Home/flexslider.css'
-import '../src/Css/Home/magnific-popup.css'
+import './Css/Home/animate.css'
+import './Css/Home/style.css'
+import './Css/Home/flexslider.css'
+import './Css/Home/magnific-popup.css'
+
+import './Css/Quest/owl.carousel.min.css'
+import './Js/Quest/owl.carousel.min.js'
 
 class App extends Component {
     constructor(props) {

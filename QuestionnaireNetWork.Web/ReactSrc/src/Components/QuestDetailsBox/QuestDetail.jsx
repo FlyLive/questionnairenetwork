@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Menu, Dropdown, Button, Icon, Input, message, Modal, Table, Tabs, Progress, Popconfirm } from 'antd';
 
-import CreateChoice from '../QuestionBox/CreateChoice.jsx'
-import CreateCompletion from '../QuestionBox/CreateCompletion.jsx'
-import RadioChoiceDetail from '../QuestionBox/RadioChoiceDetail.jsx'
-import CheckChoiceDetail from '../QuestionBox/CheckChoiceDetail.jsx'
-import CompletionDetail from '../QuestionBox/CompletionDetail.jsx'
+import CreateChoice from '../CreateQuestBox/CreateChoice.jsx'
+import CreateCompletion from '../CreateQuestBox/CreateCompletion.jsx'
+import RadioChoiceDetail from './RadioChoiceDetail.jsx'
+import CheckChoiceDetail from './CheckChoiceDetail.jsx'
+import CompletionDetail from './CompletionDetail.jsx'
 
 const TabPane = Tabs.TabPane
 
@@ -39,16 +39,30 @@ class ModifyQuest extends Component {
             choice: { visible: false },
             completion: { visible: false },
             filterDropdownVisible: false,
-            data,
+            data: [],
             searchText: '',
             filtered: false,
             selected: data == null ? null : data[0].key,
             fousQuestId: null,
         }
     }
+
+    componentWillMount() {
+        // $.ajax({
+        //     type: 'post',
+        //     url: '',
+        //     data: {},
+        //     success: function (data) {
+        //         this.setState({ data: data })
+        //     }, error: function () {
+        //     }
+        // })
+    }
+
     onInputChange(e) {
         this.setState({ searchText: e.target.value });
     }
+
     onSearch() {
         const { searchText } = this.state;
         const reg = new RegExp(searchText, 'gi');
@@ -71,35 +85,60 @@ class ModifyQuest extends Component {
             }).filter(record => !!record),
         });
     }
+
     handleMenuClick(e) {
         switch (e.key) {
             case '1': this.setState({ choice: { visible: true } }); break;
             case '2': this.setState({ completion: { visible: true } }); break;
         }
     }
+
     handleCChoiceCancel(e) {
         this.setState({
             choice: { visible: false }
         });
     }
+
     handleCCompletionCancel(e) {
         this.setState({
             completion: { visible: false }
         });
     }
+
     onSelected(record, index) {
         this.setState({ selected: record.key });
     }
 
     onDeleteQuest(key) {
-
+        $.ajax({
+            type: 'post',
+            url: '',
+            data: {},
+            success: function () {
+                message.success('修改成功');
+            }, error: function () {
+                message.error('出错了');
+            }
+        })
     }
+
     onModifyQuest(key) {
-
+        $.ajax({
+            type: 'post',
+            url: '',
+            data: {},
+            success: function () {
+                message.success('修改成功');
+            }, error: function () {
+                message.error('出错了');
+            }
+        })
     }
+
     onFoucsQuest(key) {
         this.setState({ fousQuestId: key });
     }
+
     render() {
         const menu = (
             <Menu onClick={this.handleMenuClick.bind(this)}>

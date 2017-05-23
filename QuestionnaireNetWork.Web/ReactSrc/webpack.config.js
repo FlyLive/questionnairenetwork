@@ -6,8 +6,8 @@ const webpack = require('webpack');
 module.exports = {
     entry: {
         "app": path.resolve(__dirname, "./src/entry.jsx"),
-        "admin": path.resolve(__dirname, "./src/Components/Content/AdminCenter.jsx"),
-        "questionnaire": path.resolve(__dirname, "./src/Components/Questionnaire/Questionnaire.jsx"),
+        "admin": path.resolve(__dirname, "./src/AdminCenter.jsx"),
+        "questionnaire": path.resolve(__dirname, "./src/Questionnaire.jsx"),
     },
     output: {
         path: path.resolve(__dirname, "./src/build"),

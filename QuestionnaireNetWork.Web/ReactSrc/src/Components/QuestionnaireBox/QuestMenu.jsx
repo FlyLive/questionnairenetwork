@@ -3,9 +3,6 @@ import { render } from 'react-dom';
 import { Card, Button, Input, Icon } from 'antd';
 import $ from 'jquery'
 
-import '../../Css/Quest/owl.carousel.min.css'
-import '../../Js/Quest/owl.carousel.min.js'
-
 $(document).ready(function () {
     $("#news-slider").owlCarousel({
         items: 3,
