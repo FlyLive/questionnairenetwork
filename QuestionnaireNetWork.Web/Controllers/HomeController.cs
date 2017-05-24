@@ -13,6 +13,11 @@ namespace QuestionnaireNetWork.Web.Controllers
             return View();
         }
 
+        public ActionResult AdminCenter()
+        {
+            return View();
+        }
+
         public ActionResult Questionnaire()
         {
             return View();

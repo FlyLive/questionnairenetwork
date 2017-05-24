@@ -1,23 +1,29 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Form, Switch, Input, Button, Icon, InputNumber } from 'antd'
+import { Form, Switch, Input, Button, Icon, InputNumber, message } from 'antd'
 
 const FormItem = Form.Item
 
 class CreateQuest extends Component {
     handleSubmit(e) {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        const form = this.props.form;
+        form.validateFields((err, values) => {
             if (!err) {
                 var title = values["title"];
-                var maxNum = values["num"];
+                var maxNum = values["maxNum"];
 
                 $.ajax({
                     type: 'post',
-                    url: '',
-                    data: {title:title,maxNum:maxNum},
-                    success: function () {
-                        message.success('创建成功');
+                    url: 'http://localhost:50979/api/Questionnaire/CreateQuest',
+                    data: { QuestTitle: title, MaxQuestNum: maxNum },
+                    success: function (data) {
+                        if(data){
+                            message.success('创建成功');
+                            form.resetFields();
+                            return true;
+                        }
+                        message.error('创建失败');
                     }, error: function () {
                         message.error('出错了');
                     }

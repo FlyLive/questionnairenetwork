@@ -18,6 +18,7 @@ import './Css/Home/magnific-popup.css'
 
 import './Css/Quest/owl.carousel.min.css'
 import './Js/Quest/owl.carousel.min.js'
+import './Js/jquery.cookie.js'
 
 class App extends Component {
     constructor(props) {
@@ -35,18 +36,16 @@ class App extends Component {
         // .catch(function(error){
         //     alert(error);
         // });
-        // $.ajax({
-        //     url: 'http://localhost:50979/api/values',
-        //     dataType: 'json',
-        //     cache: false,
-        //     success: function (data) {
-        //         this.props.data = true;
-        //     }.bind(this),
-        //     error: function (xhr, status, err) {
-        //         this.props.data = false;
-        //         console.error(this.props.url, status, err.toString());
-        //     }.bind(this)
-        // });
+        $.ajax({
+            url: 'http://localhost:50979/api/values',
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+            }.bind(this),
+            error: function (xhr, status, err) {
+                
+            }.bind(this)
+        });
     }
     onLogin(e) {
         this.setState({ visible: true });
@@ -55,7 +54,7 @@ class App extends Component {
         this.setState({ visible: false });
     }
     render() {
-        const isLogin = this.state.data === null ? (
+        const isLogin = this.state.data !== null ? (
             <ul>
                 <li className="active"><a>主页</a></li>
                 <li><a>管理中心</a></li>

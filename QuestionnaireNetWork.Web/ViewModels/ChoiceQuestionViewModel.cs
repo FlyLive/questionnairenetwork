@@ -8,8 +8,8 @@ namespace QuestionnaireNetWork.Web.ViewModels
     public class ChoiceQuestionViewModel
     {
         public int ChoiceId { get; set; }
-        public int Qid { get; set; }
-        public string Title { get; set; }
+        public int QId { get; set; }
+        public string ChoiceTitle { get; set; }
         public bool Type { get; set; }
     }
 }

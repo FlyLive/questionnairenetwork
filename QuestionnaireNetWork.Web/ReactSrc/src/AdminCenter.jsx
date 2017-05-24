@@ -12,6 +12,7 @@ import './Css/Home/animate.css'
 import './Css/Home/style.css'
 import './Css/Home/flexslider.css'
 import './Css/Home/magnific-popup.css'
+import './Js/jquery.cookie.js'
 
 class AdminCenter extends Component {
     render() {

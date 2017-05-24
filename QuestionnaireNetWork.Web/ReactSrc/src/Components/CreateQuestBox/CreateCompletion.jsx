@@ -1,20 +1,23 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Form, Switch, Input, Button, Icon } from 'antd'
+import { Form, Switch, Input, Button, Icon, message } from 'antd'
 
 const FormItem = Form.Item
 
 class CreateCompletion extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={}
+        this.state = { questId: props.questId }
+    }
+    componentWillReceiveProps(nextProps) {
+        this.setState({ questId: nextProps.questId })
     }
     handleSubmit(e) {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                var questId = this.props.questId;
-                if(questId == undefined){
+                var questId = this.state.questId;
+                if (questId == undefined) {
                     message.error("出错啦");
                     return false;
                 }
@@ -22,13 +25,17 @@ class CreateCompletion extends Component {
 
                 $.ajax({
                     type: 'post',
-                    url: '',
-                    data: {"questId":questId,"title":title},
-                    success: function () {
-
+                    url: 'http://localhost:50979/api/Question/CreateCompletion',
+                    data: { QId: questId, Title: title },
+                    success: function (data) {
+                        if (data) {
+                            message.success("创建成功");
+                            return true;
+                        }
+                        message.error("创建失败,可能题数达到上限")
                     },
                     error: function () {
-
+                        message.error("出错了")
                     }
                 });
             }

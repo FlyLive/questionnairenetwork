@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "88717e309f10aca61cfa"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dad5f8458ac7cde4747a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -704,7 +704,7 @@
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire("./src/Components/Content/AdminCenter.jsx")(__webpack_require__.s = "./src/Components/Content/AdminCenter.jsx");
+/******/ 	return hotCreateRequire("./src/AdminCenter.jsx")(__webpack_require__.s = "./src/AdminCenter.jsx");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -76018,7 +76018,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/Components/Content/AdminCenter.jsx":
+/***/ "./src/AdminCenter.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76060,6 +76060,8 @@ __webpack_require__("./src/Css/Home/flexslider.css");
 
 __webpack_require__("./src/Css/Home/magnific-popup.css");
 
+__webpack_require__("./src/Js/jquery.cookie.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76096,33 +76098,33 @@ var AdminCenter = function (_Component) {
 
 /***/ }),
 
-/***/ "./src/Components/Content/AdminInfo.jsx":
+/***/ "./src/Components/CreateQuestBox/CreateChoice.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _css = __webpack_require__("./node_modules/antd/lib/modal/style/css.js");
-
-var _modal = __webpack_require__("./node_modules/antd/lib/modal/index.js");
-
-var _modal2 = _interopRequireDefault(_modal);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+var _css = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
 
 var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
 
 var _button2 = _interopRequireDefault(_button);
 
-var _css3 = __webpack_require__("./node_modules/antd/lib/tooltip/style/css.js");
+var _css2 = __webpack_require__("./node_modules/antd/lib/switch/style/css.js");
 
-var _tooltip = __webpack_require__("./node_modules/antd/lib/tooltip/index.js");
+var _switch = __webpack_require__("./node_modules/antd/lib/switch/index.js");
 
-var _tooltip2 = _interopRequireDefault(_tooltip);
+var _switch2 = _interopRequireDefault(_switch);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/icon/style/css.js");
+
+var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
+
+var _icon2 = _interopRequireDefault(_icon);
 
 var _css4 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
 
@@ -76130,13 +76132,7 @@ var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
 
 var _input2 = _interopRequireDefault(_input);
 
-var _css5 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
-
-var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
-
-var _message2 = _interopRequireDefault(_message);
-
-var _css6 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+var _css5 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
 
 var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
 
@@ -76152,17 +76148,225 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
-var _ModifyPassword = __webpack_require__("./src/Components/Content/ModifyPassword.jsx");
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _ModifyPassword2 = _interopRequireDefault(_ModifyPassword);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _jquery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var _jquery2 = _interopRequireDefault(_jquery);
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var _axios = __webpack_require__("./node_modules/axios/index.js");
+var FormItem = _form2.default.Item;
 
-var _axios2 = _interopRequireDefault(_axios);
+var uuid = 1;
+
+var CreateChoice = function (_Component) {
+    _inherits(CreateChoice, _Component);
+
+    function CreateChoice(props) {
+        _classCallCheck(this, CreateChoice);
+
+        var _this = _possibleConstructorReturn(this, (CreateChoice.__proto__ || Object.getPrototypeOf(CreateChoice)).call(this, props));
+
+        _this.state = {};
+        return _this;
+    }
+
+    _createClass(CreateChoice, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(props) {}
+    }, {
+        key: 'remove',
+        value: function remove(k) {
+            var form = this.props.form;
+            // can use data-binding to get
+
+            var keys = form.getFieldValue('keys');
+            // We need at least one passenger
+            if (keys.length === 1) {
+                return;
+            }
+
+            // can use data-binding to set
+            form.setFieldsValue({
+                keys: keys.filter(function (key) {
+                    return key !== k;
+                })
+            });
+        }
+    }, {
+        key: 'add',
+        value: function add(e) {
+            uuid++;
+            var form = this.props.form;
+            // can use data-binding to get
+
+            var keys = form.getFieldValue('keys');
+            var nextKeys = keys.concat(uuid);
+            // can use data-binding to set
+            // important! notify form to detect changes
+            form.setFieldsValue({
+                keys: nextKeys
+            });
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+            var _this2 = this;
+
+            e.preventDefault();
+            this.props.form.validateFields(function (err, values) {
+                if (!err) {
+                    var questId = _this2.props.questId;
+                    if (questId == undefined) {
+                        message.error("出错啦");
+                        return false;
+                    }
+                    var title = values["title"];
+                    var type = values["switch"] == true ? true : false;
+
+                    var options = new Array();
+                    var form = _this2.props.form;
+
+                    var keys = form.getFieldValue('keys');
+                    keys.filter(function (key) {
+                        return options.push(values["names-" + key]);
+                    });
+
+                    $.ajax({
+                        type: 'post',
+                        url: '',
+                        data: { "questId": questId, "title": title, "type": type },
+                        success: function success() {},
+                        error: function error() {}
+                    });
+                }
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            var _props$form = this.props.form,
+                getFieldDecorator = _props$form.getFieldDecorator,
+                getFieldValue = _props$form.getFieldValue;
+
+
+            var formItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
+            };
+
+            var formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
+                }
+            };
+            getFieldDecorator('keys', { initialValue: [] });
+            var keys = getFieldValue('keys');
+            var formItems = keys.map(function (k, index) {
+                return _react2.default.createElement(
+                    FormItem,
+                    _extends({}, index === 0 ? formItemLayout : formItemLayoutWithOutLabel, {
+                        label: index === 0 ? '选项' : '', required: false, key: k }),
+                    getFieldDecorator('names-' + k, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [{ required: true, whitespace: true, message: "请输入选项内容或删除该选项." }]
+                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9009\u9879\u5185\u5BB9', style: { width: '60%', marginRight: 8 } })),
+                    _react2.default.createElement(_icon2.default, { className: 'dynamic-delete-button', type: 'minus-circle-o',
+                        disabled: keys.length === 1, onClick: function onClick() {
+                            return _this3.remove(k);
+                        } })
+                );
+            });
+            return _react2.default.createElement(
+                _form2.default,
+                null,
+                _react2.default.createElement(
+                    FormItem,
+                    _extends({ label: '\u9898\u76EE\u540D\u79F0' }, formItemLayout, { wrapperCol: { span: 10 } }),
+                    getFieldDecorator('title', {
+                        rules: [{ required: true, message: '请输入题目名称!', whitespace: true }]
+                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9898\u76EE\u540D\u79F0' }))
+                ),
+                _react2.default.createElement(
+                    FormItem,
+                    _extends({ label: '\u591A\u9009\u9898' }, formItemLayout),
+                    getFieldDecorator('switch', {
+                        rules: [{ required: false }]
+                    })(_react2.default.createElement(_switch2.default, null))
+                ),
+                formItems,
+                _react2.default.createElement(
+                    FormItem,
+                    formItemLayoutWithOutLabel,
+                    _react2.default.createElement(
+                        _button2.default,
+                        { type: 'dashed', onClick: this.add.bind(this), style: { width: '60%' } },
+                        _react2.default.createElement(_icon2.default, { type: 'plus' }),
+                        '\u6DFB\u52A0\u9009\u9879'
+                    )
+                ),
+                _react2.default.createElement(
+                    FormItem,
+                    formItemLayoutWithOutLabel,
+                    _react2.default.createElement(
+                        _button2.default,
+                        { type: 'primary', onClick: this.handleSubmit.bind(this), size: 'large' },
+                        '\u63D0\u4EA4'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return CreateChoice;
+}(_react.Component);
+
+exports.default = _form2.default.create()(CreateChoice);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
+
+/***/ }),
+
+/***/ "./src/Components/CreateQuestBox/CreateCompletion.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+
+var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
+
+var _button2 = _interopRequireDefault(_button);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+
+var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
+
+var _input2 = _interopRequireDefault(_input);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+
+var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
+
+var _form2 = _interopRequireDefault(_form);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -76174,317 +76378,93 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var FormItem = _form2.default.Item;
 
-var AdminInfo = function (_Component) {
-    _inherits(AdminInfo, _Component);
+var CreateCompletion = function (_Component) {
+    _inherits(CreateCompletion, _Component);
 
-    function AdminInfo(props) {
-        _classCallCheck(this, AdminInfo);
+    function CreateCompletion(props) {
+        _classCallCheck(this, CreateCompletion);
 
-        var _this = _possibleConstructorReturn(this, (AdminInfo.__proto__ || Object.getPrototypeOf(AdminInfo)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (CreateCompletion.__proto__ || Object.getPrototypeOf(CreateCompletion)).call(this, props));
 
-        _this.state = {
-            account: {
-                value: 'Lucy'
-            },
-            nick: {
-                value: 'nick'
-            },
-            mP: {
-                visible: false
-            },
-            mNick: {
-                visible: false
-            },
-            oldP: {
-                visible: false
-            }
-        };
+        _this.state = {};
         return _this;
     }
 
-    _createClass(AdminInfo, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            _jquery2.default.ajax({
-                type: 'get',
-                url: 'http://localhost:50979/api/values',
-                dataType: 'json',
-                success: function success(data) {
-                    this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
-                },
-                error: function error() {
-                    // Modal.error({
-                    //     title: 'Error',
-                    //     content: '错误',
-                    //     width:300,
-                    // });
-                }
-            });
-        }
-    }, {
-        key: 'isEmpty',
-        value: function isEmpty(e) {
-            var nickName = e.target.value;
-            this.setState({
-                nick: { value: nickName }
-            });
-            if (nickName == "" || /\s+/g.test(nickName)) {
-                this.setState({ mNick: { visible: true } });
-                return false;
-            }
-            this.setState({
-                mNick: { visible: false }
-            });
-        }
-    }, {
+    _createClass(CreateCompletion, [{
         key: 'handleSubmit',
         value: function handleSubmit(e) {
-            var nick = this.state.nick.value;
-            if (nick == "" || /\s+/g.test(nick)) {
-                this.setState({ mNick: { visible: true } });
-                return false;
-            }
-            _jquery2.default.ajax({
-                type: 'post',
-                url: 'http://localhost:50979/api/values',
-                data: { "nickName": nick },
-                success: function success() {
-                    _message2.default.success('修改成功');
-                }, error: function error() {
-                    _message2.default.error('出错了');
+            var _this2 = this;
+
+            e.preventDefault();
+            this.props.form.validateFields(function (err, values) {
+                if (!err) {
+                    var questId = _this2.props.questId;
+                    if (questId == undefined) {
+                        message.error("出错啦");
+                        return false;
+                    }
+                    var title = values["title"];
+
+                    $.ajax({
+                        type: 'post',
+                        url: '',
+                        data: { "questId": questId, "title": title },
+                        success: function success() {},
+                        error: function error() {}
+                    });
                 }
-            });
-        }
-    }, {
-        key: 'isOldEmpty',
-        value: function isOldEmpty(e) {
-            var oldP = e.target.value;
-            if (oldP == "" || /\s+/g.test(oldP)) {
-                this.setState({ oldP: { visible: true } });
-                return false;
-            }
-            this.setState({ oldP: { visible: false } });
-        }
-    }, {
-        key: 'modifyPassword',
-        value: function modifyPassword(e) {
-            var password = (0, _jquery2.default)("#old-password").val();
-            if (password == "" || /\s+/g.test(password)) {
-                this.setState({ oldP: { visible: true } });
-                return false;
-            }
-            // $.ajax({
-            //     type: 'post',
-            //     url: 'http://localhost:50979/api/values',
-            //     data: { "oldPassword": password },
-            //     success: function (data) {
-            this.setState({
-                mP: { visible: true }
-            });
-            //     },
-            //     error: function () {
-            _message2.default.error("密码错误！");
-            //     }
-            // });
-        }
-    }, {
-        key: 'handleMPCancel',
-        value: function handleMPCancel(e) {
-            this.setState({
-                mP: { visible: false }
             });
         }
     }, {
         key: 'render',
         value: function render() {
-            var state = this.state;
+            var _props$form = this.props.form,
+                getFieldDecorator = _props$form.getFieldDecorator,
+                getFieldValue = _props$form.getFieldValue;
+
             var formItemLayout = {
-                labelCol: {
-                    xs: { span: 24 },
-                    sm: { span: 6 }
-                },
-                wrapperCol: {
-                    xs: { span: 24 },
-                    sm: { span: 5 }
-                }
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
             };
-            var tailFormItemLayout = {
+
+            var formItemLayoutWithOutLabel = {
                 wrapperCol: {
-                    sm: {
-                        span: 14,
-                        offset: 6
-                    }
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
                 }
             };
             return _react2.default.createElement(
-                'div',
-                { className: 'admin-info router' },
+                _form2.default,
+                null,
                 _react2.default.createElement(
-                    'h3',
-                    null,
-                    '\u4E2A\u4EBA\u8D44\u6599'
+                    FormItem,
+                    _extends({ label: '\u9898\u76EE\u540D\u79F0' }, formItemLayout, { wrapperCol: { span: 10 } }),
+                    getFieldDecorator('title', {
+                        rules: [{ required: true, message: '请输入题目名称!', whitespace: true }]
+                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9898\u76EE\u540D\u79F0' }))
                 ),
                 _react2.default.createElement(
-                    _form2.default,
-                    { className: 'login-form' },
+                    FormItem,
+                    formItemLayoutWithOutLabel,
                     _react2.default.createElement(
-                        FormItem,
-                        _extends({}, formItemLayout, { label: '\u8D26\u6237' }),
-                        _react2.default.createElement(
-                            'label',
-                            { id: 'account', placeholder: '\u8D26\u6237' },
-                            ' ',
-                            state.account.value
-                        )
-                    ),
-                    _react2.default.createElement(
-                        FormItem,
-                        _extends({}, formItemLayout, { label: '\u6635\u79F0' }),
-                        _react2.default.createElement(
-                            _tooltip2.default,
-                            { placement: 'right', title: "昵称不能为空", visible: state.mNick.visible },
-                            _react2.default.createElement(_input2.default, { id: 'nick', onChange: this.isEmpty.bind(this), placeholder: '\u6635\u79F0', value: state.nick.value })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        FormItem,
-                        tailFormItemLayout,
-                        _react2.default.createElement(
-                            _button2.default,
-                            { onClick: this.handleSubmit.bind(this), type: 'primary' },
-                            '\u786E\u8BA4\u4FEE\u6539'
-                        )
+                        _button2.default,
+                        { type: 'primary', onClick: this.handleSubmit.bind(this), size: 'large' },
+                        '\u63D0\u4EA4'
                     )
-                ),
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(
-                    _form2.default,
-                    { className: 'login-form' },
-                    _react2.default.createElement(
-                        FormItem,
-                        _extends({}, formItemLayout, { label: '\u65E7\u5BC6\u7801' }),
-                        _react2.default.createElement(
-                            _tooltip2.default,
-                            { placement: 'right', title: "密码不能为空", visible: this.state.oldP.visible },
-                            _react2.default.createElement(_input2.default, { id: 'old-password', onChange: this.isOldEmpty.bind(this), placeholder: '\u65E7\u5BC6\u7801', type: 'password' })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        FormItem,
-                        tailFormItemLayout,
-                        _react2.default.createElement(
-                            _button2.default,
-                            { onClick: this.modifyPassword.bind(this), type: 'primary' },
-                            '\u4FEE\u6539\u5BC6\u7801'
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    _modal2.default,
-                    { title: '\u4FEE\u6539\u5BC6\u7801', visible: state.mP.visible, footer: null,
-                        onCancel: this.handleMPCancel.bind(this) },
-                    _react2.default.createElement(_ModifyPassword2.default, null)
                 )
             );
         }
     }]);
 
-    return AdminInfo;
+    return CreateCompletion;
 }(_react.Component);
 
-exports.default = AdminInfo;
+exports.default = _form2.default.create()(CreateCompletion);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
-/***/ "./src/Components/Content/ChartDetail.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
-
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
-
-var _table2 = _interopRequireDefault(_table);
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-var _OptionChart = __webpack_require__("./src/Components/Content/OptionChart.jsx");
-
-var _OptionChart2 = _interopRequireDefault(_OptionChart);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
-
-var RadioChoiceDetail = function (_Component) {
-    _inherits(RadioChoiceDetail, _Component);
-
-    function RadioChoiceDetail(props) {
-        _classCallCheck(this, RadioChoiceDetail);
-
-        var _this = _possibleConstructorReturn(this, (RadioChoiceDetail.__proto__ || Object.getPrototypeOf(RadioChoiceDetail)).call(this, props));
-
-        _this.state = {
-            questId: props.questId,
-            data: data
-        };
-        return _this;
-    }
-
-    _createClass(RadioChoiceDetail, [{
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }];
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, {
-                    columns: choiceColumns,
-                    bordered: true,
-                    expandedRowRender: function expandedRowRender(record) {
-                        return _react2.default.createElement(_OptionChart2.default, { choiceId: record.key });
-                    },
-                    dataSource: this.state.data,
-                    title: function title() {
-                        return "选择题";
-                    } })
-            );
-        }
-    }]);
-
-    return RadioChoiceDetail;
-}(_react.Component);
-
-exports.default = RadioChoiceDetail;
-
-/***/ }),
-
-/***/ "./src/Components/Content/CreateQuest.jsx":
+/***/ "./src/Components/CreateQuestBox/CreateQuest.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76638,7 +76618,733 @@ exports.default = _form2.default.create()(CreateQuest);
 
 /***/ }),
 
-/***/ "./src/Components/Content/DataDetail.jsx":
+/***/ "./src/Components/ManageCenterBox/AdminInfo.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/modal/style/css.js");
+
+var _modal = __webpack_require__("./node_modules/antd/lib/modal/index.js");
+
+var _modal2 = _interopRequireDefault(_modal);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+
+var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
+
+var _button2 = _interopRequireDefault(_button);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/tooltip/style/css.js");
+
+var _tooltip = __webpack_require__("./node_modules/antd/lib/tooltip/index.js");
+
+var _tooltip2 = _interopRequireDefault(_tooltip);
+
+var _css4 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+
+var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
+
+var _input2 = _interopRequireDefault(_input);
+
+var _css5 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css6 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+
+var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
+
+var _form2 = _interopRequireDefault(_form);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _jquery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _axios = __webpack_require__("./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FormItem = _form2.default.Item;
+
+var AdminInfo = function (_Component) {
+    _inherits(AdminInfo, _Component);
+
+    function AdminInfo(props) {
+        _classCallCheck(this, AdminInfo);
+
+        var _this = _possibleConstructorReturn(this, (AdminInfo.__proto__ || Object.getPrototypeOf(AdminInfo)).call(this, props));
+
+        _this.state = {
+            account: {
+                value: 'Lucy'
+            },
+            nick: {
+                value: 'nick'
+            },
+            mP: {
+                visible: false
+            },
+            mNick: {
+                visible: false
+            },
+            oldP: {
+                visible: false
+            },
+            confirmDirty: false
+        };
+        return _this;
+    }
+
+    _createClass(AdminInfo, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            _jquery2.default.ajax({
+                type: 'get',
+                url: 'http://localhost:50979/api/Admin/GetAdminInfo',
+                dataType: 'json',
+                success: function success(data) {
+                    this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
+                },
+                error: function error() {
+                    window.location.href = "index.html";
+                }
+            });
+        }
+    }, {
+        key: 'isNickEmpty',
+        value: function isNickEmpty(e) {
+            var nickName = e.target.value;
+            this.setState({
+                nick: { value: nickName }
+            });
+            if (nickName == "" || /\s+/g.test(nickName)) {
+                this.setState({ mNick: { visible: true } });
+                return false;
+            }
+            this.setState({
+                mNick: { visible: false }
+            });
+        }
+    }, {
+        key: 'handleMInfoSubmit',
+        value: function handleMInfoSubmit(e) {
+            var nick = this.state.nick.value;
+            if (nick == "" || /\s+/g.test(nick)) {
+                this.setState({ mNick: { visible: true } });
+                return false;
+            }
+            _jquery2.default.ajax({
+                type: 'post',
+                url: 'http://localhost:50979/api/values',
+                data: { "nickName": nick },
+                success: function success() {
+                    _message2.default.success('修改成功');
+                }, error: function error() {
+                    _message2.default.error('出错了');
+                }
+            });
+        }
+    }, {
+        key: 'isOldEmpty',
+        value: function isOldEmpty(e) {
+            var oldP = e.target.value;
+            if (oldP == "" || /\s+/g.test(oldP)) {
+                this.setState({ oldP: { visible: true } });
+                return false;
+            }
+            this.setState({ oldP: { visible: false } });
+        }
+    }, {
+        key: 'isPasswordCorrect',
+        value: function isPasswordCorrect(e) {
+            var password = (0, _jquery2.default)("#old-password").val();
+            if (password == "" || /\s+/g.test(password)) {
+                this.setState({ oldP: { visible: true } });
+                return false;
+            }
+            // $.ajax({
+            //     type: 'post',
+            //     url: 'http://localhost:50979/api/values',
+            //     data: { "oldPassword": password },
+            //     success: function (data) {
+            this.setState({
+                mP: { visible: true }
+            });
+            //     },
+            //     error: function () {
+            _message2.default.error("密码错误！");
+            //     }
+            // });
+        }
+    }, {
+        key: 'handleMPCancel',
+        value: function handleMPCancel(e) {
+            this.setState({
+                mP: { visible: false }
+            });
+        }
+    }, {
+        key: 'handleMPSubmit',
+        value: function handleMPSubmit(e) {
+            e.preventDefault();
+            this.props.form.validateFields(function (err, values) {
+                if (!err) {
+                    var fPassword = values.fPassword;
+                    var sPassword = values.sPassword;
+
+                    _jquery2.default.ajax({
+                        type: 'post',
+                        url: '',
+                        data: { "password": fPassword },
+                        success: function success() {
+                            this.handleMPCancel.bind(this);
+                            _message2.default.success('修改成功');
+                        }, error: function error() {
+                            _message2.default.error('出错了');
+                        }
+                    });
+                }
+            });
+        }
+    }, {
+        key: 'handleConfirmBlur',
+        value: function handleConfirmBlur(e) {
+            var value = e.target.value;
+            this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+        }
+    }, {
+        key: 'checkPassword',
+        value: function checkPassword(rule, value, callback) {
+            var form = this.props.form;
+            if (value && value !== form.getFieldValue('password')) {
+                callback('两次密码不一致!');
+            } else {
+                callback();
+            }
+        }
+    }, {
+        key: 'checkConfirm',
+        value: function checkConfirm(rule, value, callback) {
+            var form = this.props.form;
+            if (value && this.state.confirmDirty) {
+                form.validateFields(['confirm'], { force: true });
+            }
+            callback();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _props$form = this.props.form,
+                getFieldDecorator = _props$form.getFieldDecorator,
+                getFieldValue = _props$form.getFieldValue;
+
+            var state = this.state;
+            var formItemLayout = {
+                labelCol: {
+                    xs: { span: 24 },
+                    sm: { span: 6 }
+                },
+                wrapperCol: {
+                    xs: { span: 24 },
+                    sm: { span: 5 }
+                }
+            };
+            var tailFormItemLayout = {
+                wrapperCol: {
+                    sm: {
+                        span: 14,
+                        offset: 6
+                    }
+                }
+            };
+            var ModalItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
+            };
+            var formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
+                }
+            };
+            return _react2.default.createElement(
+                'div',
+                { className: 'admin-info router' },
+                _react2.default.createElement(
+                    'h3',
+                    null,
+                    '\u4E2A\u4EBA\u8D44\u6599'
+                ),
+                _react2.default.createElement(
+                    _form2.default,
+                    { className: 'login-form' },
+                    _react2.default.createElement(
+                        FormItem,
+                        _extends({}, formItemLayout, { label: '\u8D26\u6237' }),
+                        _react2.default.createElement(
+                            'label',
+                            { id: 'account', placeholder: '\u8D26\u6237' },
+                            ' ',
+                            state.account.value
+                        )
+                    ),
+                    _react2.default.createElement(
+                        FormItem,
+                        _extends({}, formItemLayout, { label: '\u6635\u79F0' }),
+                        _react2.default.createElement(
+                            _tooltip2.default,
+                            { placement: 'right', title: "昵称不能为空", visible: state.mNick.visible },
+                            _react2.default.createElement(_input2.default, { id: 'nick', onChange: this.isNickEmpty.bind(this), placeholder: '\u6635\u79F0', value: state.nick.value })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        FormItem,
+                        tailFormItemLayout,
+                        _react2.default.createElement(
+                            _button2.default,
+                            { onClick: this.handleMInfoSubmit.bind(this), type: 'primary' },
+                            '\u786E\u8BA4\u4FEE\u6539'
+                        )
+                    )
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    _form2.default,
+                    { className: 'login-form' },
+                    _react2.default.createElement(
+                        FormItem,
+                        _extends({}, formItemLayout, { label: '\u65E7\u5BC6\u7801' }),
+                        _react2.default.createElement(
+                            _tooltip2.default,
+                            { placement: 'right', title: "密码不能为空", visible: state.oldP.visible },
+                            _react2.default.createElement(_input2.default, { id: 'old-password', onChange: this.isOldEmpty.bind(this), placeholder: '\u65E7\u5BC6\u7801', type: 'password' })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        FormItem,
+                        tailFormItemLayout,
+                        _react2.default.createElement(
+                            _button2.default,
+                            { onClick: this.isPasswordCorrect.bind(this), type: 'primary' },
+                            '\u4FEE\u6539\u5BC6\u7801'
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _modal2.default,
+                    { title: '\u4FEE\u6539\u5BC6\u7801', visible: state.mP.visible, footer: null,
+                        onCancel: this.handleMPCancel.bind(this) },
+                    _react2.default.createElement(
+                        _form2.default,
+                        null,
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({}, ModalItemLayout, { label: '\u65B0\u5BC6\u7801', hasFeedback: true }),
+                            getFieldDecorator('password', {
+                                rules: [{ required: true, message: '请输入新密码!' }, { validator: this.checkConfirm.bind(this) }]
+                            })(_react2.default.createElement(_input2.default, { type: 'password' }))
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({}, ModalItemLayout, { label: '\u786E\u8BA4\u5BC6\u7801', hasFeedback: true }),
+                            getFieldDecorator('confirm', {
+                                rules: [{ required: true, message: '请确认密码!' }, { validator: this.checkPassword.bind(this) }]
+                            })(_react2.default.createElement(_input2.default, { type: 'password', onBlur: this.handleConfirmBlur.bind(this) }))
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            formItemLayoutWithOutLabel,
+                            _react2.default.createElement(
+                                _button2.default,
+                                { type: 'primary', onClick: this.handleMPSubmit.bind(this), size: 'large' },
+                                '\u63D0\u4EA4'
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return AdminInfo;
+}(_react.Component);
+
+exports.default = _form2.default.create()(AdminInfo);
+
+/***/ }),
+
+/***/ "./src/Components/QuestDetailsBox/ChartDetail.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+
+var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
+
+var _table2 = _interopRequireDefault(_table);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _OptionChart = __webpack_require__("./src/Components/QuestDetailsBox/OptionChart.jsx");
+
+var _OptionChart2 = _interopRequireDefault(_OptionChart);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
+
+var RadioChoiceDetail = function (_Component) {
+    _inherits(RadioChoiceDetail, _Component);
+
+    function RadioChoiceDetail(props) {
+        _classCallCheck(this, RadioChoiceDetail);
+
+        var _this = _possibleConstructorReturn(this, (RadioChoiceDetail.__proto__ || Object.getPrototypeOf(RadioChoiceDetail)).call(this, props));
+
+        _this.state = {
+            questId: props.questId,
+            data: data
+        };
+        return _this;
+    }
+
+    _createClass(RadioChoiceDetail, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var questId = nextProps.questId;
+            this.setState({ quest: questId });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }];
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(_table2.default, {
+                    columns: choiceColumns,
+                    bordered: true,
+                    expandedRowRender: function expandedRowRender(record) {
+                        return _react2.default.createElement(_OptionChart2.default, { choiceId: record.key });
+                    },
+                    dataSource: this.state.data,
+                    title: function title() {
+                        return "选择题";
+                    } })
+            );
+        }
+    }]);
+
+    return RadioChoiceDetail;
+}(_react.Component);
+
+exports.default = RadioChoiceDetail;
+
+/***/ }),
+
+/***/ "./src/Components/QuestDetailsBox/CheckChoiceDetail.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+
+var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
+
+var _table2 = _interopRequireDefault(_table);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _OptionDetail = __webpack_require__("./src/Components/QuestDetailsBox/OptionDetail.jsx");
+
+var _OptionDetail2 = _interopRequireDefault(_OptionDetail);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
+
+var CheckChoiceDetail = function (_Component) {
+    _inherits(CheckChoiceDetail, _Component);
+
+    function CheckChoiceDetail(props) {
+        _classCallCheck(this, CheckChoiceDetail);
+
+        var _this = _possibleConstructorReturn(this, (CheckChoiceDetail.__proto__ || Object.getPrototypeOf(CheckChoiceDetail)).call(this, props));
+
+        _this.state = {
+            questId: props.questId,
+            data: []
+        };
+        return _this;
+    }
+
+    _createClass(CheckChoiceDetail, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            // $.ajax({
+            //     type:'post',
+            //     url:'',
+            //     data:{},
+            //     success:function(data){
+            //         this.setState({data:data})
+            //     },error:function(){
+            //     }
+            // })
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var questId = nextProps.questId;
+            this.setState({ quest: questId });
+        }
+    }, {
+        key: 'onModifyChoice',
+        value: function onModifyChoice(text, record) {
+            alert(record.name);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+                title: '操作', dataIndex: '', width: 100,
+                render: function render(text, record) {
+                    return _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            null,
+                            '\u4FEE\u6539'
+                        ),
+                        _react2.default.createElement('span', { className: 'ant-divider' }),
+                        _react2.default.createElement(
+                            'a',
+                            null,
+                            '\u5220\u9664'
+                        )
+                    );
+                }
+            }];
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(_table2.default, {
+                    columns: choiceColumns,
+                    bordered: true,
+                    expandedRowRender: function expandedRowRender(record) {
+                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.key });
+                    },
+                    dataSource: this.state.data,
+                    title: function title() {
+                        return "多选题";
+                    } })
+            );
+        }
+    }]);
+
+    return CheckChoiceDetail;
+}(_react.Component);
+
+exports.default = CheckChoiceDetail;
+
+/***/ }),
+
+/***/ "./src/Components/QuestDetailsBox/CompletionDetail.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+
+var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
+
+var _table2 = _interopRequireDefault(_table);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
+
+var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
+
+var _popconfirm2 = _interopRequireDefault(_popconfirm);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park' }];
+
+var CompletionDetail = function (_Component) {
+    _inherits(CompletionDetail, _Component);
+
+    function CompletionDetail(props) {
+        _classCallCheck(this, CompletionDetail);
+
+        var _this = _possibleConstructorReturn(this, (CompletionDetail.__proto__ || Object.getPrototypeOf(CompletionDetail)).call(this, props));
+
+        _this.state = {
+            questId: props.questId,
+            data: data
+        };
+        return _this;
+    }
+
+    _createClass(CompletionDetail, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            // $.ajax({
+            //     type:'post',
+            //     url:'',
+            //     data:{},
+            //     success:function(data){
+            //         this.setState({data:data})
+            //     },error:function(){
+            //     }
+            // })
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var questId = nextProps.questId;
+            this.setState({ quest: questId });
+        }
+    }, {
+        key: 'onModifyCompleion',
+        value: function onModifyCompleion(key) {}
+    }, {
+        key: 'onDeletCompletion',
+        value: function onDeletCompletion(key) {}
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var columns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+                title: '操作', dataIndex: '', width: 100,
+                render: function render(text, record, index) {
+                    return _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { onClick: function onClick() {
+                                    return _this2.onModifyCompleion(record.key);
+                                } },
+                            '\u4FEE\u6539'
+                        ),
+                        _react2.default.createElement('span', { className: 'ant-divider' }),
+                        _react2.default.createElement(
+                            _popconfirm2.default,
+                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
+                                    return _this2.onDeletCompletion(record.key);
+                                }, okText: '\u5220\u9664' },
+                            _react2.default.createElement(
+                                'a',
+                                null,
+                                '\u5220\u9664'
+                            )
+                        )
+                    );
+                }
+            }];
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(_table2.default, { columns: columns, dataSource: this.state.data, title: function title() {
+                        return "简答题";
+                    } })
+            );
+        }
+    }]);
+
+    return CompletionDetail;
+}(_react.Component);
+
+exports.default = CompletionDetail;
+
+/***/ }),
+
+/***/ "./src/Components/QuestDetailsBox/DataDetail.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76729,35 +77435,27 @@ exports.default = DataDetail;
 
 /***/ }),
 
-/***/ "./src/Components/Content/ModifyPassword.jsx":
+/***/ "./src/Components/QuestDetailsBox/OptionChart.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _css = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
 
-var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
+var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
 
-var _button2 = _interopRequireDefault(_button);
+var _table2 = _interopRequireDefault(_table);
 
-var _css2 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+var _css2 = __webpack_require__("./node_modules/antd/lib/progress/style/css.js");
 
-var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
+var _progress = __webpack_require__("./node_modules/antd/lib/progress/index.js");
 
-var _input2 = _interopRequireDefault(_input);
-
-var _css3 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
-
-var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
-
-var _form2 = _interopRequireDefault(_form);
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _progress2 = _interopRequireDefault(_progress);
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -76775,126 +77473,223 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var FormItem = _form2.default.Item;
+var data = [{ OptionId: 1, OptionContent: 'John Brown', age: 32, num: 20 }, { OptionId: 2, OptionContent: 'Jim Green', age: 42, num: 20 }, { OptionId: 3, OptionContent: 'Joe Black', age: 32, num: 20 }];
 
-var ModifyPassword = function (_Component) {
-    _inherits(ModifyPassword, _Component);
+var OptionChart = function (_Component) {
+    _inherits(OptionChart, _Component);
 
-    function ModifyPassword(props) {
-        _classCallCheck(this, ModifyPassword);
+    function OptionChart(props) {
+        _classCallCheck(this, OptionChart);
 
-        var _this = _possibleConstructorReturn(this, (ModifyPassword.__proto__ || Object.getPrototypeOf(ModifyPassword)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (OptionChart.__proto__ || Object.getPrototypeOf(OptionChart)).call(this, props));
 
         _this.state = {
-            confirmDirty: false
+            questId: props.questId,
+            data: data
         };
         return _this;
     }
 
-    _createClass(ModifyPassword, [{
-        key: 'handleSubmit',
-        value: function handleSubmit(e) {
-            e.preventDefault();
-            this.props.form.validateFields(function (err, values) {
-                if (!err) {
-                    var fPassword = values["fPassword"];
-                    var sPassword = values["sPassword"];
-
-                    $.ajax({
-                        type: 'post',
-                        url: '',
-                        data: { "password": fPassword },
-                        success: function success() {
-                            message.success('修改成功');
-                        }, error: function error() {
-                            message.error('出错了');
-                        }
-                    });
-                }
-            });
+    _createClass(OptionChart, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            // $.ajax({
+            //     type:'post',
+            //     url:'',
+            //     data:{},
+            //     success:function(data){
+            //         this.setState({data:data})
+            //     },error:function(){
+            //     }
+            // })
         }
     }, {
-        key: 'handleConfirmBlur',
-        value: function handleConfirmBlur(e) {
-            var value = e.target.value;
-            this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-        }
-    }, {
-        key: 'checkPassword',
-        value: function checkPassword(rule, value, callback) {
-            var form = this.props.form;
-            if (value && value !== form.getFieldValue('password')) {
-                callback('两次密码不一致!');
-            } else {
-                callback();
-            }
-        }
-    }, {
-        key: 'checkConfirm',
-        value: function checkConfirm(rule, value, callback) {
-            var form = this.props.form;
-            if (value && this.state.confirmDirty) {
-                form.validateFields(['confirm'], { force: true });
-            }
-            callback();
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var questId = nextProps.questId;
+            this.setState({ quest: questId });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _props$form = this.props.form,
-                getFieldDecorator = _props$form.getFieldDecorator,
-                getFieldValue = _props$form.getFieldValue;
-
-            var formItemLayout = {
-                labelCol: { span: 4 },
-                wrapperCol: { span: 14 }
-            };
-
-            var formItemLayoutWithOutLabel = {
-                wrapperCol: {
-                    xs: { span: 24, offset: 0 },
-                    sm: { span: 20, offset: 4 }
+            var choiceColumns = [{ title: '题目Id', dataIndex: 'OptionId', key: 'OptionId', width: 100 }, { title: '题目名称', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 }, {
+                title: '百分比', dataIndex: 'age', key: 'age', width: 100,
+                render: function render(text, record, index) {
+                    return _react2.default.createElement(
+                        'div',
+                        { style: { textAlign: "center" } },
+                        _react2.default.createElement(_progress2.default, { type: 'circle', percent: 20, width: 50 })
+                    );
                 }
-            };
+            }, { title: '总数', dataIndex: 'num', key: 'num', width: 100 }];
             return _react2.default.createElement(
-                _form2.default,
+                'div',
                 null,
-                _react2.default.createElement(
-                    FormItem,
-                    _extends({}, formItemLayout, { label: '\u65B0\u5BC6\u7801', hasFeedback: true }),
-                    getFieldDecorator('password', {
-                        rules: [{ required: true, message: '请输入新密码!' }, { validator: this.checkConfirm.bind(this) }]
-                    })(_react2.default.createElement(_input2.default, { type: 'password' }))
-                ),
-                _react2.default.createElement(
-                    FormItem,
-                    _extends({}, formItemLayout, { label: '\u786E\u8BA4\u5BC6\u7801', hasFeedback: true }),
-                    getFieldDecorator('confirm', {
-                        rules: [{ required: true, message: '请确认密码!' }, { validator: this.checkPassword.bind(this) }]
-                    })(_react2.default.createElement(_input2.default, { type: 'password', onBlur: this.handleConfirmBlur.bind(this) }))
-                ),
-                _react2.default.createElement(
-                    FormItem,
-                    formItemLayoutWithOutLabel,
-                    _react2.default.createElement(
-                        _button2.default,
-                        { type: 'primary', onClick: this.handleSubmit.bind(this), size: 'large' },
-                        '\u63D0\u4EA4'
-                    )
-                )
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(_table2.default, { rowKey: 'OptionId',
+                    columns: choiceColumns,
+                    bordered: true,
+                    pagination: false,
+                    scroll: { y: 240 },
+                    dataSource: this.state.data,
+                    title: function title() {
+                        return _react2.default.createElement(
+                            'p',
+                            { style: { textAlign: "center", margin: 0 } },
+                            '\u9009\u9879'
+                        );
+                    } })
             );
         }
     }]);
 
-    return ModifyPassword;
+    return OptionChart;
 }(_react.Component);
 
-exports.default = _form2.default.create()(ModifyPassword);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
+exports.default = OptionChart;
 
 /***/ }),
 
-/***/ "./src/Components/Content/ModifyQuest.jsx":
+/***/ "./src/Components/QuestDetailsBox/OptionDetail.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+
+var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
+
+var _table2 = _interopRequireDefault(_table);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
+
+var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
+
+var _popconfirm2 = _interopRequireDefault(_popconfirm);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 4, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 5, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 6, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 7, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 8, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 9, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 10, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 11, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 12, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
+
+var OptionDetail = function (_Component) {
+    _inherits(OptionDetail, _Component);
+
+    function OptionDetail(props) {
+        _classCallCheck(this, OptionDetail);
+
+        var _this = _possibleConstructorReturn(this, (OptionDetail.__proto__ || Object.getPrototypeOf(OptionDetail)).call(this, props));
+
+        _this.state = {
+            choiceId: props.choiceId,
+            data: []
+        };
+        return _this;
+    }
+
+    _createClass(OptionDetail, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            // $.ajax({
+            //     type: 'post',
+            //     url: '',
+            //     data: {},
+            //     success: function (data) {
+            //         this.setState({ data: data })
+            //     }, error: function () {
+            //     }
+            // })
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var choiceId = nextProps.choiceId;
+            this.setState({ choiceId: choiceId });
+        }
+    }, {
+        key: 'onModifyChoice',
+        value: function onModifyChoice(key) {
+            alert(key);
+        }
+    }, {
+        key: 'onDeletOption',
+        value: function onDeletOption(key) {
+            alert(key);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var optionColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+                title: '操作', dataIndex: '', width: 100,
+                render: function render(text, record, index) {
+                    return _react2.default.createElement(
+                        'span',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { onClick: function onClick() {
+                                    return _this2.onModifyChoice(record.key);
+                                } },
+                            '\u4FEE\u6539'
+                        ),
+                        _react2.default.createElement('span', { className: 'ant-divider' }),
+                        _react2.default.createElement(
+                            _popconfirm2.default,
+                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u9009\u9879\uFF1F', onConfirm: function onConfirm() {
+                                    return _this2.onDeletOption(record.key);
+                                }, okText: '\u5220\u9664' },
+                            _react2.default.createElement(
+                                'a',
+                                null,
+                                '\u5220\u9664'
+                            )
+                        )
+                    );
+                }
+            }];
+            return _react2.default.createElement(_table2.default, { columns: optionColumns,
+                dataSource: this.state.data,
+                pagination: false,
+                scroll: { y: 240 },
+                size: 'small',
+                title: function title() {
+                    return _react2.default.createElement(
+                        'p',
+                        { style: { textAlign: "center", margin: 0 } },
+                        '\u9009\u9879'
+                    );
+                } });
+        }
+    }]);
+
+    return OptionDetail;
+}(_react.Component);
+
+exports.default = OptionDetail;
+
+/***/ }),
+
+/***/ "./src/Components/QuestDetailsBox/QuestDetail.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -76972,23 +77767,23 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
-var _CreateChoice = __webpack_require__("./src/Components/QuestionBox/CreateChoice.jsx");
+var _CreateChoice = __webpack_require__("./src/Components/CreateQuestBox/CreateChoice.jsx");
 
 var _CreateChoice2 = _interopRequireDefault(_CreateChoice);
 
-var _CreateCompletion = __webpack_require__("./src/Components/QuestionBox/CreateCompletion.jsx");
+var _CreateCompletion = __webpack_require__("./src/Components/CreateQuestBox/CreateCompletion.jsx");
 
 var _CreateCompletion2 = _interopRequireDefault(_CreateCompletion);
 
-var _RadioChoiceDetail = __webpack_require__("./src/Components/QuestionBox/RadioChoiceDetail.jsx");
+var _RadioChoiceDetail = __webpack_require__("./src/Components/QuestDetailsBox/RadioChoiceDetail.jsx");
 
 var _RadioChoiceDetail2 = _interopRequireDefault(_RadioChoiceDetail);
 
-var _CheckChoiceDetail = __webpack_require__("./src/Components/QuestionBox/CheckChoiceDetail.jsx");
+var _CheckChoiceDetail = __webpack_require__("./src/Components/QuestDetailsBox/CheckChoiceDetail.jsx");
 
 var _CheckChoiceDetail2 = _interopRequireDefault(_CheckChoiceDetail);
 
-var _CompletionDetail = __webpack_require__("./src/Components/QuestionBox/CompletionDetail.jsx");
+var _CompletionDetail = __webpack_require__("./src/Components/QuestDetailsBox/CompletionDetail.jsx");
 
 var _CompletionDetail2 = _interopRequireDefault(_CompletionDetail);
 
@@ -77322,11 +78117,11 @@ exports.default = ModifyQuest;
 
 /***/ }),
 
-/***/ "./src/Components/Content/OptionChart.jsx":
+/***/ "./src/Components/QuestDetailsBox/RadioChoiceDetail.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -77338,11 +78133,11 @@ var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
 
 var _table2 = _interopRequireDefault(_table);
 
-var _css2 = __webpack_require__("./node_modules/antd/lib/progress/style/css.js");
+var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
 
-var _progress = __webpack_require__("./node_modules/antd/lib/progress/index.js");
+var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
 
-var _progress2 = _interopRequireDefault(_progress);
+var _popconfirm2 = _interopRequireDefault(_popconfirm);
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -77352,6 +78147,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
+var _OptionDetail = __webpack_require__("./src/Components/QuestDetailsBox/OptionDetail.jsx");
+
+var _OptionDetail2 = _interopRequireDefault(_OptionDetail);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -77360,35 +78159,34 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = [{ OptionId: 1, OptionContent: 'John Brown', age: 32, num: 20 }, { OptionId: 2, OptionContent: 'Jim Green', age: 42, num: 20 }, { OptionId: 3, OptionContent: 'Joe Black', age: 32, num: 20 }];
+var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
 
-var OptionChart = function (_Component) {
-    _inherits(OptionChart, _Component);
+var RadioChoiceDetail = function (_Component) {
+    _inherits(RadioChoiceDetail, _Component);
 
-    function OptionChart(props) {
-        _classCallCheck(this, OptionChart);
+    function RadioChoiceDetail(props) {
+        _classCallCheck(this, RadioChoiceDetail);
 
-        var _this = _possibleConstructorReturn(this, (OptionChart.__proto__ || Object.getPrototypeOf(OptionChart)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (RadioChoiceDetail.__proto__ || Object.getPrototypeOf(RadioChoiceDetail)).call(this, props));
 
         _this.state = {
             questId: props.questId,
-            data: data
+            data: []
         };
         return _this;
     }
 
-    _createClass(OptionChart, [{
+    _createClass(RadioChoiceDetail, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(data){
-            //         this.setState({data:data})
-            //     },error:function(){
-            //     }
-            // })
+            $.ajax({
+                type: 'post',
+                url: '',
+                data: {},
+                success: function success(data) {
+                    this.setState({ data: data });
+                }, error: function error() {}
+            });
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -77397,47 +78195,109 @@ var OptionChart = function (_Component) {
             this.setState({ quest: questId });
         }
     }, {
+        key: 'onModifyChoice',
+        value: function onModifyChoice(key) {
+            alert(key);
+            // $.ajax({
+            //     type:'post',
+            //     url:'',
+            //     data:{},
+            //     success:function(){
+            //         message.success('修改成功');
+            //     },error:function(){
+            //         message.error('出错了');
+            //     }
+            // })
+        }
+    }, {
+        key: 'submitModify',
+        value: function submitModify() {
+            // $.ajax({
+            //     type: 'post',
+            //     url: '',
+            //     data: {},
+            //     success: function () {
+            //         message.success('修改成功');
+            //     }, error: function () {
+            //         message.error('出错了');
+            //     }
+            // })
+        }
+    }, {
+        key: 'onDeletChoice',
+        value: function onDeletChoice(key) {
+            alert(key);
+            // $.ajax({
+            //     type:'post',
+            //     url:'',
+            //     data:{},
+            //     success:function(){
+            //         message.success('删除成功');
+            //     },error:function(){
+            //         message.error('出错了');
+            //     }
+            // })
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var choiceColumns = [{ title: '题目Id', dataIndex: 'OptionId', key: 'OptionId', width: 100 }, { title: '题目名称', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 }, {
-                title: '百分比', dataIndex: 'age', key: 'age', width: 100,
+            var _this2 = this;
+
+            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+                title: '操作', dataIndex: '', width: 100,
                 render: function render(text, record, index) {
                     return _react2.default.createElement(
-                        'div',
-                        { style: { textAlign: "center" } },
-                        _react2.default.createElement(_progress2.default, { type: 'circle', percent: 20, width: 50 })
+                        'span',
+                        null,
+                        _react2.default.createElement(
+                            'a',
+                            { onClick: function onClick() {
+                                    return _this2.onModifyChoice(record.key);
+                                } },
+                            '\u4FEE\u6539'
+                        ),
+                        _react2.default.createElement('span', { className: 'ant-divider' }),
+                        _react2.default.createElement(
+                            _popconfirm2.default,
+                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
+                                    return _this2.onDeletChoice(record.key);
+                                }, okText: '\u5220\u9664' },
+                            _react2.default.createElement(
+                                'a',
+                                null,
+                                '\u5220\u9664'
+                            )
+                        )
                     );
                 }
-            }, { title: '总数', dataIndex: 'num', key: 'num', width: 100 }];
+            }];
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, { rowKey: 'OptionId',
+                _react2.default.createElement(_table2.default, {
                     columns: choiceColumns,
                     bordered: true,
-                    pagination: false,
-                    scroll: { y: 240 },
+                    expandedRowRender: function expandedRowRender(record) {
+                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.key });
+                    },
                     dataSource: this.state.data,
                     title: function title() {
-                        return _react2.default.createElement(
-                            'p',
-                            { style: { textAlign: "center", margin: 0 } },
-                            '\u9009\u9879'
-                        );
+                        return "单选";
                     } })
             );
         }
     }]);
 
-    return OptionChart;
+    return RadioChoiceDetail;
 }(_react.Component);
 
-exports.default = OptionChart;
+exports.default = RadioChoiceDetail;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
-/***/ "./src/Components/Content/Total.jsx":
+/***/ "./src/Components/QuestDetailsBox/Total.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77485,11 +78345,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
-var _ChartDetail = __webpack_require__("./src/Components/Content/ChartDetail.jsx");
+var _ChartDetail = __webpack_require__("./src/Components/QuestDetailsBox/ChartDetail.jsx");
 
 var _ChartDetail2 = _interopRequireDefault(_ChartDetail);
 
-var _DataDetail = __webpack_require__("./src/Components/Content/DataDetail.jsx");
+var _DataDetail = __webpack_require__("./src/Components/QuestDetailsBox/DataDetail.jsx");
 
 var _DataDetail2 = _interopRequireDefault(_DataDetail);
 
@@ -77684,948 +78544,6 @@ exports.default = Total;
 
 /***/ }),
 
-/***/ "./src/Components/QuestionBox/CheckChoiceDetail.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
-
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
-
-var _table2 = _interopRequireDefault(_table);
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-var _OptionDetail = __webpack_require__("./src/Components/QuestionBox/OptionDetail.jsx");
-
-var _OptionDetail2 = _interopRequireDefault(_OptionDetail);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
-
-var CheckChoiceDetail = function (_Component) {
-    _inherits(CheckChoiceDetail, _Component);
-
-    function CheckChoiceDetail(props) {
-        _classCallCheck(this, CheckChoiceDetail);
-
-        var _this = _possibleConstructorReturn(this, (CheckChoiceDetail.__proto__ || Object.getPrototypeOf(CheckChoiceDetail)).call(this, props));
-
-        _this.state = {
-            questId: props.questId,
-            data: []
-        };
-        return _this;
-    }
-
-    _createClass(CheckChoiceDetail, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(data){
-            //         this.setState({data:data})
-            //     },error:function(){
-            //     }
-            // })
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
-        }
-    }, {
-        key: 'onModifyChoice',
-        value: function onModifyChoice(text, record) {
-            alert(record.name);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
-                title: '操作', dataIndex: '', width: 100,
-                render: function render(text, record) {
-                    return _react2.default.createElement(
-                        'span',
-                        null,
-                        _react2.default.createElement(
-                            'a',
-                            null,
-                            '\u4FEE\u6539'
-                        ),
-                        _react2.default.createElement('span', { className: 'ant-divider' }),
-                        _react2.default.createElement(
-                            'a',
-                            null,
-                            '\u5220\u9664'
-                        )
-                    );
-                }
-            }];
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, {
-                    columns: choiceColumns,
-                    bordered: true,
-                    expandedRowRender: function expandedRowRender(record) {
-                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.key });
-                    },
-                    dataSource: this.state.data,
-                    title: function title() {
-                        return "多选题";
-                    } })
-            );
-        }
-    }]);
-
-    return CheckChoiceDetail;
-}(_react.Component);
-
-exports.default = CheckChoiceDetail;
-
-/***/ }),
-
-/***/ "./src/Components/QuestionBox/CompletionDetail.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
-
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
-
-var _table2 = _interopRequireDefault(_table);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
-
-var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
-
-var _popconfirm2 = _interopRequireDefault(_popconfirm);
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park' }];
-
-var CompletionDetail = function (_Component) {
-    _inherits(CompletionDetail, _Component);
-
-    function CompletionDetail(props) {
-        _classCallCheck(this, CompletionDetail);
-
-        var _this = _possibleConstructorReturn(this, (CompletionDetail.__proto__ || Object.getPrototypeOf(CompletionDetail)).call(this, props));
-
-        _this.state = {
-            questId: props.questId,
-            data: data
-        };
-        return _this;
-    }
-
-    _createClass(CompletionDetail, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(data){
-            //         this.setState({data:data})
-            //     },error:function(){
-            //     }
-            // })
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
-        }
-    }, {
-        key: 'onModifyCompleion',
-        value: function onModifyCompleion(key) {}
-    }, {
-        key: 'onDeletCompletion',
-        value: function onDeletCompletion(key) {}
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var columns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
-                title: '操作', dataIndex: '', width: 100,
-                render: function render(text, record, index) {
-                    return _react2.default.createElement(
-                        'span',
-                        null,
-                        _react2.default.createElement(
-                            'a',
-                            { onClick: function onClick() {
-                                    return _this2.onModifyCompleion(record.key);
-                                } },
-                            '\u4FEE\u6539'
-                        ),
-                        _react2.default.createElement('span', { className: 'ant-divider' }),
-                        _react2.default.createElement(
-                            _popconfirm2.default,
-                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeletCompletion(record.key);
-                                }, okText: '\u5220\u9664' },
-                            _react2.default.createElement(
-                                'a',
-                                null,
-                                '\u5220\u9664'
-                            )
-                        )
-                    );
-                }
-            }];
-
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, { columns: columns, dataSource: this.state.data, title: function title() {
-                        return "简答题";
-                    } })
-            );
-        }
-    }]);
-
-    return CompletionDetail;
-}(_react.Component);
-
-exports.default = CompletionDetail;
-
-/***/ }),
-
-/***/ "./src/Components/QuestionBox/CreateChoice.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
-
-var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
-
-var _button2 = _interopRequireDefault(_button);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/switch/style/css.js");
-
-var _switch = __webpack_require__("./node_modules/antd/lib/switch/index.js");
-
-var _switch2 = _interopRequireDefault(_switch);
-
-var _css3 = __webpack_require__("./node_modules/antd/lib/icon/style/css.js");
-
-var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
-
-var _icon2 = _interopRequireDefault(_icon);
-
-var _css4 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
-
-var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
-
-var _input2 = _interopRequireDefault(_input);
-
-var _css5 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
-
-var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
-
-var _form2 = _interopRequireDefault(_form);
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FormItem = _form2.default.Item;
-
-var uuid = 1;
-
-var CreateChoice = function (_Component) {
-    _inherits(CreateChoice, _Component);
-
-    function CreateChoice(props) {
-        _classCallCheck(this, CreateChoice);
-
-        var _this = _possibleConstructorReturn(this, (CreateChoice.__proto__ || Object.getPrototypeOf(CreateChoice)).call(this, props));
-
-        _this.state = {};
-        return _this;
-    }
-
-    _createClass(CreateChoice, [{
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {}
-    }, {
-        key: 'remove',
-        value: function remove(k) {
-            var form = this.props.form;
-            // can use data-binding to get
-
-            var keys = form.getFieldValue('keys');
-            // We need at least one passenger
-            if (keys.length === 1) {
-                return;
-            }
-
-            // can use data-binding to set
-            form.setFieldsValue({
-                keys: keys.filter(function (key) {
-                    return key !== k;
-                })
-            });
-        }
-    }, {
-        key: 'add',
-        value: function add(e) {
-            uuid++;
-            var form = this.props.form;
-            // can use data-binding to get
-
-            var keys = form.getFieldValue('keys');
-            var nextKeys = keys.concat(uuid);
-            // can use data-binding to set
-            // important! notify form to detect changes
-            form.setFieldsValue({
-                keys: nextKeys
-            });
-        }
-    }, {
-        key: 'handleSubmit',
-        value: function handleSubmit(e) {
-            var _this2 = this;
-
-            e.preventDefault();
-            this.props.form.validateFields(function (err, values) {
-                if (!err) {
-                    var questId = _this2.props.questId;
-                    if (questId == undefined) {
-                        message.error("出错啦");
-                        return false;
-                    }
-                    var title = values["title"];
-                    var type = values["switch"] == true ? true : false;
-
-                    var options = new Array();
-                    var form = _this2.props.form;
-
-                    var keys = form.getFieldValue('keys');
-                    keys.filter(function (key) {
-                        return options.push(values["names-" + key]);
-                    });
-
-                    $.ajax({
-                        type: 'post',
-                        url: '',
-                        data: { "questId": questId, "title": title, "type": type },
-                        success: function success() {},
-                        error: function error() {}
-                    });
-                }
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this3 = this;
-
-            var _props$form = this.props.form,
-                getFieldDecorator = _props$form.getFieldDecorator,
-                getFieldValue = _props$form.getFieldValue;
-
-
-            var formItemLayout = {
-                labelCol: { span: 4 },
-                wrapperCol: { span: 14 }
-            };
-
-            var formItemLayoutWithOutLabel = {
-                wrapperCol: {
-                    xs: { span: 24, offset: 0 },
-                    sm: { span: 20, offset: 4 }
-                }
-            };
-            getFieldDecorator('keys', { initialValue: [] });
-            var keys = getFieldValue('keys');
-            var formItems = keys.map(function (k, index) {
-                return _react2.default.createElement(
-                    FormItem,
-                    _extends({}, index === 0 ? formItemLayout : formItemLayoutWithOutLabel, {
-                        label: index === 0 ? '选项' : '', required: false, key: k }),
-                    getFieldDecorator('names-' + k, {
-                        validateTrigger: ['onChange', 'onBlur'],
-                        rules: [{ required: true, whitespace: true, message: "请输入选项内容或删除该选项." }]
-                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9009\u9879\u5185\u5BB9', style: { width: '60%', marginRight: 8 } })),
-                    _react2.default.createElement(_icon2.default, { className: 'dynamic-delete-button', type: 'minus-circle-o',
-                        disabled: keys.length === 1, onClick: function onClick() {
-                            return _this3.remove(k);
-                        } })
-                );
-            });
-            return _react2.default.createElement(
-                _form2.default,
-                null,
-                _react2.default.createElement(
-                    FormItem,
-                    _extends({ label: '\u9898\u76EE\u540D\u79F0' }, formItemLayout, { wrapperCol: { span: 10 } }),
-                    getFieldDecorator('title', {
-                        rules: [{ required: true, message: '请输入题目名称!', whitespace: true }]
-                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9898\u76EE\u540D\u79F0' }))
-                ),
-                _react2.default.createElement(
-                    FormItem,
-                    _extends({ label: '\u591A\u9009\u9898' }, formItemLayout),
-                    getFieldDecorator('switch', {
-                        rules: [{ required: false }]
-                    })(_react2.default.createElement(_switch2.default, null))
-                ),
-                formItems,
-                _react2.default.createElement(
-                    FormItem,
-                    formItemLayoutWithOutLabel,
-                    _react2.default.createElement(
-                        _button2.default,
-                        { type: 'dashed', onClick: this.add.bind(this), style: { width: '60%' } },
-                        _react2.default.createElement(_icon2.default, { type: 'plus' }),
-                        '\u6DFB\u52A0\u9009\u9879'
-                    )
-                ),
-                _react2.default.createElement(
-                    FormItem,
-                    formItemLayoutWithOutLabel,
-                    _react2.default.createElement(
-                        _button2.default,
-                        { type: 'primary', onClick: this.handleSubmit.bind(this), size: 'large' },
-                        '\u63D0\u4EA4'
-                    )
-                )
-            );
-        }
-    }]);
-
-    return CreateChoice;
-}(_react.Component);
-
-exports.default = _form2.default.create()(CreateChoice);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
-/***/ "./src/Components/QuestionBox/CreateCompletion.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
-
-var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
-
-var _button2 = _interopRequireDefault(_button);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
-
-var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
-
-var _input2 = _interopRequireDefault(_input);
-
-var _css3 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
-
-var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
-
-var _form2 = _interopRequireDefault(_form);
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var FormItem = _form2.default.Item;
-
-var CreateCompletion = function (_Component) {
-    _inherits(CreateCompletion, _Component);
-
-    function CreateCompletion(props) {
-        _classCallCheck(this, CreateCompletion);
-
-        var _this = _possibleConstructorReturn(this, (CreateCompletion.__proto__ || Object.getPrototypeOf(CreateCompletion)).call(this, props));
-
-        _this.state = {};
-        return _this;
-    }
-
-    _createClass(CreateCompletion, [{
-        key: 'handleSubmit',
-        value: function handleSubmit(e) {
-            var _this2 = this;
-
-            e.preventDefault();
-            this.props.form.validateFields(function (err, values) {
-                if (!err) {
-                    var questId = _this2.props.questId;
-                    if (questId == undefined) {
-                        message.error("出错啦");
-                        return false;
-                    }
-                    var title = values["title"];
-
-                    $.ajax({
-                        type: 'post',
-                        url: '',
-                        data: { "questId": questId, "title": title },
-                        success: function success() {},
-                        error: function error() {}
-                    });
-                }
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props$form = this.props.form,
-                getFieldDecorator = _props$form.getFieldDecorator,
-                getFieldValue = _props$form.getFieldValue;
-
-            var formItemLayout = {
-                labelCol: { span: 4 },
-                wrapperCol: { span: 14 }
-            };
-
-            var formItemLayoutWithOutLabel = {
-                wrapperCol: {
-                    xs: { span: 24, offset: 0 },
-                    sm: { span: 20, offset: 4 }
-                }
-            };
-            return _react2.default.createElement(
-                _form2.default,
-                null,
-                _react2.default.createElement(
-                    FormItem,
-                    _extends({ label: '\u9898\u76EE\u540D\u79F0' }, formItemLayout, { wrapperCol: { span: 10 } }),
-                    getFieldDecorator('title', {
-                        rules: [{ required: true, message: '请输入题目名称!', whitespace: true }]
-                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9898\u76EE\u540D\u79F0' }))
-                ),
-                _react2.default.createElement(
-                    FormItem,
-                    formItemLayoutWithOutLabel,
-                    _react2.default.createElement(
-                        _button2.default,
-                        { type: 'primary', onClick: this.handleSubmit.bind(this), size: 'large' },
-                        '\u63D0\u4EA4'
-                    )
-                )
-            );
-        }
-    }]);
-
-    return CreateCompletion;
-}(_react.Component);
-
-exports.default = _form2.default.create()(CreateCompletion);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
-/***/ "./src/Components/QuestionBox/OptionDetail.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
-
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
-
-var _table2 = _interopRequireDefault(_table);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
-
-var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
-
-var _popconfirm2 = _interopRequireDefault(_popconfirm);
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 4, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 5, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 6, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 7, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 8, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 9, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 10, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 11, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 12, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
-
-var OptionDetail = function (_Component) {
-    _inherits(OptionDetail, _Component);
-
-    function OptionDetail(props) {
-        _classCallCheck(this, OptionDetail);
-
-        var _this = _possibleConstructorReturn(this, (OptionDetail.__proto__ || Object.getPrototypeOf(OptionDetail)).call(this, props));
-
-        _this.state = {
-            choiceId: props.choiceId,
-            data: []
-        };
-        return _this;
-    }
-
-    _createClass(OptionDetail, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            // $.ajax({
-            //     type: 'post',
-            //     url: '',
-            //     data: {},
-            //     success: function (data) {
-            //         this.setState({ data: data })
-            //     }, error: function () {
-            //     }
-            // })
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var choiceId = nextProps.choiceId;
-            this.setState({ choiceId: choiceId });
-        }
-    }, {
-        key: 'onModifyChoice',
-        value: function onModifyChoice(key) {
-            alert(key);
-        }
-    }, {
-        key: 'onDeletOption',
-        value: function onDeletOption(key) {
-            alert(key);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var optionColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
-                title: '操作', dataIndex: '', width: 100,
-                render: function render(text, record, index) {
-                    return _react2.default.createElement(
-                        'span',
-                        null,
-                        _react2.default.createElement(
-                            'a',
-                            { onClick: function onClick() {
-                                    return _this2.onModifyChoice(record.key);
-                                } },
-                            '\u4FEE\u6539'
-                        ),
-                        _react2.default.createElement('span', { className: 'ant-divider' }),
-                        _react2.default.createElement(
-                            _popconfirm2.default,
-                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u9009\u9879\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeletOption(record.key);
-                                }, okText: '\u5220\u9664' },
-                            _react2.default.createElement(
-                                'a',
-                                null,
-                                '\u5220\u9664'
-                            )
-                        )
-                    );
-                }
-            }];
-            return _react2.default.createElement(_table2.default, { columns: optionColumns,
-                dataSource: this.state.data,
-                pagination: false,
-                scroll: { y: 240 },
-                size: 'small',
-                title: function title() {
-                    return _react2.default.createElement(
-                        'p',
-                        { style: { textAlign: "center", margin: 0 } },
-                        '\u9009\u9879'
-                    );
-                } });
-        }
-    }]);
-
-    return OptionDetail;
-}(_react.Component);
-
-exports.default = OptionDetail;
-
-/***/ }),
-
-/***/ "./src/Components/QuestionBox/RadioChoiceDetail.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
-
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
-
-var _table2 = _interopRequireDefault(_table);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
-
-var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
-
-var _popconfirm2 = _interopRequireDefault(_popconfirm);
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-var _OptionDetail = __webpack_require__("./src/Components/QuestionBox/OptionDetail.jsx");
-
-var _OptionDetail2 = _interopRequireDefault(_OptionDetail);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
-
-var RadioChoiceDetail = function (_Component) {
-    _inherits(RadioChoiceDetail, _Component);
-
-    function RadioChoiceDetail(props) {
-        _classCallCheck(this, RadioChoiceDetail);
-
-        var _this = _possibleConstructorReturn(this, (RadioChoiceDetail.__proto__ || Object.getPrototypeOf(RadioChoiceDetail)).call(this, props));
-
-        _this.state = {
-            questId: props.questId,
-            data: []
-        };
-        return _this;
-    }
-
-    _createClass(RadioChoiceDetail, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            $.ajax({
-                type: 'post',
-                url: '',
-                data: {},
-                success: function success(data) {
-                    this.setState({ data: data });
-                }, error: function error() {}
-            });
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
-        }
-    }, {
-        key: 'onModifyChoice',
-        value: function onModifyChoice(key) {
-            alert(key);
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(){
-            //         message.success('修改成功');
-            //     },error:function(){
-            //         message.error('出错了');
-            //     }
-            // })
-        }
-    }, {
-        key: 'submitModify',
-        value: function submitModify() {
-            // $.ajax({
-            //     type: 'post',
-            //     url: '',
-            //     data: {},
-            //     success: function () {
-            //         message.success('修改成功');
-            //     }, error: function () {
-            //         message.error('出错了');
-            //     }
-            // })
-        }
-    }, {
-        key: 'onDeletChoice',
-        value: function onDeletChoice(key) {
-            alert(key);
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(){
-            //         message.success('删除成功');
-            //     },error:function(){
-            //         message.error('出错了');
-            //     }
-            // })
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
-                title: '操作', dataIndex: '', width: 100,
-                render: function render(text, record, index) {
-                    return _react2.default.createElement(
-                        'span',
-                        null,
-                        _react2.default.createElement(
-                            'a',
-                            { onClick: function onClick() {
-                                    return _this2.onModifyChoice(record.key);
-                                } },
-                            '\u4FEE\u6539'
-                        ),
-                        _react2.default.createElement('span', { className: 'ant-divider' }),
-                        _react2.default.createElement(
-                            _popconfirm2.default,
-                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeletChoice(record.key);
-                                }, okText: '\u5220\u9664' },
-                            _react2.default.createElement(
-                                'a',
-                                null,
-                                '\u5220\u9664'
-                            )
-                        )
-                    );
-                }
-            }];
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, {
-                    columns: choiceColumns,
-                    bordered: true,
-                    expandedRowRender: function expandedRowRender(record) {
-                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.key });
-                    },
-                    dataSource: this.state.data,
-                    title: function title() {
-                        return "单选";
-                    } })
-            );
-        }
-    }]);
-
-    return RadioChoiceDetail;
-}(_react.Component);
-
-exports.default = RadioChoiceDetail;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
 /***/ "./src/Components/Router/headRouter.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -78652,19 +78570,19 @@ var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
 var _reactRouterDom = __webpack_require__("./node_modules/react-router-dom/es/index.js");
 
-var _AdminInfo = __webpack_require__("./src/Components/Content/AdminInfo.jsx");
+var _AdminInfo = __webpack_require__("./src/Components/ManageCenterBox/AdminInfo.jsx");
 
 var _AdminInfo2 = _interopRequireDefault(_AdminInfo);
 
-var _CreateQuest = __webpack_require__("./src/Components/Content/CreateQuest.jsx");
+var _CreateQuest = __webpack_require__("./src/Components/CreateQuestBox/CreateQuest.jsx");
 
 var _CreateQuest2 = _interopRequireDefault(_CreateQuest);
 
-var _ModifyQuest = __webpack_require__("./src/Components/Content/ModifyQuest.jsx");
+var _QuestDetail = __webpack_require__("./src/Components/QuestDetailsBox/QuestDetail.jsx");
 
-var _ModifyQuest2 = _interopRequireDefault(_ModifyQuest);
+var _QuestDetail2 = _interopRequireDefault(_QuestDetail);
 
-var _Total = __webpack_require__("./src/Components/Content/Total.jsx");
+var _Total = __webpack_require__("./src/Components/QuestDetailsBox/Total.jsx");
 
 var _Total2 = _interopRequireDefault(_Total);
 
@@ -78705,7 +78623,7 @@ var HeadRouter = function (_Component) {
                                 null,
                                 _react2.default.createElement(
                                     _reactRouterDom.Link,
-                                    { to: '/total' },
+                                    { to: '/Home/AdminCenter' },
                                     _react2.default.createElement(_icon2.default, { type: 'user' }),
                                     '\u4E2A\u4EBA\u8D44\u6599'
                                 )
@@ -78715,7 +78633,7 @@ var HeadRouter = function (_Component) {
                                 null,
                                 _react2.default.createElement(
                                     _reactRouterDom.Link,
-                                    { to: '/create' },
+                                    { to: '/createQuest' },
                                     _react2.default.createElement(_icon2.default, { type: 'plus-circle' }),
                                     '\u65B0\u5EFA\u95EE\u5377'
                                 )
@@ -78725,7 +78643,7 @@ var HeadRouter = function (_Component) {
                                 null,
                                 _react2.default.createElement(
                                     _reactRouterDom.Link,
-                                    { to: '/modify' },
+                                    { to: '/questDetail' },
                                     _react2.default.createElement(_icon2.default, { type: 'bars' }),
                                     '\u67E5\u770B\u6240\u6709\u95EE\u5377'
                                 )
@@ -78735,7 +78653,7 @@ var HeadRouter = function (_Component) {
                                 null,
                                 _react2.default.createElement(
                                     _reactRouterDom.Link,
-                                    { to: '/admin.html' },
+                                    { to: '/total' },
                                     _react2.default.createElement(_icon2.default, { type: 'line-chart' }),
                                     '\u7EDF\u8BA1'
                                 )
@@ -78743,10 +78661,10 @@ var HeadRouter = function (_Component) {
                         )
                     ),
                     _react2.default.createElement('hr', null),
-                    _react2.default.createElement(_reactRouterDom.Route, { path: '/total', component: _AdminInfo2.default }),
-                    _react2.default.createElement(_reactRouterDom.Route, { path: '/create', component: _CreateQuest2.default }),
-                    _react2.default.createElement(_reactRouterDom.Route, { path: '/modify', component: _ModifyQuest2.default }),
-                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/admin.html', component: _Total2.default })
+                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/Home/AdminCenter', component: _AdminInfo2.default }),
+                    _react2.default.createElement(_reactRouterDom.Route, { path: '/createQuest', component: _CreateQuest2.default }),
+                    _react2.default.createElement(_reactRouterDom.Route, { path: '/questDetail', component: _QuestDetail2.default }),
+                    _react2.default.createElement(_reactRouterDom.Route, { path: '/total', component: _Total2.default })
                 )
             );
         }
@@ -79103,10 +79021,136 @@ if(true) {
 
 /***/ }),
 
-/***/ "./src/images/diagonal-stripe.png":
+/***/ "./src/Js/jquery.cookie.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "cc7082a7f7853d6cb09451018e48c856.png";
+"use strict";
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+    if (true) {
+        // AMD
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__("./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+        // CommonJS
+        factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+})(function ($) {
+
+    var pluses = /\+/g;
+
+    function encode(s) {
+        return config.raw ? s : encodeURIComponent(s);
+    }
+
+    function decode(s) {
+        return config.raw ? s : decodeURIComponent(s);
+    }
+
+    function stringifyCookieValue(value) {
+        return encode(config.json ? JSON.stringify(value) : String(value));
+    }
+
+    function parseCookieValue(s) {
+        if (s.indexOf('"') === 0) {
+            // This is a quoted cookie as according to RFC2068, unescape...
+            s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+        }
+
+        try {
+            // Replace server-side written pluses with spaces.
+            // If we can't decode the cookie, ignore it, it's unusable.
+            // If we can't parse the cookie, ignore it, it's unusable.
+            s = decodeURIComponent(s.replace(pluses, ' '));
+            return config.json ? JSON.parse(s) : s;
+        } catch (e) {}
+    }
+
+    function read(s, converter) {
+        var value = config.raw ? s : parseCookieValue(s);
+        return $.isFunction(converter) ? converter(value) : value;
+    }
+
+    var config = $.cookie = function (key, value, options) {
+
+        // Write
+
+        if (value !== undefined && !$.isFunction(value)) {
+            options = $.extend({}, config.defaults, options);
+
+            if (typeof options.expires === 'number') {
+                var days = options.expires,
+                    t = options.expires = new Date();
+                t.setTime(+t + days * 864e+5);
+            }
+
+            return document.cookie = [encode(key), '=', stringifyCookieValue(value), options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+            options.path ? '; path=' + options.path : '', options.domain ? '; domain=' + options.domain : '', options.secure ? '; secure' : ''].join('');
+        }
+
+        // Read
+
+        var result = key ? undefined : {};
+
+        // To prevent the for loop in the first place assign an empty array
+        // in case there are no cookies at all. Also prevents odd result when
+        // calling $.cookie().
+        var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+        for (var i = 0, l = cookies.length; i < l; i++) {
+            var parts = cookies[i].split('=');
+            var name = decode(parts.shift());
+            var cookie = parts.join('=');
+
+            if (key && key === name) {
+                // If second argument (value) is a function it's a converter...
+                result = read(cookie, value);
+                break;
+            }
+
+            // Prevent storing a cookie that we couldn't decode.
+            if (!key && (cookie = read(cookie)) !== undefined) {
+                result[name] = cookie;
+            }
+        }
+
+        return result;
+    };
+
+    config.defaults = {};
+
+    $.removeCookie = function (key, options) {
+        if ($.cookie(key) === undefined) {
+            return false;
+        }
+
+        // Must not alter options, thus extending a fresh object...
+        $.cookie(key, '', $.extend({}, options, { expires: -1 }));
+        return !$.cookie(key);
+    };
+});
+
+/***/ }),
+
+/***/ "./src/images/diagonal-stripe.png":
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTcxREJCNjVCRUE3MTFFMkEzQUY4MDc0NEExNTYwM0IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTcxREJCNjZCRUE3MTFFMkEzQUY4MDc0NEExNTYwM0IiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxNzFEQkI2M0JFQTcxMUUyQTNBRjgwNzQ0QTE1NjAzQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxNzFEQkI2NEJFQTcxMUUyQTNBRjgwNzQ0QTE1NjAzQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpW85vAAAAA1SURBVHjaFMgxEgBABARBu4HC//8poyTqXDbTyMyZUVUA7G4zuxIRRsTu3pzyA1lV7v4EGAAETRHYB5JsawAAAABJRU5ErkJggg=="
 
 /***/ }),
 

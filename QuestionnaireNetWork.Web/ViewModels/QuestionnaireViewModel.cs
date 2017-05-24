@@ -7,8 +7,8 @@ namespace QuestionnaireNetWork.Web.ViewModels
 {
     public class QuestionnaireViewModel
     {
-        public int Qid { get; set; }
-        public string Title { get; set; }
+        public int QId { get; set; }
+        public string QuestTitle { get; set; }
         public int MaxQuestNum { get; set; }
         public string CreateTime { get; set; }
     }

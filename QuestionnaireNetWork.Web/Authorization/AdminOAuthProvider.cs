@@ -20,14 +20,14 @@ namespace QuestionnaireNetWork.Web.Authorization
         {
             var account = context.UserName;
             var password = context.Password;
-            string nick;
-            if (!CheckCredential(account, password, out nick))
+            string nickName;
+            if (!CheckCredential(account, password, out nickName))
             {
                 context.SetError("invalid_grant", "The user name or password is incorrect");
                 context.Rejected();
                 return Task.FromResult<object>(null);
             }
-            var ticket = new AuthenticationTicket(SetClaimsIdentity(context, nick, account), new AuthenticationProperties());
+            var ticket = new AuthenticationTicket(SetClaimsIdentity(context, account, nickName), new AuthenticationProperties());
             context.Validated(ticket);
 
             return Task.FromResult<object>(null);
@@ -39,11 +39,11 @@ namespace QuestionnaireNetWork.Web.Authorization
             return Task.FromResult<object>(null);
         }
 
-        private static ClaimsIdentity SetClaimsIdentity(OAuthGrantResourceOwnerCredentialsContext context, string account, string nick)
+        private static ClaimsIdentity SetClaimsIdentity(OAuthGrantResourceOwnerCredentialsContext context, string account, string nickName)
         {
             var identity = new ClaimsIdentity("JWT");
             identity.AddClaim(new Claim("account", account));
-            identity.AddClaim(new Claim("nick", nick));
+            identity.AddClaim(new Claim("nickName", nickName));
             return identity;
         }
 

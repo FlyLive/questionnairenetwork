@@ -1,17 +1,20 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Form, Switch, Input, Button, Icon } from 'antd'
+import { Form, Switch, Input, Button, Icon, message } from 'antd'
 
 const FormItem = Form.Item
 
 let uuid = 1;
 class CreateChoice extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={}
+        this.state = { questId: props.questId }
     }
-    componentWillReceiveProps(props){
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({ questId: nextProps.questId })
     }
+
     remove(k) {
         const { form } = this.props;
         // can use data-binding to get
@@ -44,8 +47,8 @@ class CreateChoice extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                var questId = this.props.questId;
-                if(questId == undefined){
+                var questId = this.state.questId;
+                if (questId == undefined) {
                     message.error("出错啦");
                     return false;
                 }
@@ -55,17 +58,26 @@ class CreateChoice extends Component {
                 var options = new Array();
                 const { form } = this.props;
                 const keys = form.getFieldValue('keys');
+                if(keys.length <= 0){
+                    message.error("请至少添加一个选项");
+                    return false;
+                }
                 keys.filter(key => options.push(values["names-" + key]));
 
                 $.ajax({
                     type: 'post',
-                    url: '',
-                    data: {"questId":questId,"title":title,"type":type},
-                    success: function () {
-
+                    url: 'http://localhost:50979/api/Question/CreateChoiceQuestion',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ QId: questId, ChoiceTitle: title, Type: type, Options: options }),
+                    success: function (data) {
+                        if (data) {
+                            message.success("创建成功");
+                            return true;
+                        }
+                        message.error("创建失败,可能题数达到上限")
                     },
                     error: function () {
-
+                        message.error("出错了")
                     }
                 });
             }

@@ -9,7 +9,8 @@ const FormItem = Form.Item
 class LoginModal extends Component {
     handleSubmit(e) {
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
+        const form = this.props.form;
+        form.validateFields((err, values) => {
             if (!err) {
                 var account = values.account;
                 var password = values.password;
@@ -17,19 +18,18 @@ class LoginModal extends Component {
                     type: "POST",
                     url: "http://localhost:50979/Get/Token",
                     data: {
-                        username: values.userName,
-                        password: values.password,
+                        UserName: account,
+                        Password: password,
                         grant_type: 'password'
                     },
-                    dataType: "json",
                     success: function (data) {
                         var my = JSON.stringify(data);
                         $.cookie('token', my, { path: '/' });
                         axios.defaults.headers.common['Authorization'] = "Bearer " + data.access_token;
-                        window.location.href = 'http://localhost:8080/AdminHome';
+                        window.location.href = '/Home/AdminCenter';
                     },
-                    error: function () {
-                        this.props.form.setFields({
+                    error: function (data) {
+                        form.setFields({
                             password: {
                                 value: "",
                                 errors: [new Error('密码错误,请重试!')]

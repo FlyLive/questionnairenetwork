@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace QuestionnaireNetWork.Service.Services
 {
-    public class QuestionnaireService
+    public class QuestionnaireService : IDisposable
     {
         private QuestionnaireDBContext _db;
 
@@ -36,15 +36,15 @@ namespace QuestionnaireNetWork.Service.Services
             return options;
         }
 
-        public bool CreateOption(int choiceId, string content)
+        public bool CreateOption(int choiceId, List<string> contents)
         {
             try
             {
-                _db.Option.Add(new Option
+                contents.ForEach(content => _db.Option.Add(new Option
                 {
                     ChoiceId = choiceId,
                     OptionContent = content,
-                });
+                }));
                 _db.SaveChanges();
             }
             catch (Exception e)
@@ -104,17 +104,41 @@ namespace QuestionnaireNetWork.Service.Services
             return questions;
         }
 
-        public bool CreateChoiceQuestion(int questId,string title,bool type)
+        public List<ChoiceQuestion> GetRadioChoiceQuestion(int questId)
+        {
+            List<ChoiceQuestion> questions = GetAllChoiceQuestion(questId).Where(c => c.Type == false).ToList();
+            return questions;
+        }
+
+        public List<ChoiceQuestion> GetCheckChoiceQuestion(int questId)
+        {
+            List<ChoiceQuestion> questions = GetAllChoiceQuestion(questId).Where(c => c.Type == true).ToList();
+            return questions;
+        }
+
+        public bool CreateChoiceQuestion(int questId, string title, bool type, List<string> options)
         {
             try
             {
-                _db.ChoiceQuestion.Add(new ChoiceQuestion
+                ChoiceQuestion choice = new ChoiceQuestion
                 {
+                    Qid = questId,
                     Title = title,
                     Type = type
-                });
+                };
+                _db.ChoiceQuestion.Add(choice);
+                if (options.Count != 0)
+                {
+                    options.ForEach(
+                        optionContent => choice.Option.Add(new Option
+                        {
+                            ChoiceId = choice.ChoiceId,
+                            OptionContent = optionContent
+                        }));
+                }
                 _db.SaveChanges();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.Write(e);
                 return false;
@@ -122,7 +146,7 @@ namespace QuestionnaireNetWork.Service.Services
             return true;
         }
 
-        public bool ModifyChoiceQuestion(int id,string title,bool type)
+        public bool ModifyChoiceQuestion(int id, string title, bool type)
         {
             try
             {
@@ -170,7 +194,7 @@ namespace QuestionnaireNetWork.Service.Services
             return completion;
         }
 
-        public bool CreateCompletion(int questId,string title)
+        public bool CreateCompletion(int questId, string title)
         {
             try
             {
@@ -221,7 +245,7 @@ namespace QuestionnaireNetWork.Service.Services
             return true;
         }
         #endregion
-        
+
         #region 问卷
         /// <summary>
         /// 获取问卷的现有问题数
@@ -249,7 +273,7 @@ namespace QuestionnaireNetWork.Service.Services
                 {
                     Title = title,
                     MaxQuestNum = maxNum < 30 ? (int)maxNum : 30,
-                    CreateTime = new DateTime(),
+                    CreateTime = DateTime.Now,
                 });
                 _db.SaveChanges();
             }
@@ -326,6 +350,11 @@ namespace QuestionnaireNetWork.Service.Services
                 .Include("Completion")
                 .SingleOrDefault(q => q.Qid == questId);
             return quest;
+        }
+
+        public void Dispose()
+        {
+            _db.Dispose();
         }
         #endregion
     }

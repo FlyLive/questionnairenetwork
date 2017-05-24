@@ -29,7 +29,8 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.(png|jpg|gif|svg|mp4)$/, loader: 'file-loader' },
+            { test: /.(png)|(jpg)|(gif)$/, loader: 'url-loader?limit=8192' },
+            // { test: /\.(png|jpg|gif|svg|mp4)$/, loader: 'file-loader' },
             { test: /\.js|jsx$/, exclude: /node_modules/, loaders: ['babel-loader'] },
             { test: /\.css$/, loader: 'style-loader!css-loader' },
         ]

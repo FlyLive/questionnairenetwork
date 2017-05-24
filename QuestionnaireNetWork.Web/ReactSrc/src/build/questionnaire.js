@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "88717e309f10aca61cfa"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "2b2b50455a7de976d8fe"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -704,7 +704,7 @@
 /******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire("./src/Components/Questionnaire/Questionnaire.jsx")(__webpack_require__.s = "./src/Components/Questionnaire/Questionnaire.jsx");
+/******/ 	return hotCreateRequire("./src/Questionnaire.jsx")(__webpack_require__.s = "./src/Questionnaire.jsx");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -47000,7 +47000,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/Components/Questionnaire/QuestContent.jsx":
+/***/ "./src/Components/QuestionnaireBox/QuestContent.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47302,118 +47302,6 @@ exports.default = _form2.default.create()(QuestContent);
 
 /***/ }),
 
-/***/ "./src/Components/Questionnaire/Questionnaire.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-var _jquery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _footer = __webpack_require__("./src/Components/Shared/footer.jsx");
-
-var _footer2 = _interopRequireDefault(_footer);
-
-var _QuestContent = __webpack_require__("./src/Components/Questionnaire/QuestContent.jsx");
-
-var _QuestContent2 = _interopRequireDefault(_QuestContent);
-
-__webpack_require__("./src/Css/Quest/Quest.css");
-
-__webpack_require__("./src/Css/Home/style.css");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = { QId: 1, Title: "大学生心理素质调查", CreateTime: "2017/5/22", count: 32 };
-
-var Questionnaire = function (_Component) {
-    _inherits(Questionnaire, _Component);
-
-    function Questionnaire(props) {
-        _classCallCheck(this, Questionnaire);
-
-        var _this = _possibleConstructorReturn(this, (Questionnaire.__proto__ || Object.getPrototypeOf(Questionnaire)).call(this, props));
-
-        _this.state = { quest: null };
-        return _this;
-    }
-
-    _createClass(Questionnaire, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            this.setState({
-                quest: data
-            });
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                'div',
-                { className: 'quest' },
-                _react2.default.createElement(
-                    'header',
-                    null,
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'web-title' },
-                        _react2.default.createElement(
-                            'a',
-                            { href: '#' },
-                            '\u4E91\u7FF3'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'h2',
-                            { className: 'title-content' },
-                            this.state.quest.Title
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement(
-                            'p',
-                            { className: 'quest-info' },
-                            '\u53C2\u4E0E\u8005\uFF1A',
-                            this.state.quest.count,
-                            '\u2003\u521B\u5EFA\u65F6\u95F4\uFF1A',
-                            this.state.quest.CreateTime
-                        )
-                    )
-                ),
-                _react2.default.createElement(_QuestContent2.default, { Qid: this.state.quest.QId }),
-                _react2.default.createElement(_footer2.default, null)
-            );
-        }
-    }]);
-
-    return Questionnaire;
-}(_react.Component);
-
-(0, _reactDom.render)(_react2.default.createElement(Questionnaire, null), document.getElementById("questionnaire"));
-
-/***/ }),
-
 /***/ "./src/Components/Shared/footer.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -47571,10 +47459,122 @@ module.exports = __webpack_require__.p + "ccab88bf38def99150dafa4c34b260d7.jpg";
 
 /***/ }),
 
-/***/ "./src/images/diagonal-stripe.png":
+/***/ "./src/Questionnaire.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "cc7082a7f7853d6cb09451018e48c856.png";
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _jquery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _footer = __webpack_require__("./src/Components/Shared/footer.jsx");
+
+var _footer2 = _interopRequireDefault(_footer);
+
+var _QuestContent = __webpack_require__("./src/Components/QuestionnaireBox/QuestContent.jsx");
+
+var _QuestContent2 = _interopRequireDefault(_QuestContent);
+
+__webpack_require__("./src/Css/Quest/Quest.css");
+
+__webpack_require__("./src/Css/Home/style.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var data = { QId: 1, Title: "大学生心理素质调查", CreateTime: "2017/5/22", count: 32 };
+
+var Questionnaire = function (_Component) {
+    _inherits(Questionnaire, _Component);
+
+    function Questionnaire(props) {
+        _classCallCheck(this, Questionnaire);
+
+        var _this = _possibleConstructorReturn(this, (Questionnaire.__proto__ || Object.getPrototypeOf(Questionnaire)).call(this, props));
+
+        _this.state = { quest: null };
+        return _this;
+    }
+
+    _createClass(Questionnaire, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.setState({
+                quest: data
+            });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'quest' },
+                _react2.default.createElement(
+                    'header',
+                    null,
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'web-title' },
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            '\u4E91\u7FF3'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'h2',
+                            { className: 'title-content' },
+                            this.state.quest.Title
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        null,
+                        _react2.default.createElement(
+                            'p',
+                            { className: 'quest-info' },
+                            '\u53C2\u4E0E\u8005\uFF1A',
+                            this.state.quest.count,
+                            '\u2003\u521B\u5EFA\u65F6\u95F4\uFF1A',
+                            this.state.quest.CreateTime
+                        )
+                    )
+                ),
+                _react2.default.createElement(_QuestContent2.default, { Qid: this.state.quest.QId }),
+                _react2.default.createElement(_footer2.default, null)
+            );
+        }
+    }]);
+
+    return Questionnaire;
+}(_react.Component);
+
+(0, _reactDom.render)(_react2.default.createElement(Questionnaire, null), document.getElementById("questionnaire"));
+
+/***/ }),
+
+/***/ "./src/images/diagonal-stripe.png":
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTcxREJCNjVCRUE3MTFFMkEzQUY4MDc0NEExNTYwM0IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTcxREJCNjZCRUE3MTFFMkEzQUY4MDc0NEExNTYwM0IiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxNzFEQkI2M0JFQTcxMUUyQTNBRjgwNzQ0QTE1NjAzQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxNzFEQkI2NEJFQTcxMUUyQTNBRjgwNzQ0QTE1NjAzQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpW85vAAAAA1SURBVHjaFMgxEgBABARBu4HC//8poyTqXDbTyMyZUVUA7G4zuxIRRsTu3pzyA1lV7v4EGAAETRHYB5JsawAAAABJRU5ErkJggg=="
 
 /***/ }),
 

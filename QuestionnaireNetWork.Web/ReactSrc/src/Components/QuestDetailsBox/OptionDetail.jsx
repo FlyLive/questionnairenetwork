@@ -1,24 +1,8 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Table, Popconfirm } from "antd"
+import { Table, Popconfirm, message, Modal, Form, Tooltip, Input, Button } from "antd"
 
-const data = [
-    { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
-    { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' },
-    { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' },
-
-    { key: 4, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
-    { key: 5, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' },
-    { key: 6, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' },
-
-    { key: 7, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
-    { key: 8, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' },
-    { key: 9, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' },
-
-    { key: 10, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
-    { key: 11, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' },
-    { key: 12, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' },
-];
+const FormItem = Form.Item
 
 class OptionDetail extends Component {
     constructor(props) {
@@ -26,54 +10,150 @@ class OptionDetail extends Component {
         this.state = {
             choiceId: props.choiceId,
             data: [],
+            modifyOptionModal: false,
+            optionContentEmpty: false,
+            selectedOption: null,
+            OptionContent: null,
         };
     }
+
     componentWillMount() {
-        // $.ajax({
-        //     type: 'post',
-        //     url: '',
-        //     data: {},
-        //     success: function (data) {
-        //         this.setState({ data: data })
-        //     }, error: function () {
-        //     }
-        // })
+        var choiceId = this.props.choiceId;
+        this.update(choiceId);
     }
+
+    update(choiceId) {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:50979/api/Question/GetAllOptionByCQId',
+            data: { cqId: choiceId },
+            success: function (data) {
+                _this.setState({ data: data })
+            }, error: function (error) {
+            }
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
         let choiceId = nextProps.choiceId;
         this.setState({ choiceId: choiceId });
+        this.update(choiceId);
     }
-    onModifyChoice(key) {
-        alert(key);
+
+    onModifyChoice(option) {
+        this.setState({ modifyOptionModal: true, selectedOption: option, OptionContent: option.OptionContent })
     }
-    onDeletOption(key) {
-        alert(key);
+
+    isOptionContentEmpty(e) {
+        var optionContent = e.target.value;
+        this.setState({ OptionContent: optionContent })
+        if (optionContent == "" || /\s+/g.test(optionContent)) {
+            this.setState({ optionContentEmpty: true });
+            return true;
+        }
+        this.setState({ optionContentEmpty: false });
+    }
+
+    handleSubmitModifyOption(e) {
+        var id = this.state.selectedOption.OptionId;
+        var optionContent = this.state.OptionContent;
+        var _this = this;
+        if (optionContent == "" || /\s+/g.test(optionContent)) {
+            this.setState({ optionContentEmpty: true });
+            return false;
+        }
+
+        $.ajax({
+            type: 'post',
+            url: 'http://localhost:50979/api/Question/ModifyOption',
+            data: { OptionId: id, OptionContent: optionContent },
+            success: function (data) {
+                if (data) {
+                    message.success('修改成功');
+                    _this.setState({ modifyOptionModal: false });
+                    _this.update(_this.state.choiceId);
+                    return true;
+                }
+                message.error('修改失败');
+            }, error: function (error) {
+                message.error('出错了');
+            }
+        })
+    }
+
+    handleCancleModify() {
+        this.setState({ modifyOptionModal: false })
+    }
+
+    onDeleteOption(id) {
+        var choiceId = this.state.choiceId;
+        var _this= this
+        $.ajax({
+            type: 'delete',
+            url: 'http://localhost:50979/api/Question/DeleteOption',
+            data: { "": id },
+            success: function (data) {
+                if (data) {
+                    message.success('删除成功');
+                    _this.update(choiceId);
+                    return true;
+                }
+                message.error('删除失败');
+            }, error: function (error) {
+                message.error('出错了');
+            }
+        })
     }
     render() {
         const optionColumns = [
-            { title: 'Name', dataIndex: 'name', key: 'name', width: 100 },
-            { title: 'Age', dataIndex: 'age', key: 'age', width: 100 },
-            { title: 'Address', dataIndex: 'address', key: 'address', width: 100 },
+            { title: '选项名', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 },
             {
                 title: '操作', dataIndex: '', width: 100,
                 render: (text, record, index) => (
                     <span>
-                        <a onClick={() => this.onModifyChoice(record.key)}>修改</a>
+                        <a onClick={() => this.onModifyChoice(record)}>修改</a>
                         <span className="ant-divider" />
-                        <Popconfirm title="确定要删除该选项？" onConfirm={() => this.onDeletOption(record.key)} okText="删除">
+                        <Popconfirm title="确定要删除该选项？" onConfirm={() => this.onDeleteOption(record.OptionId)} okText="删除">
                             <a>删除</a>
                         </Popconfirm>
                     </span>
                 )
             },
         ];
+        const ModalItemLayout = {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 },
+        };
+        const formItemLayoutWithOutLabel = {
+            wrapperCol: {
+                xs: { span: 24, offset: 0 },
+                sm: { span: 20, offset: 4 },
+            },
+        };
         return (
-            <Table columns={optionColumns}
-                dataSource={this.state.data}
-                pagination={false}
-                scroll={{ y: 240 }}
-                size="small"
-                title={() => <p style={{ textAlign: "center", margin: 0 }}>选项</p>} />
+            <div>
+                <Table rowKey='OptionId'
+                    columns={optionColumns}
+                    dataSource={this.state.data}
+                    pagination={false}
+                    scroll={{ y: 240 }}
+                    size="small"
+                    title={() => <p style={{ textAlign: "center", margin: 0 }}>选项</p>} />
+                <Modal title="修改选项" visible={this.state.modifyOptionModal} footer={null}
+                    onCancel={this.handleCancleModify.bind(this)}>
+                    <Form>
+                        <FormItem {...ModalItemLayout} label="选项内容">
+                            <Tooltip placement="right" title={"内容不能为空"} visible={this.state.optionContentEmpty}>
+                                <Input onChange={this.isOptionContentEmpty.bind(this)} placeholder="选项内容" value={this.state.OptionContent} />
+                            </Tooltip>
+                        </FormItem>
+                        <FormItem {...formItemLayoutWithOutLabel}>
+                            <Button onClick={this.handleSubmitModifyOption.bind(this)} type="primary">确认修改</Button>
+                        </FormItem>
+                    </Form>
+                </Modal>
+            </div>
         );
     }
 }

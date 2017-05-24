@@ -31,7 +31,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questVM;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public int GetQuestNum(int id)
         {
@@ -39,27 +39,27 @@ namespace QuestionnaireNetWork.Web.Controllers
             return count;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
-        public bool CreateQuest(string title,int ? maxNum)
+        public bool CreateQuest([FromBody]QuestionnaireViewModel quest)
         {
-            var result = _questService.CreateQuest(title,maxNum);
+            var result = _questService.CreateQuest(quest.QuestTitle,quest.MaxQuestNum);
             return result;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
-        public bool ModifyQuest(int id, string title,int ? maxNum)
+        public bool ModifyQuest([FromBody]QuestionnaireViewModel quest)
         {
-            var result = _questService.ModifyQuest(id,title,maxNum);
+            var result = _questService.ModifyQuest(quest.QId, quest.QuestTitle, quest.MaxQuestNum);
             return result;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete]
-        public bool DeleteQuest(int id)
+        public bool DeleteQuest([FromBody]int qId)
         {
-            var result = _questService.DeletQuest(id);
+            var result = _questService.DeletQuest(qId);
             return result;
         }
 
@@ -67,8 +67,8 @@ namespace QuestionnaireNetWork.Web.Controllers
         {
             QuestionnaireViewModel questVM = new QuestionnaireViewModel
             {
-                Qid = quest.Qid,
-                Title = quest.Title,
+                QId = quest.Qid,
+                QuestTitle = quest.Title,
                 MaxQuestNum = quest.MaxQuestNum,
                 CreateTime = quest.CreateTime.ToString("yyyy-MM-dd HH-mm-ss"),
             };

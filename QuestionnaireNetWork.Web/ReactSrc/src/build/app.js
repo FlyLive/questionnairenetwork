@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "88717e309f10aca61cfa"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dad5f8458ac7cde4747a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -53120,7 +53120,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ "./src/Components/Content/LoginModal.jsx":
+/***/ "./src/Components/ManageCenterBox/LoginModal.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53193,7 +53193,8 @@ var LoginModal = function (_Component) {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             e.preventDefault();
-            this.props.form.validateFields(function (err, values) {
+            var form = this.props.form;
+            form.validateFields(function (err, values) {
                 if (!err) {
                     var account = values.account;
                     var password = values.password;
@@ -53201,19 +53202,18 @@ var LoginModal = function (_Component) {
                         type: "POST",
                         url: "http://localhost:50979/Get/Token",
                         data: {
-                            username: values.userName,
-                            password: values.password,
+                            UserName: account,
+                            Password: password,
                             grant_type: 'password'
                         },
-                        dataType: "json",
                         success: function success(data) {
                             var my = JSON.stringify(data);
                             _jquery2.default.cookie('token', my, { path: '/' });
                             _axios2.default.defaults.headers.common['Authorization'] = "Bearer " + data.access_token;
-                            window.location.href = 'http://localhost:8080/AdminHome';
+                            window.location.href = 'admin.html';
                         },
-                        error: function error() {
-                            this.props.form.setFields({
+                        error: function error(data) {
+                            form.setFields({
                                 password: {
                                     value: "",
                                     errors: [new Error('密码错误,请重试!')]
@@ -53266,7 +53266,7 @@ exports.default = _form2.default.create()(LoginModal);
 
 /***/ }),
 
-/***/ "./src/Components/Questionnaire/QuestMenu.jsx":
+/***/ "./src/Components/QuestionnaireBox/QuestMenu.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53311,10 +53311,6 @@ var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 var _jquery = __webpack_require__("./node_modules/jquery/dist/jquery.js");
 
 var _jquery2 = _interopRequireDefault(_jquery);
-
-__webpack_require__("./src/Css/Quest/owl.carousel.min.css");
-
-__webpack_require__("./src/Js/Quest/owl.carousel.min.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -54500,6 +54496,132 @@ if(true) {
 
 /***/ }),
 
+/***/ "./src/Js/jquery.cookie.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+    if (true) {
+        // AMD
+        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__("./node_modules/jquery/dist/jquery.js")], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+    } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+        // CommonJS
+        factory(require('jquery'));
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+})(function ($) {
+
+    var pluses = /\+/g;
+
+    function encode(s) {
+        return config.raw ? s : encodeURIComponent(s);
+    }
+
+    function decode(s) {
+        return config.raw ? s : decodeURIComponent(s);
+    }
+
+    function stringifyCookieValue(value) {
+        return encode(config.json ? JSON.stringify(value) : String(value));
+    }
+
+    function parseCookieValue(s) {
+        if (s.indexOf('"') === 0) {
+            // This is a quoted cookie as according to RFC2068, unescape...
+            s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+        }
+
+        try {
+            // Replace server-side written pluses with spaces.
+            // If we can't decode the cookie, ignore it, it's unusable.
+            // If we can't parse the cookie, ignore it, it's unusable.
+            s = decodeURIComponent(s.replace(pluses, ' '));
+            return config.json ? JSON.parse(s) : s;
+        } catch (e) {}
+    }
+
+    function read(s, converter) {
+        var value = config.raw ? s : parseCookieValue(s);
+        return $.isFunction(converter) ? converter(value) : value;
+    }
+
+    var config = $.cookie = function (key, value, options) {
+
+        // Write
+
+        if (value !== undefined && !$.isFunction(value)) {
+            options = $.extend({}, config.defaults, options);
+
+            if (typeof options.expires === 'number') {
+                var days = options.expires,
+                    t = options.expires = new Date();
+                t.setTime(+t + days * 864e+5);
+            }
+
+            return document.cookie = [encode(key), '=', stringifyCookieValue(value), options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+            options.path ? '; path=' + options.path : '', options.domain ? '; domain=' + options.domain : '', options.secure ? '; secure' : ''].join('');
+        }
+
+        // Read
+
+        var result = key ? undefined : {};
+
+        // To prevent the for loop in the first place assign an empty array
+        // in case there are no cookies at all. Also prevents odd result when
+        // calling $.cookie().
+        var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+        for (var i = 0, l = cookies.length; i < l; i++) {
+            var parts = cookies[i].split('=');
+            var name = decode(parts.shift());
+            var cookie = parts.join('=');
+
+            if (key && key === name) {
+                // If second argument (value) is a function it's a converter...
+                result = read(cookie, value);
+                break;
+            }
+
+            // Prevent storing a cookie that we couldn't decode.
+            if (!key && (cookie = read(cookie)) !== undefined) {
+                result[name] = cookie;
+            }
+        }
+
+        return result;
+    };
+
+    config.defaults = {};
+
+    $.removeCookie = function (key, options) {
+        if ($.cookie(key) === undefined) {
+            return false;
+        }
+
+        // Must not alter options, thus extending a fresh object...
+        $.cookie(key, '', $.extend({}, options, { expires: -1 }));
+        return !$.cookie(key);
+    };
+});
+
+/***/ }),
+
 /***/ "./src/entry.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -54532,11 +54654,11 @@ var _footer = __webpack_require__("./src/Components/Shared/footer.jsx");
 
 var _footer2 = _interopRequireDefault(_footer);
 
-var _LoginModal = __webpack_require__("./src/Components/Content/LoginModal.jsx");
+var _LoginModal = __webpack_require__("./src/Components/ManageCenterBox/LoginModal.jsx");
 
 var _LoginModal2 = _interopRequireDefault(_LoginModal);
 
-var _QuestMenu = __webpack_require__("./src/Components/Questionnaire/QuestMenu.jsx");
+var _QuestMenu = __webpack_require__("./src/Components/QuestionnaireBox/QuestMenu.jsx");
 
 var _QuestMenu2 = _interopRequireDefault(_QuestMenu);
 
@@ -54551,6 +54673,12 @@ __webpack_require__("./src/Css/Home/style.css");
 __webpack_require__("./src/Css/Home/flexslider.css");
 
 __webpack_require__("./src/Css/Home/magnific-popup.css");
+
+__webpack_require__("./src/Css/Quest/owl.carousel.min.css");
+
+__webpack_require__("./src/Js/Quest/owl.carousel.min.js");
+
+__webpack_require__("./src/Js/jquery.cookie.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -54585,18 +54713,13 @@ var App = function (_Component) {
             // .catch(function(error){
             //     alert(error);
             // });
-            // $.ajax({
-            //     url: 'http://localhost:50979/api/values',
-            //     dataType: 'json',
-            //     cache: false,
-            //     success: function (data) {
-            //         this.props.data = true;
-            //     }.bind(this),
-            //     error: function (xhr, status, err) {
-            //         this.props.data = false;
-            //         console.error(this.props.url, status, err.toString());
-            //     }.bind(this)
-            // });
+            _jquery2.default.ajax({
+                url: 'http://localhost:50979/api/values',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {}.bind(this),
+                error: function (xhr, status, err) {}.bind(this)
+            });
         }
     }, {
         key: 'onLogin',
@@ -54611,7 +54734,7 @@ var App = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var isLogin = this.state.data === null ? _react2.default.createElement(
+            var isLogin = this.state.data !== null ? _react2.default.createElement(
                 'ul',
                 null,
                 _react2.default.createElement(
@@ -54821,9 +54944,9 @@ var App = function (_Component) {
 /***/ }),
 
 /***/ "./src/images/diagonal-stripe.png":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__.p + "cc7082a7f7853d6cb09451018e48c856.png";
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAIAAAAmkwkpAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MTcxREJCNjVCRUE3MTFFMkEzQUY4MDc0NEExNTYwM0IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MTcxREJCNjZCRUE3MTFFMkEzQUY4MDc0NEExNTYwM0IiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxNzFEQkI2M0JFQTcxMUUyQTNBRjgwNzQ0QTE1NjAzQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxNzFEQkI2NEJFQTcxMUUyQTNBRjgwNzQ0QTE1NjAzQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpW85vAAAAA1SURBVHjaFMgxEgBABARBu4HC//8poyTqXDbTyMyZUVUA7G4zuxIRRsTu3pzyA1lV7v4EGAAETRHYB5JsawAAAABJRU5ErkJggg=="
 
 /***/ }),
 

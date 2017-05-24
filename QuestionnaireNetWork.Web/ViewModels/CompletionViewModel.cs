@@ -8,7 +8,7 @@ namespace QuestionnaireNetWork.Web.ViewModels
     public class CompletionViewModel
     {
         public int CompletionId { get; set; }
-        public int Qid { get; set; }
+        public int QId { get; set; }
         public string Title { get; set; }
     }
 }

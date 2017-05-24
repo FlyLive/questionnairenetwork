@@ -1,62 +1,48 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Menu, Dropdown, Button, Icon, Input, message, Modal, Table, Tabs, Progress, Popconfirm } from 'antd';
+import { InputNumber,Menu, Dropdown, Button, Icon, Input, message, Modal, Table, Tabs, Progress, Popconfirm,Form } from 'antd';
+import axios from 'axios'
 
 import CreateChoice from '../CreateQuestBox/CreateChoice.jsx'
 import CreateCompletion from '../CreateQuestBox/CreateCompletion.jsx'
-import RadioChoiceDetail from './RadioChoiceDetail.jsx'
 import CheckChoiceDetail from './CheckChoiceDetail.jsx'
 import CompletionDetail from './CompletionDetail.jsx'
 
 const TabPane = Tabs.TabPane
+const FormItem = Form.Item
 
-const data = [{
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-}, {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-}, {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-}, {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-}];
-
-class ModifyQuest extends Component {
+class QuestDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
             choice: { visible: false },
             completion: { visible: false },
+            modifyQuestModal: false,
             filterDropdownVisible: false,
             data: [],
+            searchResult: [],
             searchText: '',
             filtered: false,
-            selected: data == null ? null : data[0].key,
-            fousQuestId: null,
+            selected: null,
+            focusQuestId: null,
+            focusQuest: null,
+            focusQuestTitle: null
         }
     }
 
     componentWillMount() {
-        // $.ajax({
-        //     type: 'post',
-        //     url: '',
-        //     data: {},
-        //     success: function (data) {
-        //         this.setState({ data: data })
-        //     }, error: function () {
-        //     }
-        // })
+        this.update();
+    }
+
+    update() {
+        const _this = this;
+        axios.get('http://localhost:50979/api/Questionnaire/GetAllQuest')
+            .then(function (response) {
+                _this.setState({ data: response.data, searchResult: response.data })
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     onInputChange(e) {
@@ -64,25 +50,26 @@ class ModifyQuest extends Component {
     }
 
     onSearch() {
-        const { searchText } = this.state;
+        const { searchText, data } = this.state;
         const reg = new RegExp(searchText, 'gi');
+        alert(reg);
         this.setState({
             filterDropdownVisible: false,
             filtered: !!searchText,
-            data: data.map((record) => {
-                const match = record.name.match(reg);
+            searchResult: data.map((quest, index, array) => {
+                const match = quest.QuestTitle.match(reg);
                 if (!match) {
                     return null;
                 }
-                record.name = (
+                /*quest.QuestTitle = (
                     <span>
-                        {record.name.split(reg).map((text, i) => (
+                        {quest.QuestTitle.split(reg).map((text, i) => (
                             i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
                         ))}
                     </span>
-                );
-                return record;
-            }).filter(record => !!record),
+                );*/
+                return quest;
+            }).filter(quest => !!quest),
         });
     }
 
@@ -106,40 +93,68 @@ class ModifyQuest extends Component {
     }
 
     onSelected(record, index) {
-        this.setState({ selected: record.key });
+        this.setState({ selected: record.QId });
     }
 
-    onDeleteQuest(key) {
+    onDeleteQuest(id) {
         $.ajax({
-            type: 'post',
-            url: '',
-            data: {},
-            success: function () {
-                message.success('修改成功');
+            type: 'delete',
+            url: 'http://localhost:50979/api/Questionnaire/DeleteQuest',
+            data: { "": id },
+            success: function (data) {
+                if (data) {
+                    message.success('删除成功');
+                    return true;
+                }
+                message.error('删除失败');
             }, error: function () {
                 message.error('出错了');
             }
         })
     }
 
-    onModifyQuest(key) {
+    onModifyQuest(quest) {
+        this.setState({ modifyQuestModal: true, focusQuest: quest, focusQuestTitle: quest.QuestTitle })
+    }
+
+    handleSubmitModifyQuest() {
+        const {form} = this.props;
+        var qId = this.state.focusQuest.QId;
+        var questTitle = form.getFieldValue("title")
+        var maxNum = form.getFieldValue("maxNum");
+        var _this = this;
+        if(form.getFieldError("title")/*questTitle == "" || /\s+/g.test(questTitle)*/){
+            
+            return false;
+        }
         $.ajax({
             type: 'post',
-            url: '',
-            data: {},
-            success: function () {
-                message.success('修改成功');
-            }, error: function () {
+            url: 'http://localhost:50979/api/Questionnaire/ModifyQuest',
+            data: { QId: qId, QuestTitle: questTitle, MaxQuestNum: maxNum },
+            success: function (data) {
+                if (data) {
+                    message.success('修改成功');
+                    _this.setState({modifyQuestModal:false});
+                    _this.update();
+                    return true;
+                }
+                message.error('修改失败');
+            }, error: function (error) {
                 message.error('出错了');
             }
         })
     }
 
-    onFoucsQuest(key) {
-        this.setState({ fousQuestId: key });
+    handleCancleModify(){
+        this.setState({modifyQuestModal:false})
+    }
+
+    onFoucsQuest(id) {
+        this.setState({ focusQuestId: id });
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form
         const menu = (
             <Menu onClick={this.handleMenuClick.bind(this)}>
                 <Menu.Item key="1">选择题</Menu.Item>
@@ -147,7 +162,7 @@ class ModifyQuest extends Component {
             </Menu>
         );
         const columns = [{
-            title: 'Name', dataIndex: 'name', key: 'name', width: 100,
+            title: '问卷名', dataIndex: 'QuestTitle', key: 'QuestTitle', width: 100,
             filterDropdown: (
                 <div className="custom-filter-dropdown">
                     <Input
@@ -164,48 +179,77 @@ class ModifyQuest extends Component {
             filterDropdownVisible: this.state.filterDropdownVisible,
             onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }, () => this.searchInput.focus()),
         },
-        { title: 'Age', dataIndex: 'age', key: 'age', width: 100, },
-        { title: 'Address', dataIndex: 'address', key: 'address', width: 100, }, {
-            title: '操作', key: 'action', width: 100,
+        { title: '最大题数', dataIndex: 'MaxQuestNum', key: 'MaxQuestNum', width: 100, },
+        { title: '创建时间', dataIndex: 'CreateTime', key: 'CreateTime', width: 100, }, {
+            title: '操作', key: '', width: 100,
             render: (text, record, index) => (
                 <span>
-                    <Dropdown overlay={menu} trigger={['click']} onVisibleChange={() => this.onFoucsQuest(record.key)}>
+                    <Dropdown key={record.QId} overlay={menu} trigger={['click']} onVisibleChange={this.onFoucsQuest.bind(this, record.QId)}>
                         <a className="ant-dropdown-link" style={{ marginLeft: 8 }}>
                             新建题目 <Icon type="down" />
                         </a>
                     </Dropdown>
                     <span className="ant-divider" />
-                    <a onClick={() => this.onModifyQuest(record.key)}>修改</a>
+                    <a onClick={() => this.onModifyQuest(record)}>修改</a>
                     <span className="ant-divider" />
-                    <Popconfirm title="确定要删除该问卷？" onConfirm={() => this.onDeleteQuest(record.key)} okText="删除">
+                    <Popconfirm title="确定要删除该问卷？" onConfirm={() => this.onDeleteQuest(record.QId)} okText="删除">
                         <a>删除</a>
                     </Popconfirm>
                 </span>),
         }];
+        const formItemLayout = {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 },
+        };
+
+        const formItemLayoutWithOutLabel = {
+            wrapperCol: {
+                xs: { span: 24, offset: 0 },
+                sm: { span: 20, offset: 4 },
+            },
+        };
+
         return (
             <div className="modify-quest router">
-                <Table /*rowKey="id"*/ columns={columns} dataSource={this.state.data} onRowClick={this.onSelected.bind(this)} bordered title={() => '编辑所有问卷'} />
+                <Table rowKey="QId" columns={columns} dataSource={this.state.searchResult} onRowClick={this.onSelected.bind(this)} bordered title={() => '编辑所有问卷'} />
                 <div className="quest-modal">
+                    <Modal title="修改问卷" visible={this.state.modifyQuestModal} footer={null}
+                        onCancel={this.handleCancleModify.bind(this)}>
+                        <Form>
+                            <FormItem {...formItemLayout} label="正在修改问卷:" >
+                                <label> {this.state.focusQuestTitle}</label>
+                            </FormItem>
+                            <FormItem label="问卷名称" {...formItemLayout} wrapperCol={{ span: 10 }}>
+                                {getFieldDecorator('title', {
+                                    rules: [{ required: true, message: '请输入问卷名称!', whitespace: true }],
+                                })(<Input placeholder="问卷名称" />)}
+                            </FormItem>
+                            <FormItem {...formItemLayout} label="最大题目数(自动匹配)" >
+                                {getFieldDecorator('maxNum')(<InputNumber min={1} max={30} placeholder="1~30" />)}
+                                <span className="ant-form-text">个题目</span>
+                            </FormItem>
+                            <FormItem {...formItemLayoutWithOutLabel}>
+                                <Button type="primary" onClick={this.handleSubmitModifyQuest.bind(this)} size="large">提交</Button>
+                            </FormItem>
+                        </Form>
+                    </Modal>
                     <Modal title="新建选择题" visible={this.state.choice.visible} footer={null}
                         onCancel={this.handleCChoiceCancel.bind(this)}>
-                        <CreateChoice questId={this.state.fousQuestId} />
+                        <CreateChoice questId={this.state.focusQuestId} />
                     </Modal>
                     <Modal title="新建简答题" visible={this.state.completion.visible} footer={null}
                         onCancel={this.handleCCompletionCancel.bind(this)}>
-                        <CreateCompletion questId={this.state.fousQuestId} />
+                        <CreateCompletion questId={this.state.focusQuestId} />
                     </Modal>
                 </div>
                 <div className="quest-detail">
                     <h3><Icon type="file-text" />题目信息</h3>
                     <br />
                     <Tabs defaultActiveKey="1">
-                        <TabPane tab={<span><Icon type="check-circle-o" />单选</span>} key="1">
-                            <RadioChoiceDetail questId={this.state.selected} />
-                        </TabPane>
-                        <TabPane tab={<span><Icon type="check-circle" />多选</span>} key="2">
+                        <TabPane tab={<span><Icon type="check-circle" />选择题</span>} key="1">
                             <CheckChoiceDetail questId={this.state.selected} />
                         </TabPane>
-                        <TabPane tab={<span><Icon type="message" />问答题</span>} key="3">
+                        <TabPane tab={<span><Icon type="message" />问答题</span>} key="2">
                             <CompletionDetail questId={this.state.selected} />
                         </TabPane>
                     </Tabs>
@@ -215,4 +259,4 @@ class ModifyQuest extends Component {
     }
 }
 
-export default ModifyQuest;
+export default Form.create()(QuestDetail);
