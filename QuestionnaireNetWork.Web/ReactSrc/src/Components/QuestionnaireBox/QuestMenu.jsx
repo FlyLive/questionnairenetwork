@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Card, Button, Input, Icon } from 'antd';
+import { Card, Button, Input, Icon, message } from 'antd';
 import $ from 'jquery'
 
 $(document).ready(function () {
@@ -16,19 +16,7 @@ $(document).ready(function () {
 });
 
 const Search = Input.Search
-const data = [
-    { QId: 1, QuestTitle: '大学生心理素质调查', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 2, QuestTitle: 'Jim Green', Count: 42, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 3, QuestTitle: 'Joe Black', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 4, QuestTitle: 'Joe Black', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-]; const data1 = [
-    { QId: 1, QuestTitle: '大学生心理素质调查', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 2, QuestTitle: 'Jim Green', Count: 42, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 3, QuestTitle: 'Joe Black', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 4, QuestTitle: '大学生心理素质调查', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 5, QuestTitle: 'Jim Green', Count: 42, Num: 20, CreateTime: "2017/5/22" },
-    { QId: 6, QuestTitle: 'Joe Black', Count: 32, Num: 20, CreateTime: "2017/5/22" },
-];
+
 class QuestMenu extends Component {
     constructor(props) {
         super(props);
@@ -37,38 +25,42 @@ class QuestMenu extends Component {
             searchResult: []
         }
     }
-    
-    componentWillMount() {
-        // $.ajax({
-        //     type: 'get',
-        //     url: '',
-        //     success: function (data) {
-        //         this.setState({ quests: data })
-        //     }, error: function () {
 
-        //     }
-        // })
-        this.setState({ quests: data })
+    componentWillMount() {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:60842/api/Questionnaire/GetTop5Quest',
+            success: function (data) {
+                _this.setState({ quests: data })
+            }, error: function (error) {
+            }
+        })
     }
 
-    handleSearch(Search) {
-        // $.ajax({
-        //     type: 'get',
-        //     url: '',
-        //     success: function (data) {
-
-        //     }, error: function () {
-
-        //     }
-        // })
-        this.setState({ searchResult: data1 })
+    handleSearch(search) {
+        var _this = this;
+        if (search == "" || /\s+/g.test(search)) {
+            message.error("搜索框不能为空");
+            return false;
+        }
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:60842/api/Questionnaire/Search',
+            data: { "": search },
+            success: function (data) {
+                _this.setState({ searchResult: data })
+            }, error: function (error) {
+            }
+        })
     }
 
     searchResult() {
+        const result = this.state.searchResult;
         return (
             <div className="search-result">
                 <h3>搜索结果</h3>
-                {this.state.searchResult.map(quest => this.questItem(quest))}
+                {result.length > 0 ? function () { return (<div><h2 style={{textAlign:center}}><Icon type="frown-o" />抱歉，暂时未找到匹配的问卷</h2></div>) } : result.map(quest => this.questItem(quest))}
             </div>
         )
     }
@@ -93,7 +85,7 @@ class QuestMenu extends Component {
 
     render() {
         const quests = this.state.quests
-        const questMenu = (quests === null ? function () {
+        const questMenu = (quests.length <= 0 ? function () {
             return (<div className="post-slide">
                 <div className="post-content">
                 </div>

@@ -66,7 +66,7 @@ class CreateChoice extends Component {
 
                 $.ajax({
                     type: 'post',
-                    url: 'http://localhost:50979/api/Question/CreateChoiceQuestion',
+                    url: 'http://localhost:60842/api/Question/CreateChoiceQuestion',
                     contentType: 'application/json',
                     data: JSON.stringify({ QId: questId, ChoiceTitle: title, Type: type, Options: options }),
                     success: function (data) {

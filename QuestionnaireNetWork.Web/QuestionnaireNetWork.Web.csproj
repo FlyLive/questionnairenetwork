@@ -9,7 +9,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E248589A-9F96-4EB2-B32F-30D8BC2709BC}</ProjectGuid>
+    <ProjectGuid>{B525A721-3656-41B9-8E44-5C7308A4EA33}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -19,9 +19,9 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -235,14 +235,41 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="ReactSrc\admin.html" />
     <Content Include="ReactSrc\index.html" />
+    <Content Include="ReactSrc\questionnaire.html" />
+    <Content Include="ReactSrc\src\AdminCenter.jsx" />
+    <Content Include="ReactSrc\src\build\95d64a3d5f5958f597b0a1003e927d3f.gif" />
     <Content Include="ReactSrc\src\build\admin.js" />
     <Content Include="ReactSrc\src\build\app.js" />
     <Content Include="ReactSrc\src\build\bundle.js" />
+    <Content Include="ReactSrc\src\build\cc7082a7f7853d6cb09451018e48c856.png" />
+    <Content Include="ReactSrc\src\build\ccab88bf38def99150dafa4c34b260d7.jpg" />
+    <Content Include="ReactSrc\src\build\dfd12f82cf16c17b673b22a56ab45f9e.jpg" />
     <Content Include="ReactSrc\src\build\questionnaire.js" />
+    <Content Include="ReactSrc\src\Components\CreateQuestBox\CreateChoice.jsx" />
+    <Content Include="ReactSrc\src\Components\CreateQuestBox\CreateCompletion.jsx" />
+    <Content Include="ReactSrc\src\Components\CreateQuestBox\CreateQuest.jsx" />
+    <Content Include="ReactSrc\src\Components\ManageCenterBox\AdminInfo.jsx" />
+    <Content Include="ReactSrc\src\Components\ManageCenterBox\LoginModal.jsx" />
+    <Content Include="ReactSrc\src\Components\ModifyQuestBox\ModifyChoice.jsx" />
+    <Content Include="ReactSrc\src\Components\ModifyQuestBox\ModifyCompletion.jsx" />
+    <Content Include="ReactSrc\src\Components\ModifyQuestBox\ModifyOption.jsx" />
+    <Content Include="ReactSrc\src\Components\ModifyQuestBox\ModifyQuest.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\ChartDetail.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\CheckChoiceDetail.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\CompletionDetail.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\DataDetail.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\OptionChart.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\OptionDetail.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\QuestDetail.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestDetailsBox\Total.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestionnaireBox\QuestContent.jsx" />
+    <Content Include="ReactSrc\src\Components\QuestionnaireBox\QuestMenu.jsx" />
     <Content Include="ReactSrc\src\Components\Router\headRouter.jsx" />
+    <Content Include="ReactSrc\src\Components\Shared\footer.jsx" />
+    <Content Include="ReactSrc\src\Components\Shared\header.jsx" />
     <Content Include="ReactSrc\src\Css\Admin\AdminCenter.css" />
     <Content Include="ReactSrc\src\Css\Admin\Index.css" />
     <Content Include="ReactSrc\src\Css\Admin\Login.css" />
@@ -252,18 +279,24 @@
     <Content Include="ReactSrc\src\Css\Home\Home.css" />
     <Content Include="ReactSrc\src\Css\Home\magnific-popup.css" />
     <Content Include="ReactSrc\src\Css\Home\style.css" />
+    <Content Include="ReactSrc\src\Css\Quest\owl.carousel.min.css" />
+    <Content Include="ReactSrc\src\Css\Quest\Quest.css" />
     <Content Include="ReactSrc\src\entry.jsx" />
     <Content Include="ReactSrc\src\Images\diagonal-stripe.png" />
     <Content Include="ReactSrc\src\Images\img_bg_1.jpg" />
     <Content Include="ReactSrc\src\Images\loader.gif" />
+    <Content Include="ReactSrc\src\Images\问卷.jpg" />
+    <Content Include="ReactSrc\src\Js\jquery.cookie.js" />
+    <Content Include="ReactSrc\src\Js\Quest\owl.carousel.min.js" />
+    <Content Include="ReactSrc\src\Questionnaire.jsx" />
     <Content Include="ReactSrc\webpack.config.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ReactSrc\.babelrc" />
     <Content Include="ReactSrc\package.json" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -284,39 +317,30 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\AdminCenter.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Questionnaire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="ReactSrc\src\Components\Content\" />
     <Folder Include="ReactSrc\src\Components\QuestionBox\" />
-    <Folder Include="ReactSrc\src\Components\Questionnaire\" />
     <Folder Include="ReactSrc\src\Components\Reducers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Home\AdminCenter.cshtml" />
+    <Content Include="Views\Home\Questionnaire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuestionnaireNetWork.Service\QuestionnaireNetWork.Service.csproj">
       <Project>{93b40a0e-0a18-4a2f-a2db-c72a483d662a}</Project>
       <Name>QuestionnaireNetWork.Service</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -334,9 +358,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>56828</DevelopmentServerPort>
+          <DevelopmentServerPort>55378</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50979/</IISUrl>
+          <IISUrl>http://localhost:60842/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

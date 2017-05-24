@@ -13,7 +13,25 @@ namespace QuestionnaireNetWork.Web.Controllers
     public class QuestionnaireController : ApiController
     {
         private QuestionnaireService _questService = new QuestionnaireService();
-        
+
+        [HttpGet]
+        public List<QuestionnaireViewModel> GetTop5Quest()
+        {
+            List<Questionnaire> quests = _questService.GetTop5Quest();
+            var questsVM = new List<QuestionnaireViewModel>();
+            quests.ForEach(q => questsVM.Add(DataQuestToVM(q)));
+            return questsVM;
+        }
+
+        [HttpGet]
+        public List<QuestionnaireViewModel> Search([FromBody]string search)
+        {
+            List<Questionnaire> quests = _questService.Search(search);
+            var questsVM = new List<QuestionnaireViewModel>();
+            quests.ForEach(q => questsVM.Add(DataQuestToVM(q)));
+            return questsVM;
+        } 
+
         [HttpGet]
         public List<QuestionnaireViewModel> GetAllQuest()
         {
@@ -31,7 +49,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questVM;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public int GetQuestNum(int id)
         {
@@ -39,7 +57,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return count;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public bool CreateQuest([FromBody]QuestionnaireViewModel quest)
         {
@@ -47,7 +65,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return result;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public bool ModifyQuest([FromBody]QuestionnaireViewModel quest)
         {
@@ -55,7 +73,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return result;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpDelete]
         public bool DeleteQuest([FromBody]int qId)
         {

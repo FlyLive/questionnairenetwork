@@ -36,7 +36,7 @@ class QuestDetail extends Component {
 
     update() {
         const _this = this;
-        axios.get('http://localhost:50979/api/Questionnaire/GetAllQuest')
+        axios.get('http://localhost:60842/api/Questionnaire/GetAllQuest')
             .then(function (response) {
                 _this.setState({ data: response.data, searchResult: response.data })
             })
@@ -97,13 +97,15 @@ class QuestDetail extends Component {
     }
 
     onDeleteQuest(id) {
+        var _this = this;
         $.ajax({
             type: 'delete',
-            url: 'http://localhost:50979/api/Questionnaire/DeleteQuest',
+            url: 'http://localhost:60842/api/Questionnaire/DeleteQuest',
             data: { "": id },
             success: function (data) {
                 if (data) {
                     message.success('删除成功');
+                    _this.update();
                     return true;
                 }
                 message.error('删除失败');
@@ -129,7 +131,7 @@ class QuestDetail extends Component {
         }
         $.ajax({
             type: 'post',
-            url: 'http://localhost:50979/api/Questionnaire/ModifyQuest',
+            url: 'http://localhost:60842/api/Questionnaire/ModifyQuest',
             data: { QId: qId, QuestTitle: questTitle, MaxQuestNum: maxNum },
             success: function (data) {
                 if (data) {

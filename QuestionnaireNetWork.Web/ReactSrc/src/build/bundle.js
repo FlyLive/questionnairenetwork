@@ -76110,7 +76110,7 @@ var AdminInfo = function (_Component) {
         value: function componentWillMount() {
             _jquery2.default.ajax({
                 type: 'get',
-                url: 'http://localhost:50979/api/values',
+                url: 'http://localhost:60842/api/values',
                 dataType: 'json',
                 success: function success(data) {
                     this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
@@ -76149,7 +76149,7 @@ var AdminInfo = function (_Component) {
             }
             _jquery2.default.ajax({
                 type: 'post',
-                url: 'http://localhost:50979/api/values',
+                url: 'http://localhost:60842/api/values',
                 data: { "nickName": nick },
                 success: function success(data) {},
                 error: function error() {}
@@ -76175,7 +76175,7 @@ var AdminInfo = function (_Component) {
             }
             // $.ajax({
             //     type: 'post',
-            //     url: 'http://localhost:50979/api/values',
+            //     url: 'http://localhost:60842/api/values',
             //     data: { "oldPassword": password },
             //     success: function (data) {
             this.setState({
@@ -76522,7 +76522,7 @@ var LoginModal = function (_Component) {
                     var password = values["password"];
                     _jquery2.default.ajax({
                         type: "POST",
-                        url: "http://localhost:50979/Get/Token",
+                        url: "http://localhost:60842/Get/Token",
                         data: {
                             username: values.userName,
                             password: values.password,
@@ -78858,7 +78858,7 @@ var App = function (_Component) {
     _createClass(App, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            // axios.get("http://localhost:50979/api/values")
+            // axios.get("http://localhost:60842/api/values")
             // .then(function (data) {
             //      this.setState({ data: data })
             // })
@@ -78866,7 +78866,7 @@ var App = function (_Component) {
             //     alert(error);
             // });
             // $.ajax({
-            //     url: 'http://localhost:50979/api/values',
+            //     url: 'http://localhost:60842/api/values',
             //     dataType: 'json',
             //     cache: false,
             //     success: function (data) {
@@ -79077,7 +79077,7 @@ var App = function (_Component) {
                                                 null,
                                                 _react2.default.createElement(
                                                     'a',
-                                                    { className: 'btn btn-primary btn-lg popup-vimeo btn-video', href: 'http://localhost:50979/' },
+                                                    { className: 'btn btn-primary btn-lg popup-vimeo btn-video', href: 'http://localhost:60842/' },
                                                     '\u524D\u5F80\u586B\u8868'
                                                 )
                                             )

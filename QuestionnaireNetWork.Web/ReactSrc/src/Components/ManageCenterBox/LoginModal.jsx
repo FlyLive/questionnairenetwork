@@ -16,7 +16,7 @@ class LoginModal extends Component {
                 var password = values.password;
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:50979/Get/Token",
+                    url: "http://localhost:60842/Get/Token",
                     data: {
                         UserName: account,
                         Password: password,

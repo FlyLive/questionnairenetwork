@@ -15,7 +15,7 @@ class CreateQuest extends Component {
 
                 $.ajax({
                     type: 'post',
-                    url: 'http://localhost:50979/api/Questionnaire/CreateQuest',
+                    url: 'http://localhost:60842/api/Questionnaire/CreateQuest',
                     data: { QuestTitle: title, MaxQuestNum: maxNum },
                     success: function (data) {
                         if(data){

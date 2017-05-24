@@ -86,6 +86,21 @@ namespace QuestionnaireNetWork.Service.Services
             }
             return true;
         }
+
+        private void DeleteOptionsByChoiceId(int choiceId)
+        {
+            try
+            {
+                ChoiceQuestion choice = GetChoiceQuestionById(choiceId);
+                var options = choice.Option;
+                _db.Option.RemoveRange(options);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
+        }
         #endregion
 
         #region 选择题
@@ -163,11 +178,12 @@ namespace QuestionnaireNetWork.Service.Services
             return true;
         }
 
-        public bool DeletChoiceQuestion(int id)
+        public bool DeleteChoiceQuestion(int id)
         {
             try
             {
                 ChoiceQuestion choice = GetChoiceQuestionById(id);
+                DeleteOptionsByChoiceId(id);
                 _db.ChoiceQuestion.Remove(choice);
                 _db.SaveChanges();
             }
@@ -177,6 +193,22 @@ namespace QuestionnaireNetWork.Service.Services
                 return false;
             }
             return true;
+        }
+
+        private void DeleteChoicesByQuestId(int questId)
+        {
+            try
+            {
+                Questionnaire quest = GetQuestByQuestId(questId);
+                var choices = quest.ChoiceQuestion.ToList();
+                choices.ForEach(choice => DeleteOptionsByChoiceId(choice.ChoiceId));
+                _db.ChoiceQuestion.RemoveRange(choices);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
         }
         #endregion
 
@@ -229,11 +261,12 @@ namespace QuestionnaireNetWork.Service.Services
             return true;
         }
 
-        public bool DeletCompletion(int id)
+        public bool DeleteCompletion(int id)
         {
             try
             {
                 Completion completion = GetCompletionById(id);
+                completion.CompletionAnswerOptions.Clear();
                 _db.Completion.Remove(completion);
                 _db.SaveChanges();
             }
@@ -244,9 +277,35 @@ namespace QuestionnaireNetWork.Service.Services
             }
             return true;
         }
+
+        private void DeleteCompletionsByQuestId(int questId)
+        {
+            try
+            {
+                Questionnaire quest = GetQuestByQuestId(questId);
+                var completions = quest.Completion;
+                _db.Completion.RemoveRange(completions);
+                _db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+            }
+        }
         #endregion
 
         #region 问卷
+        /// <summary>
+        /// 搜索
+        /// </summary>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public List<Questionnaire> Search(string search)
+        {
+            var quests = _db.Questionnaire.Where(q => q.Title.Contains(search)).ToList();
+            return quests;
+        }
+
         /// <summary>
         /// 获取问卷的现有问题数
         /// </summary>
@@ -320,13 +379,23 @@ namespace QuestionnaireNetWork.Service.Services
         /// <returns></returns>
         public bool DeletQuest(int questId)
         {
-            var quest = GetQuestByQuestId(questId);
-            if (quest != null)
+            try
             {
-                _db.Questionnaire.Remove(quest);
-                _db.SaveChanges();
+                var quest = GetQuestByQuestId(questId);
+                if (quest != null)
+                {
+                    DeleteChoicesByQuestId(questId);
+                    DeleteCompletionsByQuestId(questId);
+                    _db.Questionnaire.Remove(quest);
+                    _db.SaveChanges();
+                }
+                return true;
             }
-            return false;
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return false;
+            }
         }
 
         /// <summary>
@@ -349,6 +418,15 @@ namespace QuestionnaireNetWork.Service.Services
                 .Include("ChoiceQuestion")
                 .Include("Completion")
                 .SingleOrDefault(q => q.Qid == questId);
+            return quest;
+        }
+
+        public List<Questionnaire> GetTop5Quest()
+        {
+            var quest = (from g in GetAllQuest()
+                         orderby g.CreateTime
+                         descending
+                         select g).Take(5).ToList();
             return quest;
         }
 

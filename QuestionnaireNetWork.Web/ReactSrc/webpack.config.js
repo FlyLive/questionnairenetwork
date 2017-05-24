@@ -22,7 +22,7 @@ module.exports = {
         /* 前端跨域 */
         // proxy: {
         //     '/': {
-        //         target: 'http://localhost:50979',
+        //         target: 'http://localhost:60842',
         //         secure: false
         //     }
         // }

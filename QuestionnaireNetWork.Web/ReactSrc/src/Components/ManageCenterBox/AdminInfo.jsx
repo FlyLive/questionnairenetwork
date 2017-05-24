@@ -31,17 +31,16 @@ class AdminInfo extends Component {
 
     componentWillMount() {
         var _this = this;
-        // $.ajax({
-        //     type: 'get',
-        //     url: 'http://localhost:50979/api/Admin/GetAdminInfo',
-        //     dataType: 'json',
-        //     success: function (data) {
-        //         _this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
-        //     },
-        //     error: function () {
-        //         // window.location.href="index.html";
-        //     }
-        // });
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:60842/api/Admin/GetAdminInfo',
+            success: function (data) {
+                _this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
+            },
+            error: function () {
+                // window.location.href="index.html";
+            }
+        });
     }
 
     isNickEmpty(e) {
@@ -66,7 +65,7 @@ class AdminInfo extends Component {
         }
         $.ajax({
             type: 'post',
-            url: 'http://localhost:50979/api/values',
+            url: 'http://localhost:60842/api/values',
             data: { "nickName": nick },
             success: function () {
                 message.success('修改成功');
@@ -93,7 +92,7 @@ class AdminInfo extends Component {
         }
         // $.ajax({
         //     type: 'post',
-        //     url: 'http://localhost:50979/api/values',
+        //     url: 'http://localhost:60842/api/values',
         //     data: { "oldPassword": password },
         //     success: function (data) {
         this.setState({

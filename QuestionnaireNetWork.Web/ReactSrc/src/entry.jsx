@@ -29,7 +29,7 @@ class App extends Component {
         };
     }
     componentDidMount() {
-        // axios.get("http://localhost:50979/api/values")
+        // axios.get("http://localhost:60842/api/values")
         // .then(function (data) {
         //      this.setState({ data: data })
         // })
@@ -37,7 +37,7 @@ class App extends Component {
         //     alert(error);
         // });
         $.ajax({
-            url: 'http://localhost:50979/api/values',
+            url: 'http://localhost:60842/api/values',
             dataType: 'json',
             cache: false,
             success: function (data) {

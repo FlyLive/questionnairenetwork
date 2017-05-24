@@ -15,13 +15,13 @@ namespace QuestionnaireNetWork.Web.Controllers
         [System.Web.Mvc.HttpGet]
         public AdminViewModel GetAdminInfo()
         {
-            //string auth = Request.Headers.Authorization.ToString();
-            //var account = AdminExtension.GetEmployeeUserObject(auth).Account;
-            //var nick = AdminExtension.GetEmployeeUserObject(auth).NickName;
+            string auth = Request.Headers.Authorization.ToString();
+            var account = AdminExtension.GetEmployeeUserObject(auth).Account;
+            var nick = AdminExtension.GetEmployeeUserObject(auth).NickName;
             AdminViewModel admin = new AdminViewModel()
             {
-                //Account = account,
-                //NickName = nick
+                Account = account,
+                NickName = nick
             };
             return admin;
         }

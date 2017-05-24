@@ -29,7 +29,7 @@ class CheckChoiceDetail extends Component {
         var _this = this;
         $.ajax({
             type: 'get',
-            url: 'http://localhost:50979/api/Question/GetAllChoiceQuestion',
+            url: 'http://localhost:60842/api/Question/GetAllChoiceQuestion',
             data: { questId: questId },
             success: function (data) {
                 _this.setState({ data: data })
@@ -96,7 +96,7 @@ class CheckChoiceDetail extends Component {
 
                 $.ajax({
                     type: 'post',
-                    url: 'http://localhost:50979/api/Question/CreateOption',
+                    url: 'http://localhost:60842/api/Question/CreateOption',
                     contentType: 'application/json',
                     data: JSON.stringify({ ChoiceId: choiceId, Options: options }),
                     success: function (data) {
@@ -136,13 +136,13 @@ class CheckChoiceDetail extends Component {
         var type = this.state.choiceTypeInput;
         var _this = this;
 
-        if(optionContent == "" || /\s+/g.test(optionContent)){
+        if(choiceTitle == "" || /\s+/g.test(choiceTitle)){
             message.error("请输入题目标题");
             return false;
         }
         $.ajax({
             type: 'post',
-            url: 'http://localhost:50979/api/Question/ModifyChoiceQuestion',
+            url: 'http://localhost:60842/api/Question/ModifyChoiceQuestion',
             data: { ChoiceId: choiceId,ChoiceTitle:choiceTitle,Type:type },
             success: function (data) {
                 if (data) {
@@ -163,13 +163,15 @@ class CheckChoiceDetail extends Component {
     }
 
     onDeleteChoice(choiceId) {
+        var _this = this;
         $.ajax({
             type: 'delete',
-            url: 'http://localhost:50979/api/Question/DeleteChoiceQuestion',
-            data: { "": id },
+            url: 'http://localhost:60842/api/Question/DeleteChoiceQuestion',
+            data: { "": choiceId },
             success: function (data) {
                 if (data) {
                     message.success('删除成功');
+                    _this.update(_this.state.selectedChoice.QId);
                     return true;
                 }
                 message.error('删除失败');
@@ -239,13 +241,13 @@ class CheckChoiceDetail extends Component {
                     onCancel={this.handleCancleModifyChoice.bind(this)}>
                     <Form>
                         <FormItem {...formItemLayout} label="正在修改问卷:" >
-                            <label> {this.state.selectedChoiceTitle}</label>
+                            <h2> {this.state.selectedChoiceTitle}</h2>
                         </FormItem>
                         <FormItem label="问题内容" {...formItemLayout} wrapperCol={{ span: 10 }}>
-                            <Input placeholder="问题内容" onChange={this.onChangeChoiceTitle.bind(this)} value={this.state.choiceTitleInput} />)
+                            <Input placeholder="问题内容" onChange={this.onChangeChoiceTitle.bind(this)} value={this.state.choiceTitleInput} />
                         </FormItem>
                         <FormItem label="多选题" {...formItemLayout}>
-                            <Switch onChange={this.switchType.bind(this)} defaultChecked={this.selectedChoice == null ? false : this.selectedChoice.Type} />)
+                            <Switch onChange={this.switchType.bind(this)} defaultChecked={this.selectedChoice == null ? false : this.selectedChoice.Type} />
                         </FormItem>
                         <FormItem {...formItemLayoutWithOutLabel}>
                             <Button type="primary" onClick={this.handleSubmitModifyChoice.bind(this)} size="large">提交</Button>

@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "dad5f8458ac7cde4747a"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "64eab676e7e547830957"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -76132,7 +76132,13 @@ var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
 
 var _input2 = _interopRequireDefault(_input);
 
-var _css5 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+var _css5 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css6 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
 
 var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
 
@@ -76168,13 +76174,15 @@ var CreateChoice = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (CreateChoice.__proto__ || Object.getPrototypeOf(CreateChoice)).call(this, props));
 
-        _this.state = {};
+        _this.state = { questId: props.questId };
         return _this;
     }
 
     _createClass(CreateChoice, [{
         key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(props) {}
+        value: function componentWillReceiveProps(nextProps) {
+            this.setState({ questId: nextProps.questId });
+        }
     }, {
         key: 'remove',
         value: function remove(k) {
@@ -76217,9 +76225,9 @@ var CreateChoice = function (_Component) {
             e.preventDefault();
             this.props.form.validateFields(function (err, values) {
                 if (!err) {
-                    var questId = _this2.props.questId;
+                    var questId = _this2.state.questId;
                     if (questId == undefined) {
-                        message.error("出错啦");
+                        _message2.default.error("出错啦");
                         return false;
                     }
                     var title = values["title"];
@@ -76229,16 +76237,29 @@ var CreateChoice = function (_Component) {
                     var form = _this2.props.form;
 
                     var keys = form.getFieldValue('keys');
+                    if (keys.length <= 0) {
+                        _message2.default.error("请至少添加一个选项");
+                        return false;
+                    }
                     keys.filter(function (key) {
                         return options.push(values["names-" + key]);
                     });
 
                     $.ajax({
                         type: 'post',
-                        url: '',
-                        data: { "questId": questId, "title": title, "type": type },
-                        success: function success() {},
-                        error: function error() {}
+                        url: 'http://localhost:60842/api/Question/CreateChoiceQuestion',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ QId: questId, ChoiceTitle: title, Type: type, Options: options }),
+                        success: function success(data) {
+                            if (data) {
+                                _message2.default.success("创建成功");
+                                return true;
+                            }
+                            _message2.default.error("创建失败,可能题数达到上限");
+                        },
+                        error: function error() {
+                            _message2.default.error("出错了");
+                        }
                     });
                 }
             });
@@ -76352,7 +76373,13 @@ var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
 
 var _input2 = _interopRequireDefault(_input);
 
-var _css3 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+var _css3 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css4 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
 
 var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
 
@@ -76386,11 +76413,16 @@ var CreateCompletion = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (CreateCompletion.__proto__ || Object.getPrototypeOf(CreateCompletion)).call(this, props));
 
-        _this.state = {};
+        _this.state = { questId: props.questId };
         return _this;
     }
 
     _createClass(CreateCompletion, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            this.setState({ questId: nextProps.questId });
+        }
+    }, {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             var _this2 = this;
@@ -76398,19 +76430,27 @@ var CreateCompletion = function (_Component) {
             e.preventDefault();
             this.props.form.validateFields(function (err, values) {
                 if (!err) {
-                    var questId = _this2.props.questId;
+                    var questId = _this2.state.questId;
                     if (questId == undefined) {
-                        message.error("出错啦");
+                        _message2.default.error("出错啦");
                         return false;
                     }
                     var title = values["title"];
 
                     $.ajax({
                         type: 'post',
-                        url: '',
-                        data: { "questId": questId, "title": title },
-                        success: function success() {},
-                        error: function error() {}
+                        url: 'http://localhost:60842/api/Question/CreateCompletion',
+                        data: { QId: questId, Title: title },
+                        success: function success(data) {
+                            if (data) {
+                                _message2.default.success("创建成功");
+                                return true;
+                            }
+                            _message2.default.error("创建失败,可能题数达到上限");
+                        },
+                        error: function error() {
+                            _message2.default.error("出错了");
+                        }
                     });
                 }
             });
@@ -76492,7 +76532,13 @@ var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
 
 var _input2 = _interopRequireDefault(_input);
 
-var _css4 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+var _css4 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css5 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
 
 var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
 
@@ -76531,19 +76577,25 @@ var CreateQuest = function (_Component) {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             e.preventDefault();
-            this.props.form.validateFields(function (err, values) {
+            var form = this.props.form;
+            form.validateFields(function (err, values) {
                 if (!err) {
                     var title = values["title"];
-                    var maxNum = values["num"];
+                    var maxNum = values["maxNum"];
 
                     $.ajax({
                         type: 'post',
-                        url: '',
-                        data: { title: title, maxNum: maxNum },
-                        success: function success() {
-                            message.success('创建成功');
+                        url: 'http://localhost:60842/api/Questionnaire/CreateQuest',
+                        data: { QuestTitle: title, MaxQuestNum: maxNum },
+                        success: function success(data) {
+                            if (data) {
+                                _message2.default.success('创建成功');
+                                form.resetFields();
+                                return true;
+                            }
+                            _message2.default.error('创建失败');
                         }, error: function error() {
-                            message.error('出错了');
+                            _message2.default.error('出错了');
                         }
                     });
                 }
@@ -76698,9 +76750,9 @@ var AdminInfo = function (_Component) {
     function AdminInfo(props) {
         _classCallCheck(this, AdminInfo);
 
-        var _this = _possibleConstructorReturn(this, (AdminInfo.__proto__ || Object.getPrototypeOf(AdminInfo)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (AdminInfo.__proto__ || Object.getPrototypeOf(AdminInfo)).call(this, props));
 
-        _this.state = {
+        _this2.state = {
             account: {
                 value: 'Lucy'
             },
@@ -76718,23 +76770,24 @@ var AdminInfo = function (_Component) {
             },
             confirmDirty: false
         };
-        return _this;
+        return _this2;
     }
 
     _createClass(AdminInfo, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            _jquery2.default.ajax({
-                type: 'get',
-                url: 'http://localhost:50979/api/Admin/GetAdminInfo',
-                dataType: 'json',
-                success: function success(data) {
-                    this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
-                },
-                error: function error() {
-                    window.location.href = "index.html";
-                }
-            });
+            var _this = this;
+            // $.ajax({
+            //     type: 'get',
+            //     url: 'http://localhost:60842/api/Admin/GetAdminInfo',
+            //     dataType: 'json',
+            //     success: function (data) {
+            //         _this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
+            //     },
+            //     error: function () {
+            //         // window.location.href="index.html";
+            //     }
+            // });
         }
     }, {
         key: 'isNickEmpty',
@@ -76761,7 +76814,7 @@ var AdminInfo = function (_Component) {
             }
             _jquery2.default.ajax({
                 type: 'post',
-                url: 'http://localhost:50979/api/values',
+                url: 'http://localhost:60842/api/values',
                 data: { "nickName": nick },
                 success: function success() {
                     _message2.default.success('修改成功');
@@ -76776,7 +76829,7 @@ var AdminInfo = function (_Component) {
             var oldP = e.target.value;
             if (oldP == "" || /\s+/g.test(oldP)) {
                 this.setState({ oldP: { visible: true } });
-                return false;
+                return true;
             }
             this.setState({ oldP: { visible: false } });
         }
@@ -76790,7 +76843,7 @@ var AdminInfo = function (_Component) {
             }
             // $.ajax({
             //     type: 'post',
-            //     url: 'http://localhost:50979/api/values',
+            //     url: 'http://localhost:60842/api/values',
             //     data: { "oldPassword": password },
             //     success: function (data) {
             this.setState({
@@ -77091,17 +77144,67 @@ exports.default = RadioChoiceDetail;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+var _css = __webpack_require__("./node_modules/antd/lib/modal/style/css.js");
+
+var _modal = __webpack_require__("./node_modules/antd/lib/modal/index.js");
+
+var _modal2 = _interopRequireDefault(_modal);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+
+var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
+
+var _button2 = _interopRequireDefault(_button);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/switch/style/css.js");
+
+var _switch = __webpack_require__("./node_modules/antd/lib/switch/index.js");
+
+var _switch2 = _interopRequireDefault(_switch);
+
+var _css4 = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
 
 var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
 
 var _table2 = _interopRequireDefault(_table);
+
+var _css5 = __webpack_require__("./node_modules/antd/lib/icon/style/css.js");
+
+var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
+
+var _icon2 = _interopRequireDefault(_icon);
+
+var _css6 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+
+var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
+
+var _input2 = _interopRequireDefault(_input);
+
+var _css7 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
+
+var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
+
+var _popconfirm2 = _interopRequireDefault(_popconfirm);
+
+var _css8 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css9 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+
+var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
+
+var _form2 = _interopRequireDefault(_form);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -77123,7 +77226,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
+var FormItem = _form2.default.Item;
+
+var uuid = 1;
 
 var CheckChoiceDetail = function (_Component) {
     _inherits(CheckChoiceDetail, _Component);
@@ -77131,43 +77236,212 @@ var CheckChoiceDetail = function (_Component) {
     function CheckChoiceDetail(props) {
         _classCallCheck(this, CheckChoiceDetail);
 
-        var _this = _possibleConstructorReturn(this, (CheckChoiceDetail.__proto__ || Object.getPrototypeOf(CheckChoiceDetail)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (CheckChoiceDetail.__proto__ || Object.getPrototypeOf(CheckChoiceDetail)).call(this, props));
 
-        _this.state = {
-            questId: props.questId,
-            data: []
+        _this2.state = {
+            data: [],
+            createOptionModal: false,
+            modifyChoiceModal: false,
+            selectedChoice: null,
+            selectedChoiceTitle: null,
+            choiceTitleInput: null,
+            choiceTypeInput: null
         };
-        return _this;
+        return _this2;
     }
 
     _createClass(CheckChoiceDetail, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(data){
-            //         this.setState({data:data})
-            //     },error:function(){
-            //     }
-            // })
+            this.update(this.props.questId);
+        }
+    }, {
+        key: 'update',
+        value: function update(questId) {
+            var _this = this;
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:60842/api/Question/GetAllChoiceQuestion',
+                data: { questId: questId },
+                success: function success(data) {
+                    _this.setState({ data: data });
+                }, error: function error(_error) {}
+            });
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
             var questId = nextProps.questId;
-            this.setState({ quest: questId });
+            this.update(questId);
+        }
+    }, {
+        key: 'onAddOption',
+        value: function onAddOption(choice) {
+            this.setState({ selectedChoice: choice, selectedChoiceTitle: choice.ChoiceTitle, createOptionModal: true });
+        }
+    }, {
+        key: 'remove',
+        value: function remove(k) {
+            var form = this.props.form;
+            // can use data-binding to get
+
+            var keys = form.getFieldValue('keys');
+            // We need at least one passenger
+            if (keys.length === 1) {
+                return;
+            }
+
+            // can use data-binding to set
+            form.setFieldsValue({
+                keys: keys.filter(function (key) {
+                    return key !== k;
+                })
+            });
+        }
+    }, {
+        key: 'add',
+        value: function add(e) {
+            uuid++;
+            var form = this.props.form;
+            // can use data-binding to get
+
+            var keys = form.getFieldValue('keys');
+            var nextKeys = keys.concat(uuid);
+            // can use data-binding to set
+            // important! notify form to detect changes
+            form.setFieldsValue({
+                keys: nextKeys
+            });
+        }
+    }, {
+        key: 'handleSubmitCreateOptions',
+        value: function handleSubmitCreateOptions(e) {
+            var _this3 = this;
+
+            e.preventDefault();
+            this.props.form.validateFields(function (err, values) {
+                if (!err) {
+                    var choiceId = _this3.state.selectedChoice.ChoiceId;
+                    if (choiceId == undefined) {
+                        _message2.default.error("出错啦");
+                        return false;
+                    }
+
+                    var options = new Array();
+                    var form = _this3.props.form;
+
+                    var keys = form.getFieldValue('keys');
+                    if (keys.length <= 0) {
+                        _message2.default.error("请至少添加一个选项");
+                        return false;
+                    }
+                    keys.filter(function (key) {
+                        return options.push(values["names-" + key]);
+                    });
+
+                    $.ajax({
+                        type: 'post',
+                        url: 'http://localhost:60842/api/Question/CreateOption',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ ChoiceId: choiceId, Options: options }),
+                        success: function success(data) {
+                            if (data) {
+                                _message2.default.success("添加成功");
+                                return true;
+                            }
+                            _message2.default.error("添加失败");
+                        },
+                        error: function error(_error2) {
+                            _message2.default.error("出错了");
+                        }
+                    });
+                }
+            });
+        }
+    }, {
+        key: 'handleCancleCreate',
+        value: function handleCancleCreate() {
+            this.setState({ createOptionModal: false });
         }
     }, {
         key: 'onModifyChoice',
-        value: function onModifyChoice(text, record) {
-            alert(record.name);
+        value: function onModifyChoice(choice) {
+            this.setState({ selectedChoice: choice, selectedChoiceTitle: choice.ChoiceTitle, modifyChoiceModal: true });
+        }
+    }, {
+        key: 'switchType',
+        value: function switchType(e) {
+            this.setState({ choiceTypeInput: e.target.value });
+        }
+    }, {
+        key: 'onChangeChoiceTitle',
+        value: function onChangeChoiceTitle(e) {
+            this.setState({ choiceTitleInput: e.target.value });
+        }
+    }, {
+        key: 'handleSubmitModifyChoice',
+        value: function handleSubmitModifyChoice() {
+            var choiceId = this.state.selectedChoice.ChoiceId;
+            var choiceTitle = this.state.choiceTitleInput;
+            var type = this.state.choiceTypeInput;
+            var _this = this;
+
+            if (choiceTitle == "" || /\s+/g.test(choiceTitle)) {
+                _message2.default.error("请输入题目标题");
+                return false;
+            }
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:60842/api/Question/ModifyChoiceQuestion',
+                data: { ChoiceId: choiceId, ChoiceTitle: choiceTitle, Type: type },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success("修改成功");
+                        _this.update(_this.state.selectedChoice.QId);
+                        return true;
+                    }
+                    _message2.default.error("修改失败");
+                },
+                error: function error(_error3) {
+                    _message2.default.error("出错了");
+                }
+            });
+        }
+    }, {
+        key: 'handleCancleModifyChoice',
+        value: function handleCancleModifyChoice() {
+            this.setState({ modifyChoiceModal: false });
+        }
+    }, {
+        key: 'onDeleteChoice',
+        value: function onDeleteChoice(choiceId) {
+            var _this = this;
+            $.ajax({
+                type: 'delete',
+                url: 'http://localhost:60842/api/Question/DeleteChoiceQuestion',
+                data: { "": choiceId },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('删除成功');
+                        _this.update(_this.state.selectedChoice.QId);
+                        return true;
+                    }
+                    _message2.default.error('删除失败');
+                }, error: function error() {
+                    _message2.default.error('出错了');
+                }
+            });
         }
     }, {
         key: 'render',
         value: function render() {
-            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+            var _this4 = this;
+
+            var _props$form = this.props.form,
+                getFieldDecorator = _props$form.getFieldDecorator,
+                getFieldValue = _props$form.getFieldValue;
+
+            var choiceColumns = [{ title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle', width: 100 }, { title: '类型', dataIndex: 'Type', key: 'Type', width: 100 }, {
                 title: '操作', dataIndex: '', width: 100,
                 render: function render(text, record) {
                     return _react2.default.createElement(
@@ -77175,32 +77449,155 @@ var CheckChoiceDetail = function (_Component) {
                         null,
                         _react2.default.createElement(
                             'a',
-                            null,
-                            '\u4FEE\u6539'
+                            { onClick: function onClick() {
+                                    return _this4.onAddOption(record);
+                                } },
+                            '\u6DFB\u52A0\u9009\u9879'
                         ),
                         _react2.default.createElement('span', { className: 'ant-divider' }),
                         _react2.default.createElement(
                             'a',
-                            null,
-                            '\u5220\u9664'
+                            { onClick: function onClick() {
+                                    return _this4.onModifyChoice(record);
+                                } },
+                            '\u4FEE\u6539'
+                        ),
+                        _react2.default.createElement('span', { className: 'ant-divider' }),
+                        _react2.default.createElement(
+                            _popconfirm2.default,
+                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
+                                    return _this4.onDeleteChoice(record.ChoiceId);
+                                }, okText: '\u5220\u9664' },
+                            _react2.default.createElement(
+                                'a',
+                                null,
+                                '\u5220\u9664'
+                            )
                         )
                     );
                 }
             }];
+
+            var formItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
+            };
+
+            var formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
+                }
+            };
+
+            getFieldDecorator('keys', { initialValue: [] });
+            var keys = getFieldValue('keys');
+            var formItems = keys.map(function (k, index) {
+                return _react2.default.createElement(
+                    FormItem,
+                    _extends({}, index === 0 ? formItemLayout : formItemLayoutWithOutLabel, {
+                        label: index === 0 ? '选项' : '', required: false, key: k }),
+                    getFieldDecorator('names-' + k, {
+                        validateTrigger: ['onChange', 'onBlur'],
+                        rules: [{ required: true, whitespace: true, message: "请输入选项内容或删除该选项." }]
+                    })(_react2.default.createElement(_input2.default, { placeholder: '\u9009\u9879\u5185\u5BB9', style: { width: '60%', marginRight: 8 } })),
+                    _react2.default.createElement(_icon2.default, { className: 'dynamic-delete-button', type: 'minus-circle-o',
+                        disabled: keys.length === 1, onClick: function onClick() {
+                            return _this4.remove(k);
+                        } })
+                );
+            });
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, {
+                _react2.default.createElement(_table2.default, { rowKey: 'ChoiceId',
                     columns: choiceColumns,
                     bordered: true,
                     expandedRowRender: function expandedRowRender(record) {
-                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.key });
+                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.ChoiceId });
                     },
                     dataSource: this.state.data,
                     title: function title() {
-                        return "多选题";
-                    } })
+                        return "选择题";
+                    } }),
+                _react2.default.createElement(
+                    _modal2.default,
+                    { title: '\u4FEE\u6539\u95EE\u9898', visible: this.state.modifyChoiceModal, footer: null,
+                        onCancel: this.handleCancleModifyChoice.bind(this) },
+                    _react2.default.createElement(
+                        _form2.default,
+                        null,
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({}, formItemLayout, { label: '\u6B63\u5728\u4FEE\u6539\u95EE\u5377:' }),
+                            _react2.default.createElement(
+                                'h2',
+                                null,
+                                ' ',
+                                this.state.selectedChoiceTitle
+                            )
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({ label: '\u95EE\u9898\u5185\u5BB9' }, formItemLayout, { wrapperCol: { span: 10 } }),
+                            _react2.default.createElement(_input2.default, { placeholder: '\u95EE\u9898\u5185\u5BB9', onChange: this.onChangeChoiceTitle.bind(this), value: this.state.choiceTitleInput })
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({ label: '\u591A\u9009\u9898' }, formItemLayout),
+                            _react2.default.createElement(_switch2.default, { onChange: this.switchType.bind(this), defaultChecked: this.selectedChoice == null ? false : this.selectedChoice.Type })
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            formItemLayoutWithOutLabel,
+                            _react2.default.createElement(
+                                _button2.default,
+                                { type: 'primary', onClick: this.handleSubmitModifyChoice.bind(this), size: 'large' },
+                                '\u63D0\u4EA4'
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _modal2.default,
+                    { title: '\u6DFB\u52A0\u9009\u9879', visible: this.state.createOptionModal, footer: null,
+                        onCancel: this.handleCancleCreate.bind(this) },
+                    _react2.default.createElement(
+                        _form2.default,
+                        null,
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({}, formItemLayout, { label: '\u5C06\u6DFB\u52A0\u81F3\u9898\u76EE:' }),
+                            _react2.default.createElement(
+                                'label',
+                                null,
+                                ' ',
+                                this.state.selectedChoiceTitle
+                            )
+                        ),
+                        formItems,
+                        _react2.default.createElement(
+                            FormItem,
+                            formItemLayoutWithOutLabel,
+                            _react2.default.createElement(
+                                _button2.default,
+                                { type: 'dashed', onClick: this.add.bind(this), style: { width: '60%' } },
+                                _react2.default.createElement(_icon2.default, { type: 'plus' }),
+                                '\u6DFB\u52A0\u9009\u9879'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            formItemLayoutWithOutLabel,
+                            _react2.default.createElement(
+                                _button2.default,
+                                { type: 'primary', onClick: this.handleSubmitCreateOptions.bind(this), size: 'large' },
+                                '\u63D0\u4EA4'
+                            )
+                        )
+                    )
+                )
             );
         }
     }]);
@@ -77208,7 +77605,8 @@ var CheckChoiceDetail = function (_Component) {
     return CheckChoiceDetail;
 }(_react.Component);
 
-exports.default = CheckChoiceDetail;
+exports.default = _form2.default.create()(CheckChoiceDetail);
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -77216,23 +77614,55 @@ exports.default = CheckChoiceDetail;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+var _css = __webpack_require__("./node_modules/antd/lib/modal/style/css.js");
+
+var _modal = __webpack_require__("./node_modules/antd/lib/modal/index.js");
+
+var _modal2 = _interopRequireDefault(_modal);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+
+var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
+
+var _button2 = _interopRequireDefault(_button);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+
+var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
+
+var _input2 = _interopRequireDefault(_input);
+
+var _css4 = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
 
 var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
 
 var _table2 = _interopRequireDefault(_table);
 
-var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
+var _css5 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
 
 var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
 
 var _popconfirm2 = _interopRequireDefault(_popconfirm);
+
+var _css6 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css7 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+
+var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
+
+var _form2 = _interopRequireDefault(_form);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -77250,7 +77680,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park' }];
+var FormItem = _form2.default.Item;
 
 var CompletionDetail = function (_Component) {
     _inherits(CompletionDetail, _Component);
@@ -77258,46 +77688,111 @@ var CompletionDetail = function (_Component) {
     function CompletionDetail(props) {
         _classCallCheck(this, CompletionDetail);
 
-        var _this = _possibleConstructorReturn(this, (CompletionDetail.__proto__ || Object.getPrototypeOf(CompletionDetail)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (CompletionDetail.__proto__ || Object.getPrototypeOf(CompletionDetail)).call(this, props));
 
-        _this.state = {
+        _this2.state = {
             questId: props.questId,
-            data: data
+            focusCompletion: null,
+            modifyCompletionModal: false,
+            completionTitle: null
         };
-        return _this;
+        return _this2;
     }
 
     _createClass(CompletionDetail, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(data){
-            //         this.setState({data:data})
-            //     },error:function(){
-            //     }
-            // })
+            this.update(this.props.questId);
+        }
+    }, {
+        key: 'update',
+        value: function update(questId) {
+            var _this = this;
+            _this.setState({ questId: questId });
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:60842/api/Question/GetAllCompletion',
+                data: { questId: questId },
+                success: function success(data) {
+                    _this.setState({ data: data });
+                }, error: function error(_error) {}
+            });
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
             var questId = nextProps.questId;
-            this.setState({ quest: questId });
+            this.update(questId);
         }
     }, {
-        key: 'onModifyCompleion',
-        value: function onModifyCompleion(key) {}
+        key: 'onModifyCompletion',
+        value: function onModifyCompletion(completion) {
+            this.setState({ modifyCompletionModal: true, focusCompletion: completion, completionTitle: completion.Title });
+        }
+    }, {
+        key: 'completionChange',
+        value: function completionChange(e) {
+            this.setState({ completionTitle: e.target.value });
+        }
+    }, {
+        key: 'handleSubmitModifyCompletion',
+        value: function handleSubmitModifyCompletion() {
+            var id = this.state.selectedOption.OptionId;
+            var completionTitle = this.state.completionTitle;
+            var _this = this;
+            if (completionTitle == "" || /\s+/g.test(completionTitle)) {
+                _message2.default.error("简答题题目不能为空");
+                return false;
+            }
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:60842/api/Question/ModifyCompletion',
+                data: { CompletionId: id, Title: completionTitle },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('修改成功');
+                        _this.setState({ modifyCompletionModal: false });
+                        _this.update(_this.state.questId);
+                        return true;
+                    }
+                    _message2.default.error('修改失败');
+                }, error: function error(_error2) {
+                    _message2.default.error('出错了');
+                }
+            });
+        }
+    }, {
+        key: 'handleCancleModify',
+        value: function handleCancleModify() {
+            this.setState({ modifyCompletionModal: false });
+        }
     }, {
         key: 'onDeletCompletion',
-        value: function onDeletCompletion(key) {}
+        value: function onDeletCompletion(key) {
+            $.ajax({
+                type: 'delete',
+                url: 'http://localhost:60842/api/Question/DeleteCompletion',
+                data: { "": id },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('删除成功');
+                        return true;
+                    }
+                    _message2.default.error('删除失败');
+                }, error: function error() {
+                    _message2.default.error('出错了');
+                }
+            });
+        }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
-            var columns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+            var columns = [{ title: '题目', dataIndex: 'Title', key: 'Title', width: 100 },
+            // { title: 'Age', dataIndex: 'age', key: 'age', width: 100 },
+            // { title: 'Address', dataIndex: 'address', key: 'address', width: 100 },
+            {
                 title: '操作', dataIndex: '', width: 100,
                 render: function render(text, record, index) {
                     return _react2.default.createElement(
@@ -77306,7 +77801,7 @@ var CompletionDetail = function (_Component) {
                         _react2.default.createElement(
                             'a',
                             { onClick: function onClick() {
-                                    return _this2.onModifyCompleion(record.key);
+                                    return _this3.onModifyCompletion(record);
                                 } },
                             '\u4FEE\u6539'
                         ),
@@ -77314,7 +77809,7 @@ var CompletionDetail = function (_Component) {
                         _react2.default.createElement(
                             _popconfirm2.default,
                             { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeletCompletion(record.key);
+                                    return _this3.onDeletCompletion(record.key);
                                 }, okText: '\u5220\u9664' },
                             _react2.default.createElement(
                                 'a',
@@ -77325,14 +77820,46 @@ var CompletionDetail = function (_Component) {
                     );
                 }
             }];
-
+            var ModalItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
+            };
+            var formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
+                }
+            };
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, { columns: columns, dataSource: this.state.data, title: function title() {
+                _react2.default.createElement(_table2.default, { rowKey: 'CompletionId', columns: columns, dataSource: this.state.data, title: function title() {
                         return "简答题";
-                    } })
+                    } }),
+                _react2.default.createElement(
+                    _modal2.default,
+                    { title: '\u4FEE\u6539\u9009\u9879', visible: this.state.modifyCompletionModal, footer: null,
+                        onCancel: this.handleCancleModify.bind(this) },
+                    _react2.default.createElement(
+                        _form2.default,
+                        null,
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({}, ModalItemLayout, { label: '\u7B80\u7B54\u9898\u9898\u76EE' }),
+                            _react2.default.createElement(_input2.default, { onChange: this.completionChange.bind(this), placeholder: '\u7B80\u7B54\u9898\u9898\u76EE', value: this.state.completionTitle })
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            formItemLayoutWithOutLabel,
+                            _react2.default.createElement(
+                                _button2.default,
+                                { onClick: this.handleSubmitModifyCompletion.bind(this), type: 'primary' },
+                                '\u786E\u8BA4\u4FEE\u6539'
+                            )
+                        )
+                    )
+                )
             );
         }
     }]);
@@ -77341,6 +77868,7 @@ var CompletionDetail = function (_Component) {
 }(_react.Component);
 
 exports.default = CompletionDetail;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -77554,23 +78082,61 @@ exports.default = OptionChart;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+var _css = __webpack_require__("./node_modules/antd/lib/modal/style/css.js");
+
+var _modal = __webpack_require__("./node_modules/antd/lib/modal/index.js");
+
+var _modal2 = _interopRequireDefault(_modal);
+
+var _css2 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+
+var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
+
+var _button2 = _interopRequireDefault(_button);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/tooltip/style/css.js");
+
+var _tooltip = __webpack_require__("./node_modules/antd/lib/tooltip/index.js");
+
+var _tooltip2 = _interopRequireDefault(_tooltip);
+
+var _css4 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+
+var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
+
+var _input2 = _interopRequireDefault(_input);
+
+var _css5 = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
 
 var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
 
 var _table2 = _interopRequireDefault(_table);
 
-var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
+var _css6 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
 
 var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
 
 var _popconfirm2 = _interopRequireDefault(_popconfirm);
+
+var _css7 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+
+var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
+
+var _message2 = _interopRequireDefault(_message);
+
+var _css8 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+
+var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
+
+var _form2 = _interopRequireDefault(_form);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -77588,7 +78154,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 4, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 5, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 6, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 7, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 8, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 9, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }, { key: 10, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 11, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 12, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
+var FormItem = _form2.default.Item;
 
 var OptionDetail = function (_Component) {
     _inherits(OptionDetail, _Component);
@@ -77596,50 +78162,121 @@ var OptionDetail = function (_Component) {
     function OptionDetail(props) {
         _classCallCheck(this, OptionDetail);
 
-        var _this = _possibleConstructorReturn(this, (OptionDetail.__proto__ || Object.getPrototypeOf(OptionDetail)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (OptionDetail.__proto__ || Object.getPrototypeOf(OptionDetail)).call(this, props));
 
-        _this.state = {
+        _this2.state = {
             choiceId: props.choiceId,
-            data: []
+            data: [],
+            modifyOptionModal: false,
+            optionContentEmpty: false,
+            selectedOption: null,
+            OptionContent: null
         };
-        return _this;
+        return _this2;
     }
 
     _createClass(OptionDetail, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            // $.ajax({
-            //     type: 'post',
-            //     url: '',
-            //     data: {},
-            //     success: function (data) {
-            //         this.setState({ data: data })
-            //     }, error: function () {
-            //     }
-            // })
+            var choiceId = this.props.choiceId;
+            this.update(choiceId);
+        }
+    }, {
+        key: 'update',
+        value: function update(choiceId) {
+            var _this = this;
+            $.ajax({
+                type: 'get',
+                url: 'http://localhost:60842/api/Question/GetAllOptionByCQId',
+                data: { cqId: choiceId },
+                success: function success(data) {
+                    _this.setState({ data: data });
+                }, error: function error(_error) {}
+            });
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
             var choiceId = nextProps.choiceId;
             this.setState({ choiceId: choiceId });
+            this.update(choiceId);
         }
     }, {
         key: 'onModifyChoice',
-        value: function onModifyChoice(key) {
-            alert(key);
+        value: function onModifyChoice(option) {
+            this.setState({ modifyOptionModal: true, selectedOption: option, OptionContent: option.OptionContent });
         }
     }, {
-        key: 'onDeletOption',
-        value: function onDeletOption(key) {
-            alert(key);
+        key: 'isOptionContentEmpty',
+        value: function isOptionContentEmpty(e) {
+            var optionContent = e.target.value;
+            this.setState({ OptionContent: optionContent });
+            if (optionContent == "" || /\s+/g.test(optionContent)) {
+                this.setState({ optionContentEmpty: true });
+                return true;
+            }
+            this.setState({ optionContentEmpty: false });
+        }
+    }, {
+        key: 'handleSubmitModifyOption',
+        value: function handleSubmitModifyOption(e) {
+            var id = this.state.selectedOption.OptionId;
+            var optionContent = this.state.OptionContent;
+            var _this = this;
+            if (optionContent == "" || /\s+/g.test(optionContent)) {
+                this.setState({ optionContentEmpty: true });
+                return false;
+            }
+
+            $.ajax({
+                type: 'post',
+                url: 'http://localhost:60842/api/Question/ModifyOption',
+                data: { OptionId: id, OptionContent: optionContent },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('修改成功');
+                        _this.setState({ modifyOptionModal: false });
+                        _this.update(_this.state.choiceId);
+                        return true;
+                    }
+                    _message2.default.error('修改失败');
+                }, error: function error(_error2) {
+                    _message2.default.error('出错了');
+                }
+            });
+        }
+    }, {
+        key: 'handleCancleModify',
+        value: function handleCancleModify() {
+            this.setState({ modifyOptionModal: false });
+        }
+    }, {
+        key: 'onDeleteOption',
+        value: function onDeleteOption(id) {
+            var choiceId = this.state.choiceId;
+            var _this = this;
+            $.ajax({
+                type: 'delete',
+                url: 'http://localhost:60842/api/Question/DeleteOption',
+                data: { "": id },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('删除成功');
+                        _this.update(choiceId);
+                        return true;
+                    }
+                    _message2.default.error('删除失败');
+                }, error: function error(_error3) {
+                    _message2.default.error('出错了');
+                }
+            });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
-            var optionColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
+            var optionColumns = [{ title: '选项名', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 }, {
                 title: '操作', dataIndex: '', width: 100,
                 render: function render(text, record, index) {
                     return _react2.default.createElement(
@@ -77648,7 +78285,7 @@ var OptionDetail = function (_Component) {
                         _react2.default.createElement(
                             'a',
                             { onClick: function onClick() {
-                                    return _this2.onModifyChoice(record.key);
+                                    return _this3.onModifyChoice(record);
                                 } },
                             '\u4FEE\u6539'
                         ),
@@ -77656,7 +78293,7 @@ var OptionDetail = function (_Component) {
                         _react2.default.createElement(
                             _popconfirm2.default,
                             { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u9009\u9879\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeletOption(record.key);
+                                    return _this3.onDeleteOption(record.OptionId);
                                 }, okText: '\u5220\u9664' },
                             _react2.default.createElement(
                                 'a',
@@ -77667,18 +78304,60 @@ var OptionDetail = function (_Component) {
                     );
                 }
             }];
-            return _react2.default.createElement(_table2.default, { columns: optionColumns,
-                dataSource: this.state.data,
-                pagination: false,
-                scroll: { y: 240 },
-                size: 'small',
-                title: function title() {
-                    return _react2.default.createElement(
-                        'p',
-                        { style: { textAlign: "center", margin: 0 } },
-                        '\u9009\u9879'
-                    );
-                } });
+            var ModalItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
+            };
+            var formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
+                }
+            };
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_table2.default, { rowKey: 'OptionId',
+                    columns: optionColumns,
+                    dataSource: this.state.data,
+                    pagination: false,
+                    scroll: { y: 240 },
+                    size: 'small',
+                    title: function title() {
+                        return _react2.default.createElement(
+                            'p',
+                            { style: { textAlign: "center", margin: 0 } },
+                            '\u9009\u9879'
+                        );
+                    } }),
+                _react2.default.createElement(
+                    _modal2.default,
+                    { title: '\u4FEE\u6539\u9009\u9879', visible: this.state.modifyOptionModal, footer: null,
+                        onCancel: this.handleCancleModify.bind(this) },
+                    _react2.default.createElement(
+                        _form2.default,
+                        null,
+                        _react2.default.createElement(
+                            FormItem,
+                            _extends({}, ModalItemLayout, { label: '\u9009\u9879\u5185\u5BB9' }),
+                            _react2.default.createElement(
+                                _tooltip2.default,
+                                { placement: 'right', title: "内容不能为空", visible: this.state.optionContentEmpty },
+                                _react2.default.createElement(_input2.default, { onChange: this.isOptionContentEmpty.bind(this), placeholder: '\u9009\u9879\u5185\u5BB9', value: this.state.OptionContent })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            FormItem,
+                            formItemLayoutWithOutLabel,
+                            _react2.default.createElement(
+                                _button2.default,
+                                { onClick: this.handleSubmitModifyOption.bind(this), type: 'primary' },
+                                '\u786E\u8BA4\u4FEE\u6539'
+                            )
+                        )
+                    )
+                )
+            );
         }
     }]);
 
@@ -77686,6 +78365,7 @@ var OptionDetail = function (_Component) {
 }(_react.Component);
 
 exports.default = OptionDetail;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -77705,59 +78385,73 @@ var _modal = __webpack_require__("./node_modules/antd/lib/modal/index.js");
 
 var _modal2 = _interopRequireDefault(_modal);
 
-var _css2 = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+var _css2 = __webpack_require__("./node_modules/antd/lib/input-number/style/css.js");
+
+var _inputNumber = __webpack_require__("./node_modules/antd/lib/input-number/index.js");
+
+var _inputNumber2 = _interopRequireDefault(_inputNumber);
+
+var _css3 = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
 
 var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
 
 var _table2 = _interopRequireDefault(_table);
 
-var _css3 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
+var _css4 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
 
 var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
 
 var _popconfirm2 = _interopRequireDefault(_popconfirm);
 
-var _css4 = __webpack_require__("./node_modules/antd/lib/dropdown/style/css.js");
+var _css5 = __webpack_require__("./node_modules/antd/lib/dropdown/style/css.js");
 
 var _dropdown = __webpack_require__("./node_modules/antd/lib/dropdown/index.js");
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _css5 = __webpack_require__("./node_modules/antd/lib/icon/style/css.js");
+var _css6 = __webpack_require__("./node_modules/antd/lib/icon/style/css.js");
 
 var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
 
 var _icon2 = _interopRequireDefault(_icon);
 
-var _css6 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
+var _css7 = __webpack_require__("./node_modules/antd/lib/button/style/css.js");
 
 var _button = __webpack_require__("./node_modules/antd/lib/button/index.js");
 
 var _button2 = _interopRequireDefault(_button);
 
-var _css7 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
+var _css8 = __webpack_require__("./node_modules/antd/lib/input/style/css.js");
 
 var _input = __webpack_require__("./node_modules/antd/lib/input/index.js");
 
 var _input2 = _interopRequireDefault(_input);
 
-var _css8 = __webpack_require__("./node_modules/antd/lib/menu/style/css.js");
+var _css9 = __webpack_require__("./node_modules/antd/lib/menu/style/css.js");
 
 var _menu = __webpack_require__("./node_modules/antd/lib/menu/index.js");
 
 var _menu2 = _interopRequireDefault(_menu);
 
-var _css9 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
+var _css10 = __webpack_require__("./node_modules/antd/lib/message/style/css.js");
 
 var _message = __webpack_require__("./node_modules/antd/lib/message/index.js");
 
 var _message2 = _interopRequireDefault(_message);
 
-var _css10 = __webpack_require__("./node_modules/antd/lib/tabs/style/css.js");
+var _css11 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+
+var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
+
+var _form2 = _interopRequireDefault(_form);
+
+var _css12 = __webpack_require__("./node_modules/antd/lib/tabs/style/css.js");
 
 var _tabs = __webpack_require__("./node_modules/antd/lib/tabs/index.js");
 
 var _tabs2 = _interopRequireDefault(_tabs);
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -77767,6 +78461,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
+var _axios = __webpack_require__("./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _CreateChoice = __webpack_require__("./src/Components/CreateQuestBox/CreateChoice.jsx");
 
 var _CreateChoice2 = _interopRequireDefault(_CreateChoice);
@@ -77774,10 +78472,6 @@ var _CreateChoice2 = _interopRequireDefault(_CreateChoice);
 var _CreateCompletion = __webpack_require__("./src/Components/CreateQuestBox/CreateCompletion.jsx");
 
 var _CreateCompletion2 = _interopRequireDefault(_CreateCompletion);
-
-var _RadioChoiceDetail = __webpack_require__("./src/Components/QuestDetailsBox/RadioChoiceDetail.jsx");
-
-var _RadioChoiceDetail2 = _interopRequireDefault(_RadioChoiceDetail);
 
 var _CheckChoiceDetail = __webpack_require__("./src/Components/QuestDetailsBox/CheckChoiceDetail.jsx");
 
@@ -77796,62 +78490,47 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var TabPane = _tabs2.default.TabPane;
+var FormItem = _form2.default.Item;
 
-var data = [{
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park'
-}, {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park'
-}, {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park'
-}, {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park'
-}];
+var QuestDetail = function (_Component) {
+    _inherits(QuestDetail, _Component);
 
-var ModifyQuest = function (_Component) {
-    _inherits(ModifyQuest, _Component);
+    function QuestDetail(props) {
+        _classCallCheck(this, QuestDetail);
 
-    function ModifyQuest(props) {
-        _classCallCheck(this, ModifyQuest);
+        var _this2 = _possibleConstructorReturn(this, (QuestDetail.__proto__ || Object.getPrototypeOf(QuestDetail)).call(this, props));
 
-        var _this = _possibleConstructorReturn(this, (ModifyQuest.__proto__ || Object.getPrototypeOf(ModifyQuest)).call(this, props));
-
-        _this.state = {
+        _this2.state = {
             choice: { visible: false },
             completion: { visible: false },
+            modifyQuestModal: false,
             filterDropdownVisible: false,
             data: [],
+            searchResult: [],
             searchText: '',
             filtered: false,
-            selected: data == null ? null : data[0].key,
-            fousQuestId: null
+            selected: null,
+            focusQuestId: null,
+            focusQuest: null,
+            focusQuestTitle: null
         };
-        return _this;
+        return _this2;
     }
 
-    _createClass(ModifyQuest, [{
+    _createClass(QuestDetail, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            // $.ajax({
-            //     type: 'post',
-            //     url: '',
-            //     data: {},
-            //     success: function (data) {
-            //         this.setState({ data: data })
-            //     }, error: function () {
-            //     }
-            // })
+            this.update();
+        }
+    }, {
+        key: 'update',
+        value: function update() {
+            var _this = this;
+            _axios2.default.get('http://localhost:60842/api/Questionnaire/GetAllQuest').then(function (response) {
+                _this.setState({ data: response.data, searchResult: response.data });
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
     }, {
         key: 'onInputChange',
@@ -77861,31 +78540,30 @@ var ModifyQuest = function (_Component) {
     }, {
         key: 'onSearch',
         value: function onSearch() {
-            var searchText = this.state.searchText;
+            var _state = this.state,
+                searchText = _state.searchText,
+                data = _state.data;
 
             var reg = new RegExp(searchText, 'gi');
+            alert(reg);
             this.setState({
                 filterDropdownVisible: false,
                 filtered: !!searchText,
-                data: data.map(function (record) {
-                    var match = record.name.match(reg);
+                searchResult: data.map(function (quest, index, array) {
+                    var match = quest.QuestTitle.match(reg);
                     if (!match) {
                         return null;
                     }
-                    record.name = _react2.default.createElement(
-                        'span',
-                        null,
-                        record.name.split(reg).map(function (text, i) {
-                            return i > 0 ? [_react2.default.createElement(
-                                'span',
-                                { className: 'highlight' },
-                                match[0]
-                            ), text] : text;
-                        })
-                    );
-                    return record;
-                }).filter(function (record) {
-                    return !!record;
+                    /*quest.QuestTitle = (
+                        <span>
+                            {quest.QuestTitle.split(reg).map((text, i) => (
+                                i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
+                            ))}
+                        </span>
+                    );*/
+                    return quest;
+                }).filter(function (quest) {
+                    return !!quest;
                 })
             });
         }
@@ -77916,17 +78594,23 @@ var ModifyQuest = function (_Component) {
     }, {
         key: 'onSelected',
         value: function onSelected(record, index) {
-            this.setState({ selected: record.key });
+            this.setState({ selected: record.QId });
         }
     }, {
         key: 'onDeleteQuest',
-        value: function onDeleteQuest(key) {
+        value: function onDeleteQuest(id) {
+            var _this = this;
             $.ajax({
-                type: 'post',
-                url: '',
-                data: {},
-                success: function success() {
-                    _message2.default.success('修改成功');
+                type: 'delete',
+                url: 'http://localhost:60842/api/Questionnaire/DeleteQuest',
+                data: { "": id },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('删除成功');
+                        _this.update();
+                        return true;
+                    }
+                    _message2.default.error('删除失败');
                 }, error: function error() {
                     _message2.default.error('出错了');
                 }
@@ -77934,27 +78618,55 @@ var ModifyQuest = function (_Component) {
         }
     }, {
         key: 'onModifyQuest',
-        value: function onModifyQuest(key) {
+        value: function onModifyQuest(quest) {
+            this.setState({ modifyQuestModal: true, focusQuest: quest, focusQuestTitle: quest.QuestTitle });
+        }
+    }, {
+        key: 'handleSubmitModifyQuest',
+        value: function handleSubmitModifyQuest() {
+            var form = this.props.form;
+
+            var qId = this.state.focusQuest.QId;
+            var questTitle = form.getFieldValue("title");
+            var maxNum = form.getFieldValue("maxNum");
+            var _this = this;
+            if (form.getFieldError("title") /*questTitle == "" || /\s+/g.test(questTitle)*/) {
+
+                    return false;
+                }
             $.ajax({
                 type: 'post',
-                url: '',
-                data: {},
-                success: function success() {
-                    _message2.default.success('修改成功');
-                }, error: function error() {
+                url: 'http://localhost:60842/api/Questionnaire/ModifyQuest',
+                data: { QId: qId, QuestTitle: questTitle, MaxQuestNum: maxNum },
+                success: function success(data) {
+                    if (data) {
+                        _message2.default.success('修改成功');
+                        _this.setState({ modifyQuestModal: false });
+                        _this.update();
+                        return true;
+                    }
+                    _message2.default.error('修改失败');
+                }, error: function error(_error) {
                     _message2.default.error('出错了');
                 }
             });
         }
     }, {
+        key: 'handleCancleModify',
+        value: function handleCancleModify() {
+            this.setState({ modifyQuestModal: false });
+        }
+    }, {
         key: 'onFoucsQuest',
-        value: function onFoucsQuest(key) {
-            this.setState({ fousQuestId: key });
+        value: function onFoucsQuest(id) {
+            this.setState({ focusQuestId: id });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
+
+            var getFieldDecorator = this.props.form.getFieldDecorator;
 
             var menu = _react2.default.createElement(
                 _menu2.default,
@@ -77971,13 +78683,13 @@ var ModifyQuest = function (_Component) {
                 )
             );
             var columns = [{
-                title: 'Name', dataIndex: 'name', key: 'name', width: 100,
+                title: '问卷名', dataIndex: 'QuestTitle', key: 'QuestTitle', width: 100,
                 filterDropdown: _react2.default.createElement(
                     'div',
                     { className: 'custom-filter-dropdown' },
                     _react2.default.createElement(_input2.default, {
                         ref: function ref(ele) {
-                            return _this2.searchInput = ele;
+                            return _this3.searchInput = ele;
                         },
                         placeholder: 'Search name',
                         value: this.state.searchText,
@@ -77993,21 +78705,19 @@ var ModifyQuest = function (_Component) {
                 filterIcon: _react2.default.createElement(_icon2.default, { type: 'smile-o', style: { color: this.state.filtered ? '#108ee9' : '#aaa' } }),
                 filterDropdownVisible: this.state.filterDropdownVisible,
                 onFilterDropdownVisibleChange: function onFilterDropdownVisibleChange(visible) {
-                    return _this2.setState({ filterDropdownVisible: visible }, function () {
-                        return _this2.searchInput.focus();
+                    return _this3.setState({ filterDropdownVisible: visible }, function () {
+                        return _this3.searchInput.focus();
                     });
                 }
-            }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
-                title: '操作', key: 'action', width: 100,
+            }, { title: '最大题数', dataIndex: 'MaxQuestNum', key: 'MaxQuestNum', width: 100 }, { title: '创建时间', dataIndex: 'CreateTime', key: 'CreateTime', width: 100 }, {
+                title: '操作', key: '', width: 100,
                 render: function render(text, record, index) {
                     return _react2.default.createElement(
                         'span',
                         null,
                         _react2.default.createElement(
                             _dropdown2.default,
-                            { overlay: menu, trigger: ['click'], onVisibleChange: function onVisibleChange() {
-                                    return _this2.onFoucsQuest(record.key);
-                                } },
+                            { key: record.QId, overlay: menu, trigger: ['click'], onVisibleChange: _this3.onFoucsQuest.bind(_this3, record.QId) },
                             _react2.default.createElement(
                                 'a',
                                 { className: 'ant-dropdown-link', style: { marginLeft: 8 } },
@@ -78019,7 +78729,7 @@ var ModifyQuest = function (_Component) {
                         _react2.default.createElement(
                             'a',
                             { onClick: function onClick() {
-                                    return _this2.onModifyQuest(record.key);
+                                    return _this3.onModifyQuest(record);
                                 } },
                             '\u4FEE\u6539'
                         ),
@@ -78027,7 +78737,7 @@ var ModifyQuest = function (_Component) {
                         _react2.default.createElement(
                             _popconfirm2.default,
                             { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u5377\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeleteQuest(record.key);
+                                    return _this3.onDeleteQuest(record.QId);
                                 }, okText: '\u5220\u9664' },
                             _react2.default.createElement(
                                 'a',
@@ -78038,10 +78748,22 @@ var ModifyQuest = function (_Component) {
                     );
                 }
             }];
+            var formItemLayout = {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 14 }
+            };
+
+            var formItemLayoutWithOutLabel = {
+                wrapperCol: {
+                    xs: { span: 24, offset: 0 },
+                    sm: { span: 20, offset: 4 }
+                }
+            };
+
             return _react2.default.createElement(
                 'div',
                 { className: 'modify-quest router' },
-                _react2.default.createElement(_table2.default, { /*rowKey="id"*/columns: columns, dataSource: this.state.data, onRowClick: this.onSelected.bind(this), bordered: true, title: function title() {
+                _react2.default.createElement(_table2.default, { rowKey: 'QId', columns: columns, dataSource: this.state.searchResult, onRowClick: this.onSelected.bind(this), bordered: true, title: function title() {
                         return '编辑所有问卷';
                     } }),
                 _react2.default.createElement(
@@ -78049,15 +78771,60 @@ var ModifyQuest = function (_Component) {
                     { className: 'quest-modal' },
                     _react2.default.createElement(
                         _modal2.default,
+                        { title: '\u4FEE\u6539\u95EE\u5377', visible: this.state.modifyQuestModal, footer: null,
+                            onCancel: this.handleCancleModify.bind(this) },
+                        _react2.default.createElement(
+                            _form2.default,
+                            null,
+                            _react2.default.createElement(
+                                FormItem,
+                                _extends({}, formItemLayout, { label: '\u6B63\u5728\u4FEE\u6539\u95EE\u5377:' }),
+                                _react2.default.createElement(
+                                    'label',
+                                    null,
+                                    ' ',
+                                    this.state.focusQuestTitle
+                                )
+                            ),
+                            _react2.default.createElement(
+                                FormItem,
+                                _extends({ label: '\u95EE\u5377\u540D\u79F0' }, formItemLayout, { wrapperCol: { span: 10 } }),
+                                getFieldDecorator('title', {
+                                    rules: [{ required: true, message: '请输入问卷名称!', whitespace: true }]
+                                })(_react2.default.createElement(_input2.default, { placeholder: '\u95EE\u5377\u540D\u79F0' }))
+                            ),
+                            _react2.default.createElement(
+                                FormItem,
+                                _extends({}, formItemLayout, { label: '\u6700\u5927\u9898\u76EE\u6570(\u81EA\u52A8\u5339\u914D)' }),
+                                getFieldDecorator('maxNum')(_react2.default.createElement(_inputNumber2.default, { min: 1, max: 30, placeholder: '1~30' })),
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'ant-form-text' },
+                                    '\u4E2A\u9898\u76EE'
+                                )
+                            ),
+                            _react2.default.createElement(
+                                FormItem,
+                                formItemLayoutWithOutLabel,
+                                _react2.default.createElement(
+                                    _button2.default,
+                                    { type: 'primary', onClick: this.handleSubmitModifyQuest.bind(this), size: 'large' },
+                                    '\u63D0\u4EA4'
+                                )
+                            )
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _modal2.default,
                         { title: '\u65B0\u5EFA\u9009\u62E9\u9898', visible: this.state.choice.visible, footer: null,
                             onCancel: this.handleCChoiceCancel.bind(this) },
-                        _react2.default.createElement(_CreateChoice2.default, { questId: this.state.fousQuestId })
+                        _react2.default.createElement(_CreateChoice2.default, { questId: this.state.focusQuestId })
                     ),
                     _react2.default.createElement(
                         _modal2.default,
                         { title: '\u65B0\u5EFA\u7B80\u7B54\u9898', visible: this.state.completion.visible, footer: null,
                             onCancel: this.handleCCompletionCancel.bind(this) },
-                        _react2.default.createElement(_CreateCompletion2.default, { questId: this.state.fousQuestId })
+                        _react2.default.createElement(_CreateCompletion2.default, { questId: this.state.focusQuestId })
                     )
                 ),
                 _react2.default.createElement(
@@ -78078,19 +78845,9 @@ var ModifyQuest = function (_Component) {
                             { tab: _react2.default.createElement(
                                     'span',
                                     null,
-                                    _react2.default.createElement(_icon2.default, { type: 'check-circle-o' }),
-                                    '\u5355\u9009'
-                                ), key: '1' },
-                            _react2.default.createElement(_RadioChoiceDetail2.default, { questId: this.state.selected })
-                        ),
-                        _react2.default.createElement(
-                            TabPane,
-                            { tab: _react2.default.createElement(
-                                    'span',
-                                    null,
                                     _react2.default.createElement(_icon2.default, { type: 'check-circle' }),
-                                    '\u591A\u9009'
-                                ), key: '2' },
+                                    '\u9009\u62E9\u9898'
+                                ), key: '1' },
                             _react2.default.createElement(_CheckChoiceDetail2.default, { questId: this.state.selected })
                         ),
                         _react2.default.createElement(
@@ -78100,7 +78857,7 @@ var ModifyQuest = function (_Component) {
                                     null,
                                     _react2.default.createElement(_icon2.default, { type: 'message' }),
                                     '\u95EE\u7B54\u9898'
-                                ), key: '3' },
+                                ), key: '2' },
                             _react2.default.createElement(_CompletionDetail2.default, { questId: this.state.selected })
                         )
                     )
@@ -78109,190 +78866,10 @@ var ModifyQuest = function (_Component) {
         }
     }]);
 
-    return ModifyQuest;
+    return QuestDetail;
 }(_react.Component);
 
-exports.default = ModifyQuest;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
-/***/ "./src/Components/QuestDetailsBox/RadioChoiceDetail.jsx":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
-
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
-
-var _table2 = _interopRequireDefault(_table);
-
-var _css2 = __webpack_require__("./node_modules/antd/lib/popconfirm/style/css.js");
-
-var _popconfirm = __webpack_require__("./node_modules/antd/lib/popconfirm/index.js");
-
-var _popconfirm2 = _interopRequireDefault(_popconfirm);
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("./node_modules/react/react.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
-
-var _OptionDetail = __webpack_require__("./src/Components/QuestDetailsBox/OptionDetail.jsx");
-
-var _OptionDetail2 = _interopRequireDefault(_OptionDetail);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
-
-var RadioChoiceDetail = function (_Component) {
-    _inherits(RadioChoiceDetail, _Component);
-
-    function RadioChoiceDetail(props) {
-        _classCallCheck(this, RadioChoiceDetail);
-
-        var _this = _possibleConstructorReturn(this, (RadioChoiceDetail.__proto__ || Object.getPrototypeOf(RadioChoiceDetail)).call(this, props));
-
-        _this.state = {
-            questId: props.questId,
-            data: []
-        };
-        return _this;
-    }
-
-    _createClass(RadioChoiceDetail, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
-            $.ajax({
-                type: 'post',
-                url: '',
-                data: {},
-                success: function success(data) {
-                    this.setState({ data: data });
-                }, error: function error() {}
-            });
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
-        }
-    }, {
-        key: 'onModifyChoice',
-        value: function onModifyChoice(key) {
-            alert(key);
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(){
-            //         message.success('修改成功');
-            //     },error:function(){
-            //         message.error('出错了');
-            //     }
-            // })
-        }
-    }, {
-        key: 'submitModify',
-        value: function submitModify() {
-            // $.ajax({
-            //     type: 'post',
-            //     url: '',
-            //     data: {},
-            //     success: function () {
-            //         message.success('修改成功');
-            //     }, error: function () {
-            //         message.error('出错了');
-            //     }
-            // })
-        }
-    }, {
-        key: 'onDeletChoice',
-        value: function onDeletChoice(key) {
-            alert(key);
-            // $.ajax({
-            //     type:'post',
-            //     url:'',
-            //     data:{},
-            //     success:function(){
-            //         message.success('删除成功');
-            //     },error:function(){
-            //         message.error('出错了');
-            //     }
-            // })
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }, {
-                title: '操作', dataIndex: '', width: 100,
-                render: function render(text, record, index) {
-                    return _react2.default.createElement(
-                        'span',
-                        null,
-                        _react2.default.createElement(
-                            'a',
-                            { onClick: function onClick() {
-                                    return _this2.onModifyChoice(record.key);
-                                } },
-                            '\u4FEE\u6539'
-                        ),
-                        _react2.default.createElement('span', { className: 'ant-divider' }),
-                        _react2.default.createElement(
-                            _popconfirm2.default,
-                            { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
-                                    return _this2.onDeletChoice(record.key);
-                                }, okText: '\u5220\u9664' },
-                            _react2.default.createElement(
-                                'a',
-                                null,
-                                '\u5220\u9664'
-                            )
-                        )
-                    );
-                }
-            }];
-            return _react2.default.createElement(
-                'div',
-                null,
-                _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, {
-                    columns: choiceColumns,
-                    bordered: true,
-                    expandedRowRender: function expandedRowRender(record) {
-                        return _react2.default.createElement(_OptionDetail2.default, { choiceId: record.key });
-                    },
-                    dataSource: this.state.data,
-                    title: function title() {
-                        return "单选";
-                    } })
-            );
-        }
-    }]);
-
-    return RadioChoiceDetail;
-}(_react.Component);
-
-exports.default = RadioChoiceDetail;
+exports.default = _form2.default.create()(QuestDetail);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),

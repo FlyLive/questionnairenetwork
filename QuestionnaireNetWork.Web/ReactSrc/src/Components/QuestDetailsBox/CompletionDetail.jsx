@@ -24,7 +24,7 @@ class CompletionDetail extends Component {
         _this.setState({ questId: questId })
         $.ajax({
             type: 'get',
-            url: 'http://localhost:50979/api/Question/GetAllCompletion',
+            url: 'http://localhost:60842/api/Question/GetAllCompletion',
             data: { questId: questId },
             success: function (data) {
                 _this.setState({ data: data })
@@ -56,7 +56,7 @@ class CompletionDetail extends Component {
         }
         $.ajax({
             type: 'post',
-            url: 'http://localhost:50979/api/Question/ModifyCompletion',
+            url: 'http://localhost:60842/api/Question/ModifyCompletion',
             data: { CompletionId: id, Title: completionTitle },
             success: function (data) {
                 if (data) {
@@ -79,7 +79,7 @@ class CompletionDetail extends Component {
     onDeletCompletion(key) {
         $.ajax({
             type: 'delete',
-            url: 'http://localhost:50979/api/Question/DeleteCompletion',
+            url: 'http://localhost:60842/api/Question/DeleteCompletion',
             data: { "": id },
             success: function (data) {
                 if (data) {

@@ -26,7 +26,7 @@ class OptionDetail extends Component {
         var _this = this;
         $.ajax({
             type: 'get',
-            url: 'http://localhost:50979/api/Question/GetAllOptionByCQId',
+            url: 'http://localhost:60842/api/Question/GetAllOptionByCQId',
             data: { cqId: choiceId },
             success: function (data) {
                 _this.setState({ data: data })
@@ -66,7 +66,7 @@ class OptionDetail extends Component {
 
         $.ajax({
             type: 'post',
-            url: 'http://localhost:50979/api/Question/ModifyOption',
+            url: 'http://localhost:60842/api/Question/ModifyOption',
             data: { OptionId: id, OptionContent: optionContent },
             success: function (data) {
                 if (data) {
@@ -91,7 +91,7 @@ class OptionDetail extends Component {
         var _this= this
         $.ajax({
             type: 'delete',
-            url: 'http://localhost:50979/api/Question/DeleteOption',
+            url: 'http://localhost:60842/api/Question/DeleteOption',
             data: { "": id },
             success: function (data) {
                 if (data) {

@@ -25,7 +25,7 @@ class CreateCompletion extends Component {
 
                 $.ajax({
                     type: 'post',
-                    url: 'http://localhost:50979/api/Question/CreateCompletion',
+                    url: 'http://localhost:60842/api/Question/CreateCompletion',
                     data: { QId: questId, Title: title },
                     success: function (data) {
                         if (data) {
