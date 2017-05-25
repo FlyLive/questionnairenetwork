@@ -18,6 +18,7 @@
             <PropertyRef Name="AnswerId" />
           </Key>
           <Property Name="AnswerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QId" Type="int" Nullable="false" />
           <Property Name="IpAddress" Type="nvarchar" MaxLength="30" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
         </EntityType>
@@ -35,7 +36,7 @@
             <PropertyRef Name="ChoiceId" />
           </Key>
           <Property Name="ChoiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Qid" Type="int" Nullable="false" />
+          <Property Name="QId" Type="int" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Type" Type="bit" Nullable="false" />
         </EntityType>
@@ -44,7 +45,7 @@
             <PropertyRef Name="CompletionId" />
           </Key>
           <Property Name="CompletionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Qid" Type="int" Nullable="false" />
+          <Property Name="QId" Type="int" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
         </EntityType>
         <EntityType Name="CompletionAnswerOptions">
@@ -66,13 +67,26 @@
         </EntityType>
         <EntityType Name="Questionnaire">
           <Key>
-            <PropertyRef Name="Qid" />
+            <PropertyRef Name="QId" />
           </Key>
-          <Property Name="Qid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="MaxQuestNum" Type="int" Nullable="false" />
+          <Property Name="CurrentQuestNum" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Answer_Questionnaire">
+          <End Role="Questionnaire" Type="Self.Questionnaire" Multiplicity="1" />
+          <End Role="Answer" Type="Self.Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionnaire">
+              <PropertyRef Name="QId" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_ANSWER">
           <End Role="Answer" Type="Self.Answer" Multiplicity="1" />
           <End Role="ChoiceAnswerOptions" Type="Self.ChoiceAnswerOptions" Multiplicity="*" />
@@ -114,10 +128,10 @@
           <End Role="ChoiceQuestion" Type="Self.ChoiceQuestion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Principal>
             <Dependent Role="ChoiceQuestion">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -150,10 +164,10 @@
           <End Role="Completion" Type="Self.Completion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Principal>
             <Dependent Role="Completion">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -178,6 +192,10 @@
           <EntitySet Name="CompletionAnswerOptions" EntityType="Self.CompletionAnswerOptions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Option" EntityType="Self.Option" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Questionnaire" EntityType="Self.Questionnaire" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Answer_Questionnaire" Association="Self.FK_Answer_Questionnaire">
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
           <AssociationSet Name="FK_CHOICEAN_REFERENCE_ANSWER" Association="Self.FK_CHOICEAN_REFERENCE_ANSWER">
             <End Role="Answer" EntitySet="Answer" />
             <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
@@ -224,6 +242,10 @@
           <EntitySet Name="CompletionAnswerOptions" EntityType="QuestionnaireDBModel.CompletionAnswerOptions" />
           <EntitySet Name="Option" EntityType="QuestionnaireDBModel.Option" />
           <EntitySet Name="Questionnaire" EntityType="QuestionnaireDBModel.Questionnaire" />
+          <AssociationSet Name="FK_Answer_Questionnaire" Association="QuestionnaireDBModel.FK_Answer_Questionnaire">
+            <End Role="Questionnaire" EntitySet="Questionnaire" />
+            <End Role="Answer" EntitySet="Answer" />
+          </AssociationSet>
           <AssociationSet Name="FK_CHOICEAN_REFERENCE_ANSWER" Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER">
             <End Role="Answer" EntitySet="Answer" />
             <End Role="ChoiceAnswerOptions" EntitySet="ChoiceAnswerOptions" />
@@ -270,8 +292,10 @@
             <PropertyRef Name="AnswerId" />
           </Key>
           <Property Name="AnswerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QId" Type="Int32" Nullable="false" />
           <Property Name="IpAddress" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Questionnaire" Relationship="QuestionnaireDBModel.FK_Answer_Questionnaire" FromRole="Answer" ToRole="Questionnaire" />
           <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" FromRole="Answer" ToRole="ChoiceAnswerOptions" />
           <NavigationProperty Name="CompletionAnswerOptions" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" FromRole="Answer" ToRole="CompletionAnswerOptions" />
         </EntityType>
@@ -292,7 +316,7 @@
             <PropertyRef Name="ChoiceId" />
           </Key>
           <Property Name="ChoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Qid" Type="Int32" Nullable="false" />
+          <Property Name="QId" Type="Int32" Nullable="false" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="ChoiceAnswerOptions" Relationship="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" FromRole="ChoiceQuestion" ToRole="ChoiceAnswerOptions" />
@@ -304,7 +328,7 @@
             <PropertyRef Name="CompletionId" />
           </Key>
           <Property Name="CompletionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Qid" Type="Int32" Nullable="false" />
+          <Property Name="QId" Type="Int32" Nullable="false" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="CompletionAnswerOptions" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_COMPLETI" FromRole="Completion" ToRole="CompletionAnswerOptions" />
           <NavigationProperty Name="Questionnaire" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Completion" ToRole="Questionnaire" />
@@ -332,15 +356,29 @@
         </EntityType>
         <EntityType Name="Questionnaire">
           <Key>
-            <PropertyRef Name="Qid" />
+            <PropertyRef Name="QId" />
           </Key>
-          <Property Name="Qid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Title" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="MaxQuestNum" Type="Int32" Nullable="false" />
+          <Property Name="CurrentQuestNum" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Answer" Relationship="QuestionnaireDBModel.FK_Answer_Questionnaire" FromRole="Questionnaire" ToRole="Answer" />
           <NavigationProperty Name="ChoiceQuestion" Relationship="QuestionnaireDBModel.FK_CHOICEQU_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="ChoiceQuestion" />
           <NavigationProperty Name="Completion" Relationship="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_QUESTION" FromRole="Questionnaire" ToRole="Completion" />
         </EntityType>
+        <Association Name="FK_Answer_Questionnaire">
+          <End Type="QuestionnaireDBModel.Questionnaire" Role="Questionnaire" Multiplicity="1" />
+          <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Questionnaire">
+              <PropertyRef Name="QId" />
+            </Principal>
+            <Dependent Role="Answer">
+              <PropertyRef Name="QId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CHOICEAN_REFERENCE_ANSWER">
           <End Type="QuestionnaireDBModel.Answer" Role="Answer" Multiplicity="1" />
           <End Type="QuestionnaireDBModel.ChoiceAnswerOptions" Role="ChoiceAnswerOptions" Multiplicity="*" />
@@ -394,10 +432,10 @@
           <End Type="QuestionnaireDBModel.ChoiceQuestion" Role="ChoiceQuestion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Principal>
             <Dependent Role="ChoiceQuestion">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -430,10 +468,10 @@
           <End Type="QuestionnaireDBModel.Completion" Role="Completion" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Questionnaire">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Principal>
             <Dependent Role="Completion">
-              <PropertyRef Name="Qid" />
+              <PropertyRef Name="QId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -457,6 +495,7 @@
               <MappingFragment StoreEntitySet="Answer">
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="QId" ColumnName="QId" />
                 <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -476,7 +515,7 @@
               <MappingFragment StoreEntitySet="ChoiceQuestion">
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Qid" ColumnName="Qid" />
+                <ScalarProperty Name="QId" ColumnName="QId" />
                 <ScalarProperty Name="ChoiceId" ColumnName="ChoiceId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -485,7 +524,7 @@
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Completion">
               <MappingFragment StoreEntitySet="Completion">
                 <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Qid" ColumnName="Qid" />
+                <ScalarProperty Name="QId" ColumnName="QId" />
                 <ScalarProperty Name="CompletionId" ColumnName="CompletionId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -512,10 +551,11 @@
           <EntitySetMapping Name="Questionnaire">
             <EntityTypeMapping TypeName="QuestionnaireDBModel.Questionnaire">
               <MappingFragment StoreEntitySet="Questionnaire">
+                <ScalarProperty Name="CurrentQuestNum" ColumnName="CurrentQuestNum" />
                 <ScalarProperty Name="MaxQuestNum" ColumnName="MaxQuestNum" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="Qid" ColumnName="Qid" />
+                <ScalarProperty Name="QId" ColumnName="QId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

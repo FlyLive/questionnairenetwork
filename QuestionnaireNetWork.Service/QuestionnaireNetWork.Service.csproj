@@ -90,6 +90,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AdminService.cs" />
+    <Compile Include="Services\QuestionnaireAnswerService.cs" />
     <Compile Include="Services\QuestionnaireService.cs" />
   </ItemGroup>
   <ItemGroup>

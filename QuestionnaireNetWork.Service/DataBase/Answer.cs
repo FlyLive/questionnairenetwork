@@ -22,9 +22,11 @@ namespace QuestionnaireNetWork.Service.DataBase
         }
     
         public int AnswerId { get; set; }
+        public int QId { get; set; }
         public string IpAddress { get; set; }
         public System.DateTime CreateTime { get; set; }
     
+        public virtual Questionnaire Questionnaire { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChoiceAnswerOptions> ChoiceAnswerOptions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

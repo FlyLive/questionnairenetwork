@@ -17,15 +17,19 @@ namespace QuestionnaireNetWork.Service.DataBase
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Questionnaire()
         {
+            this.Answer = new HashSet<Answer>();
             this.ChoiceQuestion = new HashSet<ChoiceQuestion>();
             this.Completion = new HashSet<Completion>();
         }
     
-        public int Qid { get; set; }
+        public int QId { get; set; }
         public System.DateTime CreateTime { get; set; }
         public string Title { get; set; }
         public int MaxQuestNum { get; set; }
+        public int CurrentQuestNum { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Answer> Answer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChoiceQuestion> ChoiceQuestion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

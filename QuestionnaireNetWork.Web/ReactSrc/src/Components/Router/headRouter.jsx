@@ -18,14 +18,14 @@ class HeadRouter extends Component {
                             <li><Link to="/Home/AdminCenter"><Icon type="user" />个人资料</Link></li>
                             <li><Link to="/createQuest"><Icon type="plus-circle" />新建问卷</Link></li>
                             <li><Link to="/questDetail"><Icon type="bars" />查看所有问卷</Link></li>
-                            <li><Link to="/total"><Icon type="line-chart" />统计</Link></li>
+                            <li><Link to="/admin.html"><Icon type="line-chart" />统计</Link></li>
                         </ul>
                     </div>
                     <hr />
-                    <Route exact path="/Home/AdminCenter" component={AdminInfo} />
+                    <Route path="/Home/AdminCenter" component={AdminInfo} />
                     <Route path="/createQuest" component={CreateQuest} />
                     <Route path="/questDetail" component={QuestDetail} />
-                    <Route path="/total" component={Total} />
+                    <Route exact path="/admin.html" component={Total} />
                 </div>
             </Router>
         );

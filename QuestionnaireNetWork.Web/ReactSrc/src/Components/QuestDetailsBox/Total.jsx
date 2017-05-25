@@ -1,79 +1,66 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Input, Button, Icon, message, Table, Tabs, Progress, Badge } from 'antd'
+import axios from 'axios'
 
-import ChartDetail from './ChartDetail.jsx'
-import DataDetail from './DataDetail.jsx'
+import ChoiceAnswer from './ChoiceAnswer.jsx'
+import CompletionAnswer from './CompletionAnswer.jsx'
+import UserAnswer from './UserAnswer.jsx'
 
 const TabPane = Tabs.TabPane
-
-const data = [{
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-}, {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-}, {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-}, {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-}];
 
 class Total extends Component {
     constructor(props) {
         super(props);
         this.state = {
             filterDropdownVisible: false,
-            data:[],
+            data: [],
             searchText: '',
             filtered: false,
-            selected: data == null ? null : data[0].key,
+            selected: null,
         }
     }
-    componentWillMount(){
-        $.ajax({
-            type:'post',
-            url:'',
-            data:{},
-            success:function(data){
-                this.setState({data:data})
-            },error:function(){
-            }
-        })
+
+    componentWillMount() {
+        this.update();
     }
+
+    update() {
+        const _this = this;
+        axios.get('http://localhost:60842/api/Questionnaire/GetAllQuest')
+            .then(function (response) {
+                _this.setState({ data: response.data })
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     onInputChange(e) {
         this.setState({ searchText: e.target.value });
     }
+
     onSearch() {
-        const { searchText } = this.state;
+        this.update();
+        const { searchText,data } = this.state;
         const reg = new RegExp(searchText, 'gi');
         this.setState({
             filterDropdownVisible: false,
             filtered: !!searchText,
-            data: data.map((record) => {
-                const match = record.name.match(reg);
+            data: data.map((quest, index, array) => {
+                const match = quest.QuestTitle.match(reg);
                 if (!match) {
                     return null;
                 }
-                record.name = (
+                quest.QuestTitle = (
                     <span>
-                        {record.name.split(reg).map((text, i) => (
+                        {quest.QuestTitle.split(reg).map((text, i) => (
                             i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
                         ))}
                     </span>
                 );
-                return record;
-            }).filter(record => !!record),
+                return quest;
+            }).filter(quest => !!quest),
         });
     }
     onSelected(record, index) {
@@ -81,9 +68,9 @@ class Total extends Component {
     }
     render() {
         const columns = [{
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: '问卷名',
+            dataIndex: 'QuestTitle',
+            key: 'QuestTitle',
             width: 100,
             filterDropdown: (
                 <div className="custom-filter-dropdown">
@@ -101,25 +88,29 @@ class Total extends Component {
             filterDropdownVisible: this.state.filterDropdownVisible,
             onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }, () => this.searchInput.focus()),
         }, {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: '题数',
+            dataIndex: 'CurrentQuestNum',
+            key: 'CurrentQuestNum',
             width: 100,
         }, {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
+            title: '创建时间',
+            dataIndex: 'CreateTime',
+            key: 'CreateTime',
             width: 100,
         }];
         return (
             <div className="Total router">
-                <Table /*rowKey="id"*/ columns={columns} dataSource={this.state.data} onRowClick={this.onSelected.bind(this)} bordered title={() => '查看问卷结果'} />
-                <Tabs defaultActiveKey="1">
-                    <TabPane tab={<span><Icon type="pie-chart" />图表类</span>} key="1">
-                        <ChartDetail questId={this.state.selected}/>
+                <Table rowKey="QId" columns={columns} dataSource={this.state.data} onRowClick={this.onSelected.bind(this)} bordered title={() => '查看问卷结果'} />
+                <br />
+                <Tabs defaultActiveKey="3">
+                    <TabPane tab={<span><Icon type="pie-chart" />图表类(选择题)</span>} key="1">
+                        <ChoiceAnswer questId={this.state.selected} />
                     </TabPane>
-                    <TabPane tab={<span><Icon type="bars" />详细数据</span>} key="2">
-                        <DataDetail questId={this.state.selected} />
+                    <TabPane tab={<span><Icon type="bars" />简答题</span>} key="2">
+                        <CompletionAnswer questId={this.state.selected} />
+                    </TabPane>
+                    <TabPane tab={<span><Icon type="user" />参与者</span>} key="3">
+                        <UserAnswer questId={this.state.selected} />
                     </TabPane>
                 </Tabs>
             </div>

@@ -30,6 +30,7 @@ class QuestMenu extends Component {
         var _this = this;
         $.ajax({
             type: 'get',
+            async:false,
             url: 'http://localhost:60842/api/Questionnaire/GetTop5Quest',
             success: function (data) {
                 _this.setState({ quests: data })
@@ -47,7 +48,7 @@ class QuestMenu extends Component {
         $.ajax({
             type: 'get',
             url: 'http://localhost:60842/api/Questionnaire/Search',
-            data: { "": search },
+            data: { search: search },
             success: function (data) {
                 _this.setState({ searchResult: data })
             }, error: function (error) {
@@ -60,7 +61,7 @@ class QuestMenu extends Component {
         return (
             <div className="search-result">
                 <h3>搜索结果</h3>
-                {result.length > 0 ? function () { return (<div><h2 style={{textAlign:center}}><Icon type="frown-o" />抱歉，暂时未找到匹配的问卷</h2></div>) } : result.map(quest => this.questItem(quest))}
+                {result.length <= 0 ? function () { return (<div><h2 style={{textAlign:center}}><Icon type="frown-o" />抱歉，暂时未找到匹配的问卷</h2></div>) } : result.map(quest => this.questItem(quest))}
             </div>
         )
     }

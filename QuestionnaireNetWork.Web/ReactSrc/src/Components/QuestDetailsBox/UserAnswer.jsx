@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Table, Popconfirm } from 'antd'
+import { Table, Popconfirm,Card } from 'antd'
 
 const data = [
     { key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
@@ -8,7 +8,7 @@ const data = [
     { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' },
 ];
 
-class DataDetail extends Component {
+class UserAnswer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,10 +43,15 @@ class DataDetail extends Component {
                     columns={choiceColumns}
                     bordered={true}
                     dataSource={this.state.data}
-                    title={() => "单选"} />
+                    title={() => "参与者"} />
+                <Card title="Card title" bordered={false} style={{ width: 300 }}>
+                    <p>Card content</p>
+                    <p>Card content</p>
+                    <p>Card content</p>
+                </Card>
             </div>
         );
     }
 }
 
-export default DataDetail
+export default UserAnswer

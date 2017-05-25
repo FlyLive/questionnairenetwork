@@ -5,14 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="aa8fcf23dbbc48a38b919968197c872f" Name="Diagram1">
-        <EntityTypeShape EntityType="QuestionnaireDBModel.Admin" Width="1.5" PointX="7.75" PointY="1.875" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.Answer" Width="1.5" PointX="3" PointY="0.75" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.ChoiceAnswerOptions" Width="1.5" PointX="7.5" PointY="7.875" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.ChoiceQuestion" Width="1.5" PointX="3" PointY="6.375" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.Completion" Width="1.5" PointX="3" PointY="3.75" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.CompletionAnswerOptions" Width="1.5" PointX="5.25" PointY="3.625" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.Option" Width="1.5" PointX="5.25" PointY="9.625" />
-        <EntityTypeShape EntityType="QuestionnaireDBModel.Questionnaire" Width="1.5" PointX="0.75" PointY="5.125" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Admin" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Answer" Width="1.5" PointX="3" PointY="5.875" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.ChoiceAnswerOptions" Width="1.5" PointX="8.25" PointY="3.75" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.ChoiceQuestion" Width="1.5" PointX="3" PointY="2.75" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Completion" Width="1.5" PointX="3" PointY="8.875" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.CompletionAnswerOptions" Width="1.5" PointX="5.25" PointY="7.25" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Option" Width="1.5" PointX="5.375" PointY="2.5" />
+        <EntityTypeShape EntityType="QuestionnaireDBModel.Questionnaire" Width="1.5" PointX="0.75" PointY="5.5" />
+        <AssociationConnector Association="QuestionnaireDBModel.FK_Answer_Questionnaire" />
         <AssociationConnector Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_ANSWER" />
         <AssociationConnector Association="QuestionnaireDBModel.FK_COMPLETI_REFERENCE_ANSWER" />
         <AssociationConnector Association="QuestionnaireDBModel.FK_CHOICEAN_REFERENCE_CHOICEQU" />

@@ -184,10 +184,10 @@ class CheckChoiceDetail extends Component {
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form
         const choiceColumns = [
-            { title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle', width: 100 },
-            { title: '类型', dataIndex: 'Type', key: 'Type', width: 100 },
+            { title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle'},
+            { title: '类型', dataIndex: 'Type', key: 'Type'},
             {
-                title: '操作', dataIndex: '', width: 100,
+                title: '操作', dataIndex: '',
                 render: (text, record) => (
                     <span>
                         <a onClick={() => this.onAddOption(record)}>添加选项</a>

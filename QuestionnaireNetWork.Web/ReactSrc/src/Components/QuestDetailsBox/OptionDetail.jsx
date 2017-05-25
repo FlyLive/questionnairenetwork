@@ -107,9 +107,9 @@ class OptionDetail extends Component {
     }
     render() {
         const optionColumns = [
-            { title: '选项名', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 },
+            { title: '选项名', dataIndex: 'OptionContent', key: 'OptionContent'},
             {
-                title: '操作', dataIndex: '', width: 100,
+                title: '操作', dataIndex: '',
                 render: (text, record, index) => (
                     <span>
                         <a onClick={() => this.onModifyChoice(record)}>修改</a>

@@ -12,29 +12,36 @@ class OptionChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            questId: props.questId,
+            choiceId: props.choiceId,
             data: data,
         };
     }
-    componentWillMount(){
-        // $.ajax({
-        //     type:'post',
-        //     url:'',
-        //     data:{},
-        //     success:function(data){
-        //         this.setState({data:data})
-        //     },error:function(){
-        //     }
-        // })
+
+    componentWillMount() {
+        this.update(this.props.choiceId)
     }
+
+    update(choiceId) {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:60842/api/Question/',
+            data: { choiceId: choiceId },
+            success: function (data) {
+                _this.setState({ data: data })
+            }, error: function (error) {
+            }
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
-        let questId = nextProps.questId;
-        this.setState({ quest: questId });
+        let choiceId = nextProps.choiceId;
+        this.setState({ choiceId: choiceId });
     }
+
     render() {
         const choiceColumns = [
-            { title: '题目Id', dataIndex: 'OptionId', key: 'OptionId', width: 100 },
-            { title: '题目名称', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 },
+            { title: '选项名称', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 },
             {
                 title: '百分比', dataIndex: 'age', key: 'age', width: 100,
                 render: (text, record, index) => (
@@ -53,8 +60,7 @@ class OptionChart extends Component {
                     bordered={true}
                     pagination={false}
                     scroll={{ y: 240 }}
-                    dataSource={this.state.data}
-                    title={() => <p style={{ textAlign: "center", margin: 0 }}>选项</p>} />
+                    dataSource={this.state.data} />
             </div>
         );
     }

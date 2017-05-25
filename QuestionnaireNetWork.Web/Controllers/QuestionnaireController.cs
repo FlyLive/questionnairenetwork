@@ -24,7 +24,7 @@ namespace QuestionnaireNetWork.Web.Controllers
         }
 
         [HttpGet]
-        public List<QuestionnaireViewModel> Search([FromBody]string search)
+        public List<QuestionnaireViewModel> Search(string search)
         {
             List<Questionnaire> quests = _questService.Search(search);
             var questsVM = new List<QuestionnaireViewModel>();
@@ -49,7 +49,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questVM;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public int GetQuestNum(int id)
         {
@@ -57,7 +57,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return count;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public bool CreateQuest([FromBody]QuestionnaireViewModel quest)
         {
@@ -65,7 +65,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return result;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public bool ModifyQuest([FromBody]QuestionnaireViewModel quest)
         {
@@ -73,7 +73,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             return result;
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete]
         public bool DeleteQuest([FromBody]int qId)
         {
@@ -85,10 +85,11 @@ namespace QuestionnaireNetWork.Web.Controllers
         {
             QuestionnaireViewModel questVM = new QuestionnaireViewModel
             {
-                QId = quest.Qid,
+                QId = quest.QId,
                 QuestTitle = quest.Title,
                 MaxQuestNum = quest.MaxQuestNum,
-                CreateTime = quest.CreateTime.ToString("yyyy-MM-dd HH-mm-ss"),
+                CurrentQuestNum = quest.CurrentQuestNum,
+                CreateTime = quest.CreateTime.ToString("yyyy/MM/dd"),
             };
             return questVM;
         }

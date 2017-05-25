@@ -50,9 +50,9 @@ class QuestDetail extends Component {
     }
 
     onSearch() {
+        this.update();
         const { searchText, data } = this.state;
         const reg = new RegExp(searchText, 'gi');
-        alert(reg);
         this.setState({
             filterDropdownVisible: false,
             filtered: !!searchText,
@@ -61,13 +61,13 @@ class QuestDetail extends Component {
                 if (!match) {
                     return null;
                 }
-                /*quest.QuestTitle = (
+                quest.QuestTitle = (
                     <span>
                         {quest.QuestTitle.split(reg).map((text, i) => (
                             i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
                         ))}
                     </span>
-                );*/
+                );
                 return quest;
             }).filter(quest => !!quest),
         });

@@ -229,7 +229,6 @@
     <Compile Include="ViewModels\ChoiceQuestionViewModel.cs" />
     <Compile Include="ViewModels\CompletionAnswerOptionsViewModel.cs" />
     <Compile Include="ViewModels\CompletionViewModel.cs" />
-    <Compile Include="ViewModels\IdentityModels.cs" />
     <Compile Include="ViewModels\OptionViewModel.cs" />
     <Compile Include="ViewModels\QuestionnaireViewModel.cs" />
   </ItemGroup>
@@ -322,7 +321,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="ReactSrc\src\Components\QuestionBox\" />
     <Folder Include="ReactSrc\src\Components\Reducers\" />
   </ItemGroup>

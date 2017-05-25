@@ -16,12 +16,6 @@ namespace QuestionnaireNetWork.Service.Services
             _db = new QuestionnaireDBContext();
         }
 
-        public bool SubmitQuest(int questId)
-        {
-            _db.SaveChanges();
-            return true;
-        }
-
         #region 选择题选项
         public Option GetOptionById(int id)
         {
@@ -104,6 +98,18 @@ namespace QuestionnaireNetWork.Service.Services
         #endregion
 
         #region 选择题
+        /// <summary>
+        /// 获取选择题选项数量
+        /// </summary>
+        /// <param name="choiceId"></param>
+        /// <returns></returns>
+        public int GetOptionCount(int choiceId)
+        {
+            var choice = _db.ChoiceQuestion.SingleOrDefault(o => o.ChoiceId == choiceId);
+            var count = choice.Option.Count;
+            return count;
+        }
+
         public ChoiceQuestion GetChoiceQuestionById(int id)
         {
             ChoiceQuestion question = _db.ChoiceQuestion
@@ -111,7 +117,7 @@ namespace QuestionnaireNetWork.Service.Services
                 .SingleOrDefault(c => c.ChoiceId == id);
             return question;
         }
-
+        
         public List<ChoiceQuestion> GetAllChoiceQuestion(int questId)
         {
             Questionnaire quest = GetQuestByQuestId(questId);
@@ -135,13 +141,19 @@ namespace QuestionnaireNetWork.Service.Services
         {
             try
             {
+                var quest = GetQuestByQuestId(questId);
+                if(quest.CurrentQuestNum >= quest.MaxQuestNum)
+                {
+                    return false;
+                }
                 ChoiceQuestion choice = new ChoiceQuestion
                 {
-                    Qid = questId,
+                    QId = questId,
                     Title = title,
                     Type = type
                 };
                 _db.ChoiceQuestion.Add(choice);
+                CurrentQuestNumIncrease(choice.QId);
                 if (options.Count != 0)
                 {
                     options.ForEach(
@@ -183,7 +195,12 @@ namespace QuestionnaireNetWork.Service.Services
             try
             {
                 ChoiceQuestion choice = GetChoiceQuestionById(id);
+                if(choice.Questionnaire.CurrentQuestNum <= 1)
+                {
+                    return false;
+                }
                 DeleteOptionsByChoiceId(id);
+                CurrentQuestNumDecrease(choice.QId);
                 _db.ChoiceQuestion.Remove(choice);
                 _db.SaveChanges();
             }
@@ -232,7 +249,7 @@ namespace QuestionnaireNetWork.Service.Services
             {
                 _db.Completion.Add(new Completion
                 {
-                    Qid = questId,
+                    QId = questId,
                     Title = title,
                 });
                 _db.SaveChanges();
@@ -266,7 +283,12 @@ namespace QuestionnaireNetWork.Service.Services
             try
             {
                 Completion completion = GetCompletionById(id);
+                if(completion.Questionnaire.CurrentQuestNum <= 1)
+                {
+                    return false;
+                }
                 completion.CompletionAnswerOptions.Clear();
+                CurrentQuestNumDecrease(completion.QId);
                 _db.Completion.Remove(completion);
                 _db.SaveChanges();
             }
@@ -332,6 +354,7 @@ namespace QuestionnaireNetWork.Service.Services
                 {
                     Title = title,
                     MaxQuestNum = maxNum < 30 ? (int)maxNum : 30,
+                    CurrentQuestNum = 0,
                     CreateTime = DateTime.Now,
                 });
                 _db.SaveChanges();
@@ -417,7 +440,7 @@ namespace QuestionnaireNetWork.Service.Services
             var quest = _db.Questionnaire
                 .Include("ChoiceQuestion")
                 .Include("Completion")
-                .SingleOrDefault(q => q.Qid == questId);
+                .SingleOrDefault(q => q.QId == questId);
             return quest;
         }
 
@@ -430,10 +453,24 @@ namespace QuestionnaireNetWork.Service.Services
             return quest;
         }
 
+        private void CurrentQuestNumIncrease(int questId)
+        {
+            var quest = _db.Questionnaire.SingleOrDefault(q => q.QId == questId);
+            quest.CurrentQuestNum++;
+            _db.SaveChanges();
+        }
+
+        private void CurrentQuestNumDecrease(int questId)
+        {
+            var quest = _db.Questionnaire.SingleOrDefault(q => q.QId == questId);
+            quest.CurrentQuestNum--;
+            _db.SaveChanges();
+        }
+        #endregion
+
         public void Dispose()
         {
             _db.Dispose();
         }
-        #endregion
     }
 }

@@ -11,5 +11,6 @@ namespace QuestionnaireNetWork.Web.ViewModels
         public int QId { get; set; }
         public string ChoiceTitle { get; set; }
         public bool Type { get; set; }
+        public int OptionCount { get; set; }
     }
 }
