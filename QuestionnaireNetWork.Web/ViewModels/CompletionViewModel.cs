@@ -10,5 +10,7 @@ namespace QuestionnaireNetWork.Web.ViewModels
         public int CompletionId { get; set; }
         public int QId { get; set; }
         public string Title { get; set; }
+
+        public string Answer { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Table, Popconfirm, message, Modal, Form, Tooltip, Input, Button } from "antd"
+import axios from 'axios'
 
 const FormItem = Form.Item
 
@@ -24,15 +25,11 @@ class OptionDetail extends Component {
 
     update(choiceId) {
         var _this = this;
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Question/GetAllOptionByCQId',
-            data: { cqId: choiceId },
-            success: function (data) {
-                _this.setState({ data: data })
-            }, error: function (error) {
-            }
-        })
+        axios.get('http://localhost:60842/api/Question/GetAllOptionByCQId?cqId=' + choiceId)
+            .then(function (response) {
+                _this.setState({ data: response.data })
+            }).catch(function (error) {
+            })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,11 +61,9 @@ class OptionDetail extends Component {
             return false;
         }
 
-        $.ajax({
-            type: 'post',
-            url: 'http://localhost:60842/api/Question/ModifyOption',
-            data: { OptionId: id, OptionContent: optionContent },
-            success: function (data) {
+        axios.post('http://localhost:60842/api/Question/ModifyOption',
+            { OptionId: id, OptionContent: optionContent })
+            .then(function (data) {
                 if (data) {
                     message.success('修改成功');
                     _this.setState({ modifyOptionModal: false });
@@ -76,10 +71,9 @@ class OptionDetail extends Component {
                     return true;
                 }
                 message.error('修改失败');
-            }, error: function (error) {
+            }).catch(function (error) {
                 message.error('出错了');
-            }
-        })
+            })
     }
 
     handleCancleModify() {
@@ -88,28 +82,23 @@ class OptionDetail extends Component {
 
     onDeleteOption(id) {
         var choiceId = this.state.choiceId;
-        var _this= this
-        $.ajax({
-            type: 'delete',
-            url: 'http://localhost:60842/api/Question/DeleteOption',
-            data: { "": id },
-            success: function (data) {
+        var _this = this;
+        axios.get('http://localhost:60842/api/Question/DeleteOption?id='+ id )
+            .then(function (data) {
                 if (data) {
                     message.success('删除成功');
                     _this.update(choiceId);
                     return true;
                 }
                 message.error('删除失败');
-            }, error: function (error) {
+            }).catch(function (error) {
                 message.error('出错了');
-            }
-        })
+            })
     }
     render() {
         const optionColumns = [
-            { title: '选项名', dataIndex: 'OptionContent', key: 'OptionContent'},
-            {
-                title: '操作', dataIndex: '',
+            { title: '选项名', dataIndex: 'OptionContent', key: 'OptionContent',width:100 },
+            { title: '操作', dataIndex: '',width:100,
                 render: (text, record, index) => (
                     <span>
                         <a onClick={() => this.onModifyChoice(record)}>修改</a>
@@ -137,9 +126,9 @@ class OptionDetail extends Component {
                     columns={optionColumns}
                     dataSource={this.state.data}
                     pagination={false}
+                    bordered
                     scroll={{ y: 240 }}
-                    size="small"
-                    title={() => <p style={{ textAlign: "center", margin: 0 }}>选项</p>} />
+                    size="small" />
                 <Modal title="修改选项" visible={this.state.modifyOptionModal} footer={null}
                     onCancel={this.handleCancleModify.bind(this)}>
                     <Form>

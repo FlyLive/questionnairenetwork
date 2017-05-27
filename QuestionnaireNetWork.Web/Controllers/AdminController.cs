@@ -12,24 +12,64 @@ namespace QuestionnaireNetWork.Web.Controllers
 {
     public class AdminController : ApiController
     {
+        private AdminService _adminService = new AdminService();
+        private QuestionnaireService _questService = new QuestionnaireService();
         private QuestionnaireAnswerService _questAnswerService = new QuestionnaireAnswerService();
-
-        [Authorize]
-        [HttpGet]
-        public AdminViewModel GetAdminInfo()
+        public string Options()
         {
-            //string auth = Request.Headers.Authorization.ToString();
-            //var account = AdminExtension.GetEmployeeUserObject(auth).Account;
-            //var nick = AdminExtension.GetEmployeeUserObject(auth).NickName;
-            AdminViewModel admin = new AdminViewModel()
-            {
-                //Account = account,
-                //NickName = nick
-            };
-            return admin;
+            return null; // HTTP 200 response with empty body
         }
 
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
+        public AdminViewModel GetAdminInfo()
+        {
+            try
+            {
+                string auth = Request.Headers.Authorization.ToString();
+                var account = AdminExtension.GetEmployeeUserObject(auth).Account;
+                var nick = AdminExtension.GetEmployeeUserObject(auth).NickName;
+                AdminViewModel admin = new AdminViewModel()
+                {
+                    Account = account,
+                    NickName = nick
+                };
+                return admin;
+
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                return null;
+            }
+        }
+
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
+        public bool ModifyAdminInfo([FromBody]AdminViewModel admin)
+        {
+            var result = _adminService.ModifyInfo(admin.Account, admin.NickName);
+            return result;
+        }
+
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
+        public bool ConfirmPassword(AdminViewModel admin)
+        {
+            var result = _adminService.ConfirmPassword(admin.Account, admin.Password);
+            return result;
+        }
+
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
+        public bool ModifyPassword([FromBody]AdminViewModel admin)
+        {
+            var result = _adminService.ModifyPassword(admin.Account, admin.Password);
+            return result;
+        }
+
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<AnswerViewModel> GetAnswers(int questId)
         {
             var result = _questAnswerService.GetAnswers(questId);
@@ -38,23 +78,63 @@ namespace QuestionnaireNetWork.Web.Controllers
             return resultVM;
         }
 
-        [HttpGet]
-        public List<ChoiceAnswerOptionsViewModel> GetChoiceAnswer(int choiceId)
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
+        public AnswerViewModel GetAnswer(int answerId)
         {
-            var choiceAnswers = _questAnswerService.GetChoiceAnswer(choiceId);
-            List<ChoiceAnswerOptionsViewModel> resultVM = new List<ChoiceAnswerOptionsViewModel>();
-            foreach (ChoiceAnswerOptions choiceAnswer in choiceAnswers)
+            var answer = _questAnswerService.GetAnswer(answerId);
+            var choices = answer.Questionnaire.ChoiceQuestion.ToList();
+            AnswerViewModel resultVM = DataAnswerToVM(answer);
+            resultVM.ChoicesAnswer = new List<ChoiceAnswerViewModel>();
+            resultVM.CompletionsAnswer = new List<CompletionAnswerOptionsViewModel>();
+
+            foreach (ChoiceQuestion choice in choices)
             {
-                var choiceAnswerVM = DataChoiceAnswerToVM(choiceAnswer);
-                choiceAnswerVM.Count = _questAnswerService.GetOptionSelected(choiceAnswer.OptionId);
-                choiceAnswerVM.Percent = _questAnswerService.GetOptionPercent(choiceAnswer.OptionId);
-                resultVM.Add(choiceAnswerVM);
+                var choiceAnswerVM = new ChoiceAnswerViewModel
+                {
+                    ChoiceId = choice.ChoiceId,
+                    ChoiceTitle = choice.Title,
+                    Type = choice.Type
+                };
+
+                choice.Option.ToList()
+                    .ForEach(
+                    co => choiceAnswerVM.Options.Add(
+                        QuestionController.DataOptionToVM(co)
+                        ));
+                _questAnswerService.GetAnswerChoices(answerId, choice.ChoiceId)
+                    .ForEach(an => choiceAnswerVM.Answers.Add(an.Option.OptionContent));
+
+                resultVM.ChoicesAnswer.Add(choiceAnswerVM);
             }
-            choiceAnswers.ForEach(c => resultVM.Add(DataChoiceAnswerToVM(c)));
+            answer.CompletionAnswerOptions.ToList().ForEach(c => resultVM.CompletionsAnswer.Add(DataCompletionAnswerToVM(c)));
+
             return resultVM;
         }
 
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
+        public List<ChoiceAnswerOptionsViewModel> GetChoiceAnswer(int choiceId)
+        {
+            var options = _questService.GetAllOptionByCQId(choiceId);
+            var choiceAnswers = _questAnswerService.GetChoiceAnswer(choiceId);
+            List<ChoiceAnswerOptionsViewModel> resultVM = new List<ChoiceAnswerOptionsViewModel>();
+
+            foreach (Option option in options)
+            {
+                resultVM.Add(new ChoiceAnswerOptionsViewModel
+                {
+                    OptionId = option.OptionId,
+                    OptionContent = option.OptionContent,
+                    Count = _questAnswerService.GetOptionSelected(option.OptionId),
+                    Percent = _questAnswerService.GetOptionPercent(option.OptionId)
+                });
+            }
+            return resultVM;
+        }
+
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<CompletionAnswerOptionsViewModel> GetCompletionAnswer(int completionId)
         {
             var completionAnswers = _questAnswerService.GetCompletionAnswer(completionId);
@@ -70,7 +150,8 @@ namespace QuestionnaireNetWork.Web.Controllers
                 Id = choiceAnswer.Id,
                 AnswerId = choiceAnswer.AnswerId,
                 OptionId = choiceAnswer.OptionId,
-                ChoiceId = choiceAnswer.ChoiceId
+                ChoiceId = choiceAnswer.ChoiceId,
+                OptionContent = choiceAnswer.Option.OptionContent
             };
             return choiceAnswerVM;
         }
@@ -81,9 +162,11 @@ namespace QuestionnaireNetWork.Web.Controllers
             {
                 Id = completionAnswer.Id,
                 CompletionId = completionAnswer.CompletionId,
+                CompletionTitle = completionAnswer.Completion.Title,
                 AnswerId = completionAnswer.AnswerId,
                 IpAddress = completionAnswer.Answer.IpAddress,
-                AnswerContent = completionAnswer.AnswerContent
+                AnswerContent = completionAnswer.AnswerContent,
+                CreateTime = completionAnswer.Answer.CreateTime.ToString("yyyy/MM/dd")
             };
             return completionAnswerVM;
         }

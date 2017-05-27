@@ -3,12 +3,12 @@
     padding: 0 !important;
 }
 
-#main-menu>.router {
+.admin-center>div>.router {
     width: 80%;
     margin: 5% auto 0 auto;
 }
 
-#main-menu>.router .ant-spin-nested-loading {
+.admin-center>div>.router .ant-spin-nested-loading {
     background-color: white;
 }
 

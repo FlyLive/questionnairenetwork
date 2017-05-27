@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Form, Switch, Input, Button, Icon, InputNumber, message } from 'antd'
+import axios from 'axios'
 
 const FormItem = Form.Item
 
@@ -13,21 +14,18 @@ class CreateQuest extends Component {
                 var title = values["title"];
                 var maxNum = values["maxNum"];
 
-                $.ajax({
-                    type: 'post',
-                    url: 'http://localhost:60842/api/Questionnaire/CreateQuest',
-                    data: { QuestTitle: title, MaxQuestNum: maxNum },
-                    success: function (data) {
-                        if(data){
+                axios.post('http://localhost:60842/api/Questionnaire/CreateQuest',
+                    { QuestTitle: title, MaxQuestNum: maxNum })
+                    .then(function (data) {
+                        if (data) {
                             message.success('创建成功');
                             form.resetFields();
                             return true;
                         }
                         message.error('创建失败');
-                    }, error: function () {
+                    }).catch(function () {
                         message.error('出错了');
-                    }
-                })
+                    })
             }
         });
     }

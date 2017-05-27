@@ -11,10 +11,10 @@ class AdminInfo extends Component {
         super(props);
         this.state = {
             account: {
-                value: 'Lucy'
+                value: ''
             },
             nick: {
-                value: 'nick'
+                value: ''
             },
             mP: {
                 visible: false
@@ -29,18 +29,23 @@ class AdminInfo extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         var _this = this;
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Admin/GetAdminInfo',
-            success: function (data) {
-                _this.setState({ account: { value: data.Account }, nick: { value: data.Nick } });
-            },
-            error: function () {
-                // window.location.href="index.html";
-            }
-        });
+        var token = $.cookie('token');
+        var mytoken = JSON.parse(token);
+        if(mytoken == null){
+            window.location.href='/#/'
+        }
+        axios.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
+        axios.get('http://localhost:60842/api/Admin/GetAdminInfo')
+            .then(function (response) {
+                _this.setState({ account: { value: response.data.Account }, nick: { value: response.data.NickName } });
+                // var my = JSON.stringify(response.data);
+                // $.cookie('userInfo', my, {path: '/'});
+            })
+            .catch(function (response) {
+                console.log(response);
+            });
     }
 
     isNickEmpty(e) {
@@ -58,21 +63,22 @@ class AdminInfo extends Component {
     }
 
     handleMInfoSubmit(e) {
+        var account = this.state.account.value;
         var nick = this.state.nick.value;
         if (nick == "" || /\s+/g.test(nick)) {
             this.setState({ mNick: { visible: true } });
             return false;
         }
-        $.ajax({
-            type: 'post',
-            url: 'http://localhost:60842/api/values',
-            data: { "nickName": nick },
-            success: function () {
+        axios.post('http://localhost:60842/api/Admin/ModifyAdminInfo',
+            { Account: account, NickName: nick })
+            .then(function (response) {
+
                 message.success('修改成功');
-            }, error: function () {
+            })
+            .catch(function (response) {
+
                 message.error('出错了');
-            }
-        });
+            });
     }
 
     isOldEmpty(e) {
@@ -85,24 +91,26 @@ class AdminInfo extends Component {
     }
 
     isPasswordCorrect(e) {
+        var _this = this;
+        var account = this.state.account.value;
         var password = $("#old-password").val();
         if (password == "" || /\s+/g.test(password)) {
             this.setState({ oldP: { visible: true } });
             return false;
         }
-        // $.ajax({
-        //     type: 'post',
-        //     url: 'http://localhost:60842/api/values',
-        //     data: { "oldPassword": password },
-        //     success: function (data) {
-        this.setState({
-            mP: { visible: true }
-        });
-        //     },
-        //     error: function () {
-        message.error("密码错误！");
-        //     }
-        // });
+        axios.post('http://localhost:60842/api/Admin/ConfirmPassword',
+            { Account: account, Password: password }).then(function (response) {
+                $("#old-password").val("");
+                if (response.data) {
+                    _this.setState({
+                        mP: { visible: true }
+                    });
+                    return true;
+                }
+                message.error("密码错误！");
+            }).catch(function () {
+                message.error("出错了！");
+            })
     }
 
     handleMPCancel(e) {
@@ -112,23 +120,23 @@ class AdminInfo extends Component {
     }
 
     handleMPSubmit(e) {
+        var _this = this;
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                var fPassword = values.fPassword;
-                var sPassword = values.sPassword;
-
-                $.ajax({
-                    type: 'post',
-                    url: '',
-                    data: { "password": fPassword },
-                    success: function () {
-                        this.handleMPCancel.bind(this);
-                        message.success('修改成功');
-                    }, error: function () {
-                        message.error('出错了');
-                    }
-                });
+                var account = this.state.account.value;
+                var password = values.password;
+                axios.post('http://localhost:60842/api/Admin/ModifyPassword',
+                    { Account: account, Password: password }).then(function (response) {
+                        if (response.data) {
+                            _this.props.form.resetFields();
+                            _this.handleMPCancel();
+                            message.success('修改成功');
+                            return true;
+                        }
+                    }).catch(function () {
+                        message.error("出错了！");
+                    })
             }
         });
     }

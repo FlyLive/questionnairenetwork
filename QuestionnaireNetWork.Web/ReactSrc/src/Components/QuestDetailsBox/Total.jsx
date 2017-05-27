@@ -21,8 +21,14 @@ class Total extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.update();
+        var token = $.cookie('token');
+        var mytoken = JSON.parse(token);
+        if(mytoken === null){
+            window.location.href='/#/'
+        }
+        axios.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
     }
 
     update() {
@@ -64,7 +70,7 @@ class Total extends Component {
         });
     }
     onSelected(record, index) {
-        this.setState({ selected: record.key });
+        this.setState({ selected: record.QId });
     }
     render() {
         const columns = [{

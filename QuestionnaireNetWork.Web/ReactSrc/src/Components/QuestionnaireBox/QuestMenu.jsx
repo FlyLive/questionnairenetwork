@@ -69,15 +69,15 @@ class QuestMenu extends Component {
     questItem(quest) {
         return (<div className="post-slide" key={quest.QId}>
             <div className="post-content">
-                <Card title={quest.QuestTitle} extra={<a href="#">前往<Icon type="arrow-right" /></a>} style={{ width: 250 }}>
+                <Card title={quest.QuestTitle} extra={<a target="_blank" href={"/#/questionnaire/"+quest.QId}>前往<Icon type="arrow-right" /></a>} style={{ width: 250 }}>
                     <div className="post-img">
-                        <a href="#"><img src="../../src/Images/img_bg_1.jpg" title={quest.QuestTitle} /></a>
+                        <a target="_blank" href={"/#/questionnaire/"+quest.QId}><img src="../../src/Images/img_bg_1.jpg" title={quest.QuestTitle} /></a>
                     </div>
                     <h3><Icon type="file-text" style={{ color: "#108ee9" }} />题数：<span>{quest.Num}</span></h3>
                     <h3><Icon type="edit" style={{ color: "#108ee9" }} />参与人数：<span>{quest.Count}</span></h3>
                     <h3><Icon type="calendar" style={{ color: "#108ee9" }} />创建时间：<span>{quest.CreateTime}</span></h3>
                     <div style={{ textAlign: "right" }}>
-                        <Button type="primary">前往</Button>
+                        <Button type="primary"><a target="_blank" href={"/#/questionnaire/"+quest.QId}>前往</a></Button>
                     </div>
                 </Card>
             </div>

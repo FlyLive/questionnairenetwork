@@ -247,11 +247,17 @@ namespace QuestionnaireNetWork.Service.Services
         {
             try
             {
+                var quest = GetQuestByQuestId(questId);
+                if (quest.CurrentQuestNum >= quest.MaxQuestNum)
+                {
+                    return false;
+                }
                 _db.Completion.Add(new Completion
                 {
                     QId = questId,
                     Title = title,
                 });
+                CurrentQuestNumIncrease(questId);
                 _db.SaveChanges();
             }
             catch (Exception e)
@@ -405,14 +411,15 @@ namespace QuestionnaireNetWork.Service.Services
             try
             {
                 var quest = GetQuestByQuestId(questId);
-                if (quest != null)
+                if (quest != null && quest.Answer.Count == 0)
                 {
                     DeleteChoicesByQuestId(questId);
                     DeleteCompletionsByQuestId(questId);
                     _db.Questionnaire.Remove(quest);
                     _db.SaveChanges();
+                    return true;
                 }
-                return true;
+                return false;
             }
             catch (Exception e)
             {

@@ -8,34 +8,50 @@ import QuestContent from './Components/QuestionnaireBox/QuestContent.jsx'
 import './Css/Quest/Quest.css'
 import './Css/Home/style.css'
 
-const data  = {QId:1,Title:"大学生心理素质调查",CreateTime:"2017/5/22",count:32}
-
 class Questionnaire extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={quest:null}
+        this.state = { quest: [] }
     }
+
     componentWillMount() {
-        this.setState({
-            quest:data
+        var id = this.props.params.questId
+        this.update(id)
+    }
+
+    update(questId) {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:60842/api/Questionnaire/GetQuest',
+            data: { id: questId },
+            success: function (data) {
+                _this.setState({
+                    quest: data
+                })
+            }, error: function () {
+            }
         })
     }
+
+    componentWillReceiveProps(nextProps) {
+        var questId = this.props.params.questId;
+        this.update(questId);
+    }
+
     render() {
         return (
             <div className="quest">
                 <header>
-                    <div className="web-title"><a href="#">云翳</a></div>
-                    <div><h2 className="title-content">{this.state.quest.Title}</h2></div>
-                    <div><p className="quest-info">参与者：{this.state.quest.count}&emsp;创建时间：{this.state.quest.CreateTime}</p></div>
+                    <div className="web-title"><a href="/#/">云翳</a></div>
+                    <div><h2 className="title-content">{this.state.quest.QuestTitle}</h2></div>
+                    <div><p className="quest-info">参与者：{this.state.quest.CurrentQuestNum}&emsp;创建时间：{this.state.quest.CreateTime}</p></div>
                 </header>
-                <QuestContent Qid={this.state.quest.QId}/>
+                <QuestContent questId={this.state.quest.QId} />
                 <Footer />
             </div>
         );
     }
 }
 
-render(
-    <Questionnaire />,
-    document.getElementById("questionnaire")
-)
+export default Questionnaire

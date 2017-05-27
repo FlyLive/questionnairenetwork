@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Table, Popconfirm } from 'antd'
+import axios from 'axios'
 
 import OptionChart from './OptionChart.jsx'
 
@@ -14,8 +15,8 @@ class ChoiceAnswer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            questId: props.questId,
-            data: data,
+            questId: this.props.questId,
+            data: [],
         };
     }
 
@@ -23,27 +24,31 @@ class ChoiceAnswer extends Component {
         this.update(this.props.questId);
     }
 
-    update(questId) {
-        var _this = this;
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Question/GetAllChoiceQuestion',
-            data: { questId: questId },
-            success: function (data) {
-                _this.setState({ data: data })
-            }, error: function (error) {
-            }
-        })
+    componentWillReceiveProps(nextProps){
+        var questId = nextProps.questId;
+        this.setState({questId:questId})
+        this.update(questId);
     }
 
-    componentWillReceiveProps(nextProps) {
-        let questId = nextProps.questId;
-        this.setState({ quest: questId });
+    update(questId) {
+        var _this = this;
+        axios.get('http://localhost:60842/api/Question/GetAllChoiceQuestion?questId='+ questId)
+            .then(function (response) {
+                _this.setState({ data: response.data });
+            })
+            .catch(function (response) {
+                console.log(response);
+            });
     }
 
     render() {
         const choiceColumns = [
             { title: '题目名', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle' },
+            {
+                title: '类型', dataIndex: 'Type', key: 'Type',
+                render: (text, record) => (
+                    record.Type ? (<span>多选</span>) : (<span>单选</span>))
+            },
             { title: '选项数量', dataIndex: 'OptionCount', key: 'OptionCount' },
         ];
         return (

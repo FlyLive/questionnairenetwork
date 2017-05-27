@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Table, Popconfirm, Badge, Progress } from 'antd'
+import axios from 'axios'
 
 const data = [
     { Id: 1, CreateTime: '2017/5/25', IpAddress: '127.0.0.1', AnswerContent: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' },
@@ -13,7 +14,7 @@ class UserCompletionAnswer extends Component {
         super(props);
         this.state = {
             completionId: props.completionId,
-            data: data,
+            data: [],
         };
     }
 
@@ -23,15 +24,11 @@ class UserCompletionAnswer extends Component {
 
     update(completionId) {
         var _this = this;
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Question/',
-            data: { completionId: completionId },
-            success: function (data) {
-                _this.setState({ data: data })
-            }, error: function (error) {
-            }
-        })
+        axios.get('http://localhost:60842/api/Admin/GetCompletionAnswer?completionId='+ completionId )
+            .then( function (response) {
+                _this.setState({ data: response.data })
+            }).catch( function (error) {
+            })
     }
 
     componentWillReceiveProps(nextProps) {

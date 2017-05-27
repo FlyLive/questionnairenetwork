@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Table, Popconfirm, Badge, Progress } from 'antd'
+import axios from 'axios'
 
 const data = [
     { OptionId: 1, OptionContent: 'John Brown', age: 32, num: 20 },
@@ -13,7 +14,7 @@ class OptionChart extends Component {
         super(props);
         this.state = {
             choiceId: props.choiceId,
-            data: data,
+            data: [],
         };
     }
 
@@ -23,15 +24,11 @@ class OptionChart extends Component {
 
     update(choiceId) {
         var _this = this;
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Question/',
-            data: { choiceId: choiceId },
-            success: function (data) {
-                _this.setState({ data: data })
-            }, error: function (error) {
-            }
-        })
+        axios.get('http://localhost:60842/api/Admin/GetChoiceAnswer?choiceId=' + choiceId)
+            .then(function (response) {
+                _this.setState({ data: response.data })
+            }).catch(function (error) {
+            })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -43,14 +40,14 @@ class OptionChart extends Component {
         const choiceColumns = [
             { title: '选项名称', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 },
             {
-                title: '百分比', dataIndex: 'age', key: 'age', width: 100,
+                title: '百分比', dataIndex: 'Percent', key: 'Percent', width: 100,
                 render: (text, record, index) => (
                     <div style={{ textAlign: "center" }}>
-                        <Progress type="circle" percent={20} width={50} />
+                        <Progress type="circle" percent={record.Percent} width={50} />
                     </div>
                 )
             },
-            { title: '总数', dataIndex: 'num', key: 'num', width: 100, }
+            { title: '总数', dataIndex: 'Count', key: 'Count', width: 100, }
         ];
         return (
             <div>

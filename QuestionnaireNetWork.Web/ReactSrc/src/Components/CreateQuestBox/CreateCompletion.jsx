@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Form, Switch, Input, Button, Icon, message } from 'antd'
+import axios from 'axios'
 
 const FormItem = Form.Item
 
@@ -23,21 +24,18 @@ class CreateCompletion extends Component {
                 }
                 var title = values["title"];
 
-                $.ajax({
-                    type: 'post',
-                    url: 'http://localhost:60842/api/Question/CreateCompletion',
-                    data: { QId: questId, Title: title },
-                    success: function (data) {
-                        if (data) {
+                axios.post('http://localhost:60842/api/Question/CreateCompletion',
+                    { QId: questId, Title: title })
+                    .then(function (response) {
+                        if (response.data) {
                             message.success("创建成功");
                             return true;
                         }
                         message.error("创建失败,可能题数达到上限")
-                    },
-                    error: function () {
+                    })
+                    .catch(function () {
                         message.error("出错了")
-                    }
-                });
+                    })
             }
         });
     }

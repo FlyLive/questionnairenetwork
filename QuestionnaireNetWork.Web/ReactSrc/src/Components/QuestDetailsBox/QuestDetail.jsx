@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { InputNumber,Menu, Dropdown, Button, Icon, Input, message, Modal, Table, Tabs, Progress, Popconfirm,Form } from 'antd';
+import { InputNumber, Menu, Dropdown, Button, Icon, Input, message, Modal, Table, Tabs, Progress, Popconfirm, Form } from 'antd';
 import axios from 'axios'
 
 import CreateChoice from '../CreateQuestBox/CreateChoice.jsx'
@@ -98,21 +98,17 @@ class QuestDetail extends Component {
 
     onDeleteQuest(id) {
         var _this = this;
-        $.ajax({
-            type: 'delete',
-            url: 'http://localhost:60842/api/Questionnaire/DeleteQuest',
-            data: { "": id },
-            success: function (data) {
-                if (data) {
+        axios.get('http://localhost:60842/api/Questionnaire/DeleteQuest?qId='+id)
+            .then(function (response) {
+                if (response.data) {
                     message.success('删除成功');
                     _this.update();
                     return true;
                 }
                 message.error('删除失败');
-            }, error: function () {
+            }).catch(function () {
                 message.error('出错了');
-            }
-        })
+            })
     }
 
     onModifyQuest(quest) {
@@ -120,35 +116,31 @@ class QuestDetail extends Component {
     }
 
     handleSubmitModifyQuest() {
-        const {form} = this.props;
+        const { form } = this.props;
         var qId = this.state.focusQuest.QId;
         var questTitle = form.getFieldValue("title")
         var maxNum = form.getFieldValue("maxNum");
         var _this = this;
-        if(form.getFieldError("title")/*questTitle == "" || /\s+/g.test(questTitle)*/){
-            
-            return false;
+        if (questTitle == "" || /\s+/g.test(questTitle)) {
+            questTitle=this.state.focusQuestTitle;
         }
-        $.ajax({
-            type: 'post',
-            url: 'http://localhost:60842/api/Questionnaire/ModifyQuest',
-            data: { QId: qId, QuestTitle: questTitle, MaxQuestNum: maxNum },
-            success: function (data) {
-                if (data) {
+        axios.post('http://localhost:60842/api/Questionnaire/ModifyQuest',
+            { QId: qId, QuestTitle: questTitle, MaxQuestNum: maxNum })
+            .then(function (response) {
+                if (response.data) {
                     message.success('修改成功');
-                    _this.setState({modifyQuestModal:false});
+                    _this.setState({ modifyQuestModal: false });
                     _this.update();
                     return true;
                 }
                 message.error('修改失败');
-            }, error: function (error) {
+            }).catch(function (error) {
                 message.error('出错了');
-            }
-        })
+            })
     }
 
-    handleCancleModify(){
-        this.setState({modifyQuestModal:false})
+    handleCancleModify() {
+        this.setState({ modifyQuestModal: false })
     }
 
     onFoucsQuest(id) {
@@ -182,6 +174,7 @@ class QuestDetail extends Component {
             onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }, () => this.searchInput.focus()),
         },
         { title: '最大题数', dataIndex: 'MaxQuestNum', key: 'MaxQuestNum', width: 100, },
+        { title: '现有题数', dataIndex: 'CurrentQuestNum', key: 'CurrentQuestNum', width: 100, },
         { title: '创建时间', dataIndex: 'CreateTime', key: 'CreateTime', width: 100, }, {
             title: '操作', key: '', width: 100,
             render: (text, record, index) => (

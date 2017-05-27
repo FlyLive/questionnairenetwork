@@ -20,32 +20,27 @@ import './Css/Quest/owl.carousel.min.css'
 import './Js/Quest/owl.carousel.min.js'
 import './Js/jquery.cookie.js'
 
-class App extends Component {
+class entry extends Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
             visible: false,
+            isLogin:false
         };
     }
     componentDidMount() {
-        // axios.get("http://localhost:60842/api/values")
-        // .then(function (data) {
-        //      this.setState({ data: data })
-        // })
-        // .catch(function(error){
-        //     alert(error);
-        // });
-        $.ajax({
-            url: 'http://localhost:60842/api/values',
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-            }.bind(this),
-            error: function (xhr, status, err) {
-                
-            }.bind(this)
-        });
+        var _this = this
+        var token = $.cookie('token');
+        var mytoken = JSON.parse(token);
+        axios.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
+        axios.get('http://localhost:60842/api/Admin/GetAdminInfo')
+            .then(function (response) {
+                _this.setState({ data: response.data,isLogin:true });
+            })
+            .catch(function (response) {
+                console.log(response);
+            })
     }
     onLogin(e) {
         this.setState({ visible: true });
@@ -53,14 +48,19 @@ class App extends Component {
     onCancleLogin(e) {
         this.setState({ visible: false });
     }
+    handleLogout() {
+        $.cookie('token', null);
+        this.setState({ data: null ,isLogin:false })
+        window.location.reload();
+    }
     render() {
-        const isLogin = this.state.data !== null ? (
+        const isLogin = this.state.isLogin ? (
             <ul>
                 <li className="active"><a>主页</a></li>
-                <li><a>管理中心</a></li>
-                <li><a>问卷详情</a></li>
-                <li><a>统计</a></li>
-                <li><a>注销</a></li>
+                <li><a href='/#/adminCenter/adminInfo'>管理中心</a></li>
+                <li><a href='/#/adminCenter/questDetail'>问卷详情</a></li>
+                <li><a href='/#/adminCenter/questDetail'>统计</a></li>
+                <li><a onClick={this.handleLogout.bind(this)}>注销</a></li>
             </ul>
         ) : (
                 <ul>
@@ -121,7 +121,4 @@ class App extends Component {
     }
 }
 
-render(
-    <App />,
-    document.getElementById('app')
-);
+export default entry;

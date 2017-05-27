@@ -1,102 +1,98 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Radio, Checkbox, Row, Col, Input, Form, Button } from 'antd'
+import { Radio, Checkbox, Row, Col, Input, Form, Button, notification, Icon } from 'antd'
+import axios from 'axios'
 
 const FormItem = Form.Item
 const RadioGroup = Radio.Group
 const CheckboxGroup = Checkbox.Group
-const radio = [
-    {
-        ChoiceId: 1, Title: "选择题", Type: false, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-            { OptionId: 4, OptionContent: "选项" },
-        ]
-    }, {
-        ChoiceId: 2, Title: "选择题", Type: false, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-        ]
-    }, {
-        ChoiceId: 3, Title: "选择题", Type: false, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-        ]
-    }, {
-        ChoiceId: 4, Title: "选择题", Type: false, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-        ]
-    },
-]
-const checkbox = [
-    {
-        ChoiceId: 1, Title: "选择题", Type: true, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-            { OptionId: 4, OptionContent: "选项" },
-        ]
-    }, {
-        ChoiceId: 2, Title: "选择题", Type: true, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-            { OptionId: 4, OptionContent: "选项" },
-            { OptionId: 5, OptionContent: "选项" },
-        ]
-    }, {
-        ChoiceId: 3, Title: "选择题", Type: true, Option: [
-            { OptionId: 1, OptionContent: "选项" },
-            { OptionId: 2, OptionContent: "选项" },
-            { OptionId: 3, OptionContent: "选项" },
-            { OptionId: 4, OptionContent: "选项" },
-            { OptionId: 5, OptionContent: "选项" },
-        ]
-    },
-]
-const completion = [
-    { CompletionId: 1, Title: "简答题" },
-    { CompletionId: 2, Title: "简答题" },
-]
 
+let key = 1;
 class QuestContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            radio: [],
-            checkbox: [],
+            questId: this.props.questId,
+            choice: [],
             completion: [],
         }
     }
-
-    componentWillMount() {
-        // $.ajax({
-        //     type: 'get',
-        //     url: '',
-        //     data: {},
-        //     success: function (data) {
-
-        //     }, error: function () {
-        //         window.location.href=""
-        //     }
-        // })
-        this.setState({
-            radio: radio,
-            checkbox: checkbox,
-            completion: completion
+    componentwillMount() {
+        var questId = this.props.questId;
+        this.update(questId);
+    }
+    update(questId) {
+        var _this = this;
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:60842/api/Questionnaire/GetQuest',
+            data: { id: questId },
+            success: function (data) {
+                _this.setState({
+                    choice: data.ChoiceQuestions,
+                    completion: data.Completions
+                })
+            }, error: function () {
+            }
         })
+    }
+    componentWillReceiveProps(nextProps) {
+        var questId = nextProps.questId;
+        this.update(questId);
     }
 
     handleSubmit(e) {
         e.preventDefault();
+        var _this = this;
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
+                const questId = _this.props.questId;
+                const choices = _this.state.choice;
+                const completions = _this.state.completion;
+                for (var i = 0; i < choices.length; i++) {
+                    var choice = choices[i];
+                    if (choice.Type) {//多选
+                        choice.AnswerOptions = new Array();
+                        var optionIds = values["choice-" + choice.ChoiceId];
+                        optionIds.forEach(optionId => choice.AnswerOptions.push(optionId));
+                    } else {//单选
+                        var optionId = values["choice-" + choice.ChoiceId];
+                        choice.AnswerOption = optionId
+                    }
+                }
+                for (var i = 0; i < completions.length; i++) {
+                    var completion = completions[i];
+                    var content = values["completion-" + completion.CompletionId];
+                    completion.Answer = content
+                }
+                alert(questId);
+                axios.post('http://localhost:60842/api/Questionnaire/SubmitAnswer',
+                    { QId: questId, ChoiceQuestions: choices, Completions: completions })
+                    .then(function (response) {
+                        if (response.data) {
+                            notification.open({
+                                placement: 'topleft',
+                                message: '谢谢参与',
+                                description: '感谢您的参与，您的选择已经保存！',
+                                icon: <Icon type="smile-circle" style={{ color: '#108ee9' }} />,
+                            });
+                        }
+                        else {
+                            notification.open({
+                                placement: 'topleft',
+                                message: '谢谢参与',
+                                description: '对不起，系统检测到您已提交过该问卷，不能重复提交，谢谢您的参与！',
+                                icon: <Icon type="frown-circle" style={{ color: 'red' }} />,
+                            });
+                        }
+                    }).catch(function (error) {
+                        notification.open({
+                            placement: 'topleft',
+                            message: '出错啦',
+                            description: '对不起，提交失败，请重试！',
+                            icon: <Icon type="frown-circle" style={{ color: 'red' }} />,
+                        });
+                    })
             }
         });
     }
@@ -109,23 +105,23 @@ class QuestContent extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             choice.Type ? (<FormItem>
-                {getFieldDecorator('radio-group-' + (choice.ChoiceId + this.state.radio.length), {
+                {getFieldDecorator('choice-' + (choice.ChoiceId), {
                     rules: [
                         { required: true, message: '请将所有题做完!' },
                     ],
                 })(<CheckboxGroup>
                     <Row gutter={5}>
-                        {choice.Option.map(option => <Col key={option.OptionId} span={8}><Checkbox className="checkbox-input" value={option.OptionId}>{option.OptionContent}</Checkbox></Col>)}
+                        {choice.Options.map(option => <Col key={option.OptionId} span={8}><Checkbox className="checkbox-input" value={option.OptionId}>{option.OptionContent}</Checkbox></Col>)}
                     </Row>
                 </CheckboxGroup>)}
             </FormItem>
             ) : (<FormItem>
-                {getFieldDecorator('radio-group-' + choice.ChoiceId, {
+                {getFieldDecorator('choice-' + choice.ChoiceId, {
                     rules: [
                         { required: true, message: '请将所有题做完!' },
                     ],
                 })(<RadioGroup>
-                    {choice.Option.map(option => <Radio className="radio-input" key={option.OptionId} value={option.OptionId}>{option.OptionContent}</Radio>)}
+                    {choice.Options.map(option => <Radio className="radio-input" key={option.OptionId} value={option.OptionId}>{option.OptionContent}</Radio>)}
                 </RadioGroup>
                     )}
             </FormItem>)
@@ -136,10 +132,10 @@ class QuestContent extends Component {
         const { getFieldDecorator } = this.props.form;
         return (
             choice.Type ? (<li key={"checkbox" + choice.ChoiceId}>
-                <p className="choice-title">{(index + 1 + this.state.radio.length) + "、" + choice.Title}&emsp;{"(可多选)"}</p>
+                <p className="choice-title">{(index + 1) + "、" + choice.ChoiceTitle}&emsp;{"(可多选)"}</p>
                 {this.optionContent(choice)}
             </li>) : (<li key={"radio" + choice.ChoiceId}>
-                <p className="choice-title">{(index + 1) + "、" + choice.Title}&emsp;{"(单选)"}</p>
+                <p className="choice-title">{(index + 1) + "、" + choice.ChoiceTitle}&emsp;{"(单选)"}</p>
                 {this.optionContent(choice)}
             </li>)
         )
@@ -147,11 +143,11 @@ class QuestContent extends Component {
 
     completionContent(index, completion) {
         const { getFieldDecorator } = this.props.form;
-        const currentIndex = index + 1 + this.state.radio.length + this.state.checkbox.length;
+        const currentIndex = index + 1 + this.state.choice.length;
         return (
             <li key={"completion" + completion.CompletionId}>
                 <p className="choice-title">{currentIndex + "、" + completion.Title}</p>
-                <FormItem>{getFieldDecorator('radio-group-' + currentIndex, {
+                <FormItem>{getFieldDecorator('completion-' + completion.CompletionId, {
                     rules: [
                         { required: true, message: '请将所有题做完!' },
                     ],
@@ -165,18 +161,14 @@ class QuestContent extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const radioList = (this.state.radio.map((radio, index, array) => this.choiceContent(index, radio)))
-        const checkboxList = (this.state.checkbox.map((checkbox, index, array) => this.choiceContent(index, checkbox)))
+        const choiceList = (this.state.choice.map((choice, index, array) => this.choiceContent(index, choice)))
         const completionList = (this.state.completion.map((completion, index, array) => this.completionContent(index, completion)))
 
         return (
             <div className="quest-content">
                 <Form onSubmit={this.handleSubmit.bind(this)}>
-                    <ul className="radio-list">
-                        {radioList}
-                    </ul>
-                    <ul className="checkbox-list">
-                        {checkboxList}
+                    <ul className="choice-list">
+                        {choiceList}
                     </ul>
                     <ul className="completion-list">
                         {completionList}

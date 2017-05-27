@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import { Form, Switch, Input, Button, Icon, message } from 'antd'
+import axios from 'axios'
 
 const FormItem = Form.Item
 
@@ -58,15 +59,17 @@ class CreateChoice extends Component {
                 var options = new Array();
                 const { form } = this.props;
                 const keys = form.getFieldValue('keys');
-                if(keys.length <= 0){
+                if (keys.length <= 0) {
                     message.error("请至少添加一个选项");
                     return false;
                 }
                 keys.filter(key => options.push(values["names-" + key]));
-
+                var token = $.cookie('token');
+                var mytoken = JSON.parse(token);
                 $.ajax({
                     type: 'post',
                     url: 'http://localhost:60842/api/Question/CreateChoiceQuestion',
+                    headers: { Authorization: "Bearer " + mytoken.access_token },
                     contentType: 'application/json',
                     data: JSON.stringify({ QId: questId, ChoiceTitle: title, Type: type, Options: options }),
                     success: function (data) {
@@ -76,10 +79,10 @@ class CreateChoice extends Component {
                         }
                         message.error("创建失败,可能题数达到上限")
                     },
-                    error: function () {
+                    error: function (error) {
                         message.error("出错了")
                     }
-                });
+                })
             }
         });
     }

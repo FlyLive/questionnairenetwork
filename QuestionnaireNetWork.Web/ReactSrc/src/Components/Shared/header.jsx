@@ -1,15 +1,32 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import HeadRouter from '../Router/headRouter.jsx'
+import { Icon } from 'antd'
 
 class Header extends Component {
+    componentWillMount(){
+        var token = $.cookie('token');
+        var mytoken = JSON.parse(token);
+        if(mytoken == null){
+            window.location.href='/#/'
+        }
+    }
+    handleLogout(){
+        $.cookie('token', null);
+        window.location.href='/#/'
+    }
     render() {
         return (
-            <div className="head container">
-                <div className="navbar-header">
-                    <a href="index.html" className="navbar-brand" data-section="body">云翳</a>
+            <div id="main-menu">
+                <div className="menu">
+                    <ul>
+                        <li><a href="/#/adminCenter/adminInfo"><Icon type="user" />个人资料</a></li>
+                        <li><a href="/#/adminCenter/createQuest"><Icon type="plus-circle" />新建问卷</a></li>
+                        <li><a href="/#/adminCenter/questDetail"><Icon type="bars" />查看所有问卷</a></li>
+                        <li><a href="/#/adminCenter/total"><Icon type="line-chart" />统计</a></li>
+                        <li><a onClick={this.handleLogout.bind(this)}><Icon type="logout" />注销</a></li>
+                    </ul>
                 </div>
-                <HeadRouter/>
+                <hr />
             </div>
         );
     };

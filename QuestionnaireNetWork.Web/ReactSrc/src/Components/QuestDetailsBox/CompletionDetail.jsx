@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Table, Popconfirm, message,Modal,Form,Input,Button } from 'antd'
+import { Table, Popconfirm, message, Modal, Form, Input, Button } from 'antd'
+import axios from 'axios'
 
 const FormItem = Form.Item
 
@@ -22,15 +23,11 @@ class CompletionDetail extends Component {
     update(questId) {
         var _this = this;
         _this.setState({ questId: questId })
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Question/GetAllCompletion',
-            data: { questId: questId },
-            success: function (data) {
-                _this.setState({ data: data })
-            }, error: function (error) {
-            }
-        })
+        axios.get('http://localhost:60842/api/Question/GetAllCompletion?questId=' + questId)
+            .then(function (response) {
+                _this.setState({ data: response.data })
+            }).catch(function (error) {
+            })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -47,50 +44,45 @@ class CompletionDetail extends Component {
     }
 
     handleSubmitModifyCompletion() {
-        var id = this.state.selectedOption.OptionId;
+        var id = this.state.focusCompletion.CompletionId;
         var completionTitle = this.state.completionTitle;
         var _this = this;
         if (completionTitle == "" || /\s+/g.test(completionTitle)) {
             message.error("简答题题目不能为空");
             return false;
         }
-        $.ajax({
-            type: 'post',
-            url: 'http://localhost:60842/api/Question/ModifyCompletion',
-            data: { CompletionId: id, Title: completionTitle },
-            success: function (data) {
-                if (data) {
+        axios.post('http://localhost:60842/api/Question/ModifyCompletion',
+            { CompletionId: id, Title: completionTitle })
+            .then(function (response) {
+                if (response.data) {
                     message.success('修改成功');
                     _this.setState({ modifyCompletionModal: false });
                     _this.update(_this.state.questId);
                     return true;
                 }
                 message.error('修改失败');
-            }, error: function (error) {
+            }).catch(function (error) {
                 message.error('出错了');
-            }
-        })
+            })
     }
 
     handleCancleModify() {
         this.setState({ modifyCompletionModal: false })
     }
 
-    onDeletCompletion(key) {
-        $.ajax({
-            type: 'delete',
-            url: 'http://localhost:60842/api/Question/DeleteCompletion',
-            data: { "": id },
-            success: function (data) {
+    onDeletCompletion(id) {
+        var _this = this
+        axios.get('http://localhost:60842/api/Question/DeleteCompletion?id='+ id )
+            .then(function (data) {
                 if (data) {
+                    _this.update(_this.state.questId)
                     message.success('删除成功');
                     return true;
                 }
                 message.error('删除失败');
-            }, error: function () {
+            }).catch(function () {
                 message.error('出错了');
-            }
-        })
+            })
     }
 
     render() {
@@ -104,7 +96,7 @@ class CompletionDetail extends Component {
                     <span>
                         <a onClick={() => this.onModifyCompletion(record)}>修改</a>
                         <span className="ant-divider" />
-                        <Popconfirm title="确定要删除该问题？" onConfirm={() => this.onDeletCompletion(record.key)} okText="删除">
+                        <Popconfirm title="确定要删除该问题？" onConfirm={() => this.onDeletCompletion(record.CompletionId)} okText="删除">
                             <a>删除</a>
                         </Popconfirm>
                     </span>)
@@ -123,7 +115,7 @@ class CompletionDetail extends Component {
         return (
             <div>
                 <br />
-                <Table rowKey='CompletionId' columns={columns} dataSource={this.state.data} title={() => "简答题"} />
+                <Table rowKey='CompletionId' columns={columns} bordered dataSource={this.state.data} title={() => "简答题"} />
                 <Modal title="修改选项" visible={this.state.modifyCompletionModal} footer={null}
                     onCancel={this.handleCancleModify.bind(this)}>
                     <Form>

@@ -13,11 +13,15 @@ namespace QuestionnaireNetWork.Web.Controllers
 {
     public class QuestionController : ApiController
     {
+        public string Options()
+        {
+            return null; // HTTP 200 response with empty body
+        }
         private QuestionnaireService _questService = new QuestionnaireService();
 
         #region 选择题选项
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public OptionViewModel GetOptionById(int id)
         {
             Option option = _questService.GetOptionById(id);
@@ -25,8 +29,8 @@ namespace QuestionnaireNetWork.Web.Controllers
             return optionVM;
         }
 
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<OptionViewModel> GetAllOptionByCQId(int cqId)
         {
             List<Option> options = _questService.GetAllOptionByCQId(cqId).ToList();
@@ -35,8 +39,8 @@ namespace QuestionnaireNetWork.Web.Controllers
             return optionsVM;
         }
 
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
         public bool CreateOption(dynamic obj)
         {
             var choiceId = Convert.ToInt16(obj.ChoiceId);
@@ -47,17 +51,17 @@ namespace QuestionnaireNetWork.Web.Controllers
             return result;
         }
 
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
         public bool ModifyOption([FromBody]OptionViewModel option)
         {
             var result = _questService.ModifyOption(option.OptionId, option.OptionContent);
             return result;
         }
 
-        //[Authorize]
-        [HttpDelete]
-        public bool DeleteOption([FromBody]int id)
+        [Authorize]
+        [HttpGet]
+        public bool DeleteOption(int id)
         {
             var result = _questService.DeletOption(id);
             return result;
@@ -65,8 +69,8 @@ namespace QuestionnaireNetWork.Web.Controllers
         #endregion
 
         #region 选择题
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
         public bool CreateChoiceQuestion(dynamic obj)
         {
             var qId = Convert.ToInt16(obj.QId);
@@ -79,16 +83,16 @@ namespace QuestionnaireNetWork.Web.Controllers
             return result;
         }
 
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
         public bool ModifyChoiceQuestion([FromBody]ChoiceQuestionViewModel choice)
         {
             var result = _questService.ModifyChoiceQuestion(choice.ChoiceId, choice.ChoiceTitle, choice.Type);
             return result;
         }
 
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public ChoiceQuestionViewModel GetChoiceQuestion(int id)
         {
             ChoiceQuestion question = _questService.GetChoiceQuestionById(id);
@@ -96,16 +100,16 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questionVM;
         }
 
-        //[Authorize]
-        [HttpDelete]
-        public bool DeleteChoiceQuestion([FromBody]int id)
+        [Authorize]
+        [HttpGet]
+        public bool DeleteChoiceQuestion(int id)
         {
             var result = _questService.DeleteChoiceQuestion(id);
             return result;
         }
 
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<ChoiceQuestionViewModel> GetAllChoiceQuestion(int questId)
         {
             List<ChoiceQuestion> choices = _questService.GetAllChoiceQuestion(questId);
@@ -119,8 +123,8 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questionsVM;
         }
         
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<ChoiceQuestionViewModel> GetRadioChoiceQuestion(int questId)
         {
             List<ChoiceQuestion> questions = _questService.GetRadioChoiceQuestion(questId);
@@ -129,8 +133,8 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questionsVM;
         }
         
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<ChoiceQuestionViewModel> GetCheckChoiceQuestion(int questId)
         {
             List<ChoiceQuestion> questions = _questService.GetCheckChoiceQuestion(questId);
@@ -141,32 +145,32 @@ namespace QuestionnaireNetWork.Web.Controllers
         #endregion
 
         #region 简答题
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
         public bool CreateCompletion([FromBody]CompletionViewModel completion)
         {
             var result = _questService.CreateCompletion(completion.QId, completion.Title);
             return result;
         }
 
-        //[Authorize]
-        [HttpPost]
+        [Authorize]
+        [System.Web.Mvc.HttpPost]
         public bool ModifyCompletion([FromBody]CompletionViewModel completion)
         {
             var result = _questService.ModifyCompletion(completion.CompletionId, completion.Title);
             return result;
         }
 
-        //[Authorize]
-        [HttpDelete]
-        public bool DeleteCompletion([FromBody]int id)
+        [Authorize]
+        [HttpGet]
+        public bool DeleteCompletion(int id)
         {
             var result = _questService.DeleteCompletion(id);
             return result;
         }
 
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public CompletionViewModel GetCompletion(int id)
         {
             Completion completion = _questService.GetCompletionById(id);
@@ -174,8 +178,8 @@ namespace QuestionnaireNetWork.Web.Controllers
             return completionVM;
         }
 
-        //[Authorize]
-        [HttpGet]
+        [Authorize]
+        [System.Web.Mvc.HttpGet]
         public List<CompletionViewModel> GetAllCompletion(int questId)
         {
             List<Completion> completions = _questService.GetAllCompletion(questId);
@@ -203,8 +207,10 @@ namespace QuestionnaireNetWork.Web.Controllers
                 QId = choice.QId,
                 ChoiceId = choice.ChoiceId,
                 ChoiceTitle = choice.Title,
-                Type = choice.Type
+                Type = choice.Type,
+                Options = new List<OptionViewModel>()
             };
+            choice.Option.ToList().ForEach(c => choiceVM.Options.Add(DataOptionToVM(c)));
             return choiceVM;
         }
 

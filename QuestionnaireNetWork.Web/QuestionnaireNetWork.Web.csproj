@@ -226,10 +226,12 @@
     <Compile Include="ViewModels\AdminViewModel.cs" />
     <Compile Include="ViewModels\AnswerViewModel.cs" />
     <Compile Include="ViewModels\ChoiceAnswerOptionsViewModel.cs" />
+    <Compile Include="ViewModels\ChoiceAnswerViewModel.cs" />
     <Compile Include="ViewModels\ChoiceQuestionViewModel.cs" />
     <Compile Include="ViewModels\CompletionAnswerOptionsViewModel.cs" />
     <Compile Include="ViewModels\CompletionViewModel.cs" />
     <Compile Include="ViewModels\OptionViewModel.cs" />
+    <Compile Include="ViewModels\QuestAnswerViewModel.cs" />
     <Compile Include="ViewModels\QuestionnaireViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -316,9 +318,9 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ReactSrc\src\Components\QuestionBox\" />
@@ -326,10 +328,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\AdminCenter.cshtml" />
-    <Content Include="Views\Home\Questionnaire.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QuestionnaireNetWork.Service\QuestionnaireNetWork.Service.csproj">

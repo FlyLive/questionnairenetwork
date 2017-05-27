@@ -6,6 +6,10 @@
     height: 300px;
 }
 
+.choice-title {
+    color: black;
+}
+
 .quest-content,
 .quest header>div {
     width: 80%;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { Table, Popconfirm, message, Form, Tooltip, Input, Button, Icon, Modal,Switch } from 'antd'
+import { Table, Popconfirm, message, Form, Tooltip, Input, Button, Icon, Modal, Switch } from 'antd'
+import axios from 'axios'
 
 import OptionDetail from './OptionDetail.jsx'
 
@@ -14,28 +15,29 @@ class CheckChoiceDetail extends Component {
             data: [],
             createOptionModal: false,
             modifyChoiceModal: false,
-            selectedChoice: null,
-            selectedChoiceTitle: null,
-            choiceTitleInput: null,
-            choiceTypeInput: null
+            selectedChoice: { Type: false },
+            selectedChoiceTitle: [],
+            choiceTitleInput: [],
+            choiceTypeInput: []
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.update(this.props.questId);
+        var token = $.cookie('token');
+        var mytoken = JSON.parse(token);
+        axios.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
     }
 
     update(questId) {
         var _this = this;
-        $.ajax({
-            type: 'get',
-            url: 'http://localhost:60842/api/Question/GetAllChoiceQuestion',
-            data: { questId: questId },
-            success: function (data) {
-                _this.setState({ data: data })
-            }, error: function (error) {
-            }
-        })
+        axios.get('http://localhost:60842/api/Question/GetAllChoiceQuestion?questId=' + questId)
+            .then(function (response) {
+                _this.setState({ data: response.data })
+            })
+            .catch(function (response) {
+                console.log(response);
+            });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -94,9 +96,15 @@ class CheckChoiceDetail extends Component {
                 }
                 keys.filter(key => options.push(values["names-" + key]));
 
+                var token = $.cookie('token');
+                var mytoken = JSON.parse(token);
+                if (mytoken == null) {
+                    window.location.href = '/#/'
+                }
                 $.ajax({
                     type: 'post',
                     url: 'http://localhost:60842/api/Question/CreateOption',
+                    headers: { Authorization: "Bearer " + mytoken.access_token },
                     contentType: 'application/json',
                     data: JSON.stringify({ ChoiceId: choiceId, Options: options }),
                     success: function (data) {
@@ -109,7 +117,8 @@ class CheckChoiceDetail extends Component {
                     error: function (error) {
                         message.error("出错了")
                     }
-                });
+                })
+
             }
         });
     }
@@ -123,7 +132,7 @@ class CheckChoiceDetail extends Component {
     }
 
     switchType(e) {
-        this.setState({ choiceTypeInput: e.target.value })
+        this.setState({ choiceTypeInput: e })
     }
 
     onChangeChoiceTitle(e) {
@@ -136,26 +145,24 @@ class CheckChoiceDetail extends Component {
         var type = this.state.choiceTypeInput;
         var _this = this;
 
-        if(choiceTitle == "" || /\s+/g.test(choiceTitle)){
+        if (choiceTitle == "" || /\s+/g.test(choiceTitle)) {
             message.error("请输入题目标题");
             return false;
         }
-        $.ajax({
-            type: 'post',
-            url: 'http://localhost:60842/api/Question/ModifyChoiceQuestion',
-            data: { ChoiceId: choiceId,ChoiceTitle:choiceTitle,Type:type },
-            success: function (data) {
-                if (data) {
+        axios.post('http://localhost:60842/api/Question/ModifyChoiceQuestion',
+            { ChoiceId: choiceId, ChoiceTitle: choiceTitle, Type: type })
+            .then(function (response) {
+                if (response.data) {
                     message.success("修改成功");
                     _this.update(_this.state.selectedChoice.QId);
                     return true;
                 }
                 message.error("修改失败")
-            },
-            error: function (error) {
+            })
+            .catch(function (response) {
+                console.log(response);
                 message.error("出错了")
-            }
-        });
+            });
     }
 
     handleCancleModifyChoice() {
@@ -164,28 +171,30 @@ class CheckChoiceDetail extends Component {
 
     onDeleteChoice(choiceId) {
         var _this = this;
-        $.ajax({
-            type: 'delete',
-            url: 'http://localhost:60842/api/Question/DeleteChoiceQuestion',
-            data: { "": choiceId },
-            success: function (data) {
-                if (data) {
+        axios.get('http://localhost:60842/api/Question/DeleteChoiceQuestion?id=' + choiceId)
+            .then(function (response) {
+                if (response.data) {
                     message.success('删除成功');
                     _this.update(_this.state.selectedChoice.QId);
                     return true;
                 }
                 message.error('删除失败');
-            }, error: function () {
-                message.error('出错了');
-            }
-        })
+            })
+            .catch(function (response) {
+                console.log(response);
+                message.error("出错了")
+            });
     }
 
     render() {
         const { getFieldDecorator, getFieldValue } = this.props.form
         const choiceColumns = [
-            { title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle'},
-            { title: '类型', dataIndex: 'Type', key: 'Type'},
+            { title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle' },
+            {
+                title: '类型', dataIndex: 'Type', key: 'Type',
+                render: (text, record) => (
+                    record.Type ? (<span>多选</span>) : (<span>单选</span>))
+            },
             {
                 title: '操作', dataIndex: '',
                 render: (text, record) => (
@@ -247,7 +256,7 @@ class CheckChoiceDetail extends Component {
                             <Input placeholder="问题内容" onChange={this.onChangeChoiceTitle.bind(this)} value={this.state.choiceTitleInput} />
                         </FormItem>
                         <FormItem label="多选题" {...formItemLayout}>
-                            <Switch onChange={this.switchType.bind(this)} defaultChecked={this.selectedChoice == null ? false : this.selectedChoice.Type} />
+                            <Switch onChange={this.switchType.bind(this)} checked={this.state.selectedChoice.Type} />
                         </FormItem>
                         <FormItem {...formItemLayoutWithOutLabel}>
                             <Button type="primary" onClick={this.handleSubmitModifyChoice.bind(this)} size="large">提交</Button>

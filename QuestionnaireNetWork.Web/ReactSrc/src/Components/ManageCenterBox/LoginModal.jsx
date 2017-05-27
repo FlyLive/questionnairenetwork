@@ -26,7 +26,7 @@ class LoginModal extends Component {
                         var my = JSON.stringify(data);
                         $.cookie('token', my, { path: '/' });
                         axios.defaults.headers.common['Authorization'] = "Bearer " + data.access_token;
-                        window.location.href = '/Home/AdminCenter';
+                        window.location.href = '/#/adminCenter/adminInfo';
                     },
                     error: function (data) {
                         form.setFields({
