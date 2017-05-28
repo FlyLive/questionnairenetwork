@@ -16,9 +16,17 @@
     min-height: 630px;
 }
 
-ul li {
+#main-menu ul li {
     list-style: none;
     color: white;
+}
+
+.user-answer-content ul {
+    margin-left: 20px;
+}
+
+.user-answer-content ul li {
+    list-style: square;
 }
 
 .navbar-header {

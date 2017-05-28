@@ -65,7 +65,7 @@ class entry extends Component {
         ) : (
                 <ul>
                     <li className="active"><a >主页</a></li>
-                    <li className="btn-cta" onClick={this.onLogin.bind(this)}><a><span>Login</span></a></li>
+                    <li className="btn-cta" onClick={this.onLogin.bind(this)}><a><span>登录</span></a></li>
                 </ul>);
         return (
             <div className="app">

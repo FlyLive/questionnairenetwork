@@ -4,7 +4,7 @@ import $ from 'jquery'
 import axios from 'axios'
 
 import MyRouter from './Router/MyRouter.jsx';
-import './Css/Admin/AdminCenter.css'
+
 import './Css/Admin/Index.css'
 
 import './Css/Home/animate.css'

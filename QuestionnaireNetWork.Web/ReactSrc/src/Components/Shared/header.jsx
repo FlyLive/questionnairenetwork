@@ -2,17 +2,21 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Icon } from 'antd'
 
+import axios from 'axios'
+
 class Header extends Component {
-    componentWillMount(){
-        var token = $.cookie('token');
-        var mytoken = JSON.parse(token);
-        if(mytoken == null){
-            window.location.href='/#/'
+    componentWillMount() {
+        try {
+            var token = $.cookie('token');
+            var mytoken = JSON.parse(token);
+        }
+        catch (error) {
+            window.location.href = '/#/'
         }
     }
-    handleLogout(){
+    handleLogout() {
         $.cookie('token', null);
-        window.location.href='/#/'
+        window.location.href = '/#/'
     }
     render() {
         return (
