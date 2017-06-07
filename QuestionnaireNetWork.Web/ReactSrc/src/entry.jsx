@@ -87,7 +87,7 @@ class entry extends Component {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-xs-1">
-                                        <div id="fh5co-logo"><a href="index.html">云翳<span>.</span></a></div>
+                                        <div id="fh5co-logo"><a href="/#/">云翳<span>.</span></a></div>
                                     </div>
                                     <div className="col-xs-11 menu-1">
                                         {isLogin}

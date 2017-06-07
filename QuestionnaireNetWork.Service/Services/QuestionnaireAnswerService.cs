@@ -154,7 +154,7 @@ namespace QuestionnaireNetWork.Service.Services
         {
             var option = _db.Option.SingleOrDefault(o => o.OptionId == optionId);
             var choice = option.ChoiceQuestion;
-            double percent = 0, total = 0, selected = 0;
+            double total = 0, selected = 0;
             selected = GetOptionSelected(option.OptionId);
             //多选
             if (choice.Type)
@@ -165,8 +165,7 @@ namespace QuestionnaireNetWork.Service.Services
             {
                 total = choice.ChoiceAnswerOptions.Count;
             }
-            percent = (selected / total) * 100;
-            return (int)percent;
+            return total == 0 ? 0 : (int)((selected / total) * 100);
         }
 
         /// <summary>

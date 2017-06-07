@@ -60,14 +60,14 @@ namespace QuestionnaireNetWork.Web.Controllers
             return questsVM;
         }
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public List<QuestionnaireViewModel> Search(string search)
         {
             List<Questionnaire> quests = _questService.Search(search);
             var questsVM = new List<QuestionnaireViewModel>();
             quests.ForEach(q => questsVM.Add(DataQuestToVM(q)));
             return questsVM;
-        } 
+        }
 
         [System.Web.Mvc.HttpGet]
         public List<QuestionnaireViewModel> GetAllQuest()
@@ -77,7 +77,7 @@ namespace QuestionnaireNetWork.Web.Controllers
             quests.ForEach(q => questsVM.Add(DataQuestToVM(q)));
             return questsVM;
         }
-        
+
         [System.Web.Mvc.HttpGet]
         public QuestionnaireViewModel GetQuest(int id)
         {
@@ -98,7 +98,7 @@ namespace QuestionnaireNetWork.Web.Controllers
         [System.Web.Mvc.HttpPost]
         public bool CreateQuest([FromBody]QuestionnaireViewModel quest)
         {
-            var result = _questService.CreateQuest(quest.QuestTitle,quest.MaxQuestNum);
+            var result = _questService.CreateQuest(quest.QuestTitle, quest.MaxQuestNum);
             return result;
         }
 
@@ -120,14 +120,19 @@ namespace QuestionnaireNetWork.Web.Controllers
 
         private static string GetClientIP()
         {
-            if (null == HttpContext.Current.Request.ServerVariables["HTTP_VIA"])
+            HttpRequest request = HttpContext.Current.Request;
+            string userIP = request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (string.IsNullOrEmpty(userIP))
             {
-                return HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+                userIP = request.ServerVariables["REMOTE_ADDR"];
             }
-            else
+            if (string.IsNullOrEmpty(userIP))
             {
-                return HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+                userIP = request.UserHostAddress;
             }
+            if (userIP == null || userIP == "")
+                userIP = request.UserHostAddress;
+            return userIP;
         }
 
 
@@ -139,6 +144,7 @@ namespace QuestionnaireNetWork.Web.Controllers
                 QuestTitle = quest.Title,
                 MaxQuestNum = quest.MaxQuestNum,
                 CurrentQuestNum = quest.CurrentQuestNum,
+                UserNum = quest.Answer.Count,
                 CreateTime = quest.CreateTime.ToString("yyyy/MM/dd"),
                 ChoiceQuestions = new List<ChoiceQuestionViewModel>(),
                 Completions = new List<CompletionViewModel>()

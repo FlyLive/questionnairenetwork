@@ -15,6 +15,7 @@ class CreateCompletion extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
+        var _this = this;
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 var questId = this.state.questId;
@@ -29,6 +30,7 @@ class CreateCompletion extends Component {
                     .then(function (response) {
                         if (response.data) {
                             message.success("创建成功");
+                            _this.props.form.resetFields();
                             return true;
                         }
                         message.error("创建失败,可能题数达到上限")

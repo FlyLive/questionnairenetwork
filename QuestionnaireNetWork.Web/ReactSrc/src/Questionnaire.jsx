@@ -45,7 +45,7 @@ class Questionnaire extends Component {
                 <header>
                     <div className="web-title"><a href="/#/">云翳</a></div>
                     <div><h2 className="title-content">{this.state.quest.QuestTitle}</h2></div>
-                    <div><p className="quest-info">参与者：{this.state.quest.CurrentQuestNum}&emsp;创建时间：{this.state.quest.CreateTime}</p></div>
+                    <div><p className="quest-info">题目数量：{this.state.quest.CurrentQuestNum}&emsp;参与者：{this.state.quest.UserNum}&emsp;创建时间：{this.state.quest.CreateTime}</p></div>
                 </header>
                 <QuestContent questId={this.state.quest.QId} />
                 <Footer />

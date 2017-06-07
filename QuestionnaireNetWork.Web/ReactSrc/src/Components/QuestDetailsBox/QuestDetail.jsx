@@ -212,7 +212,7 @@ class QuestDetail extends Component {
                         onCancel={this.handleCancleModify.bind(this)}>
                         <Form>
                             <FormItem {...formItemLayout} label="正在修改问卷:" >
-                                <label> {this.state.focusQuestTitle}</label>
+                                <h2> {this.state.focusQuestTitle}</h2>
                             </FormItem>
                             <FormItem label="问卷名称" {...formItemLayout} wrapperCol={{ span: 10 }}>
                                 {getFieldDecorator('title', {

@@ -15,6 +15,7 @@ class QuestContent extends Component {
             questId: this.props.questId,
             choice: [],
             completion: [],
+            IsEmpty: true
         }
     }
     componentwillMount() {
@@ -29,9 +30,14 @@ class QuestContent extends Component {
             data: { id: questId },
             success: function (data) {
                 _this.setState({
+                    IsEmpty: false,
                     choice: data.ChoiceQuestions,
                     completion: data.Completions
                 })
+                if (data.ChoiceQuestions.length == 0 && data.Completions.length == 0)
+                    _this.setState({
+                        IsEmpty: true,
+                    });
             }, error: function () {
             }
         })
@@ -65,7 +71,6 @@ class QuestContent extends Component {
                     var content = values["completion-" + completion.CompletionId];
                     completion.Answer = content
                 }
-                alert(questId);
                 axios.post('http://localhost:60842/api/Questionnaire/SubmitAnswer',
                     { QId: questId, ChoiceQuestions: choices, Completions: completions })
                     .then(function (response) {
@@ -174,7 +179,7 @@ class QuestContent extends Component {
                         {completionList}
                     </ul>
                     <FormItem wrapperCol={{ span: 12, offset: 6 }}>
-                        <Button className="button" type="primary" htmlType="submit">提交</Button>
+                        <Button className="button" type="primary" htmlType="submit" disabled={this.state.IsEmpty}>提交</Button>
                         <Button className="button" onClick={this.handleReset.bind(this)}>清空</Button>
                     </FormItem>
                 </Form>
