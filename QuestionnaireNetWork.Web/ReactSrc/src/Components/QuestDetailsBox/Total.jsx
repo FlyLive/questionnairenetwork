@@ -108,7 +108,7 @@ class Total extends Component {
             <div className="Total router">
                 <Table rowKey="QId" columns={columns} dataSource={this.state.data} onRowClick={this.onSelected.bind(this)} bordered title={() => '查看问卷结果'} />
                 <br />
-                <Tabs defaultActiveKey="3">
+                <Tabs defaultActiveKey="1">
                     <TabPane tab={<span><Icon type="pie-chart" />图表类(选择题)</span>} key="1">
                         <ChoiceAnswer questId={this.state.selected} />
                     </TabPane>

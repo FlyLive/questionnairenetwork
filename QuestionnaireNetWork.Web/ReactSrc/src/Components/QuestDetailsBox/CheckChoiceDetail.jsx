@@ -79,6 +79,7 @@ class CheckChoiceDetail extends Component {
 
     handleSubmitCreateOptions(e) {
         e.preventDefault();
+        var _this = this;
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 var choiceId = this.state.selectedChoice.ChoiceId;
@@ -110,6 +111,7 @@ class CheckChoiceDetail extends Component {
                     success: function (data) {
                         if (data) {
                             message.success("添加成功");
+                            _this.props.form.resetFields();
                             return true;
                         }
                         message.error("添加失败")
@@ -128,7 +130,7 @@ class CheckChoiceDetail extends Component {
     }
 
     onModifyChoice(choice) {
-        this.setState({ selectedChoice: choice, selectedChoiceTitle: choice.ChoiceTitle, modifyChoiceModal: true })
+        this.setState({ selectedChoice: choice,choiceTypeInput:choice.Type,choiceTitleInput:choice.ChoiceTitle, selectedChoiceTitle: choice.ChoiceTitle, modifyChoiceModal: true })
     }
 
     switchType(e) {
@@ -256,7 +258,7 @@ class CheckChoiceDetail extends Component {
                             <Input placeholder="问题内容" onChange={this.onChangeChoiceTitle.bind(this)} value={this.state.choiceTitleInput} />
                         </FormItem>
                         <FormItem label="多选题" {...formItemLayout}>
-                            <Switch onChange={this.switchType.bind(this)} checked={this.state.selectedChoice.Type} />
+                            <Switch onChange={this.switchType.bind(this)} checked={this.state.choiceTypeInput} />
                         </FormItem>
                         <FormItem {...formItemLayoutWithOutLabel}>
                             <Button type="primary" onClick={this.handleSubmitModifyChoice.bind(this)} size="large">提交</Button>

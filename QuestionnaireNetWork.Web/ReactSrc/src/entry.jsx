@@ -93,7 +93,6 @@ class entry extends Component {
                                         {isLogin}
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </nav>

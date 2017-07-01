@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "69e4c486459b36eaddbe"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "4eedbccbe680ee76432e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -5211,6 +5211,260 @@ if(true) {
 
 /***/ }),
 
+/***/ "./node_modules/antd/lib/notification/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _rcNotification = __webpack_require__("./node_modules/rc-notification/es/index.js");
+
+var _rcNotification2 = _interopRequireDefault(_rcNotification);
+
+var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
+
+var _icon2 = _interopRequireDefault(_icon);
+
+var _objectAssign = __webpack_require__("./node_modules/object-assign/index.js");
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var notificationInstance = {};
+var defaultDuration = 4.5;
+var defaultTop = 24;
+var defaultBottom = 24;
+var defaultPlacement = 'topRight';
+var defaultGetContainer = void 0;
+function getPlacementStyle(placement) {
+    var style = void 0;
+    switch (placement) {
+        case 'topLeft':
+            style = {
+                left: 0,
+                top: defaultTop,
+                bottom: 'auto'
+            };
+            break;
+        case 'bottomLeft':
+            style = {
+                left: 0,
+                top: 'auto',
+                bottom: defaultBottom
+            };
+            break;
+        case 'bottomRight':
+            style = {
+                right: 0,
+                top: 'auto',
+                bottom: defaultBottom
+            };
+            break;
+        default:
+            style = {
+                right: 0,
+                top: defaultTop,
+                bottom: 'auto'
+            };
+    }
+    return style;
+}
+function getNotificationInstance(prefixCls) {
+    if (notificationInstance[defaultPlacement]) {
+        return notificationInstance[defaultPlacement];
+    }
+    notificationInstance[defaultPlacement] = _rcNotification2["default"].newInstance({
+        prefixCls: prefixCls,
+        className: prefixCls + '-' + defaultPlacement,
+        style: getPlacementStyle(defaultPlacement),
+        getContainer: defaultGetContainer
+    });
+    return notificationInstance[defaultPlacement];
+}
+function notice(args) {
+    var outerPrefixCls = args.prefixCls || 'ant-notification';
+    var prefixCls = outerPrefixCls + '-notice';
+    if (args.placement !== undefined) {
+        defaultPlacement = args.placement;
+    }
+    var duration = void 0;
+    if (args.duration === undefined) {
+        duration = defaultDuration;
+    } else {
+        duration = args.duration;
+    }
+    var iconType = '';
+    switch (args.type) {
+        case 'success':
+            iconType = 'check-circle-o';
+            break;
+        case 'info':
+            iconType = 'info-circle-o';
+            break;
+        case 'error':
+            iconType = 'cross-circle-o';
+            break;
+        case 'warning':
+            iconType = 'exclamation-circle-o';
+            break;
+        default:
+            iconType = 'info-circle';
+    }
+    var iconNode = void 0;
+    if (args.icon) {
+        iconNode = _react2["default"].createElement(
+            'span',
+            { className: prefixCls + '-icon' },
+            args.icon
+        );
+    } else if (args.type) {
+        iconNode = _react2["default"].createElement(_icon2["default"], { className: prefixCls + '-icon ' + prefixCls + '-icon-' + args.type, type: iconType });
+    }
+    var autoMarginTag = !args.description && iconNode ? _react2["default"].createElement('span', { className: prefixCls + '-message-single-line-auto-margin' }) : null;
+    var style = args.style,
+        className = args.className;
+
+    getNotificationInstance(outerPrefixCls).notice({
+        content: _react2["default"].createElement(
+            'div',
+            { className: iconNode ? prefixCls + '-with-icon' : '' },
+            iconNode,
+            _react2["default"].createElement(
+                'div',
+                { className: prefixCls + '-message' },
+                autoMarginTag,
+                args.message
+            ),
+            _react2["default"].createElement(
+                'div',
+                { className: prefixCls + '-description' },
+                args.description
+            ),
+            args.btn ? _react2["default"].createElement(
+                'span',
+                { className: prefixCls + '-btn' },
+                args.btn
+            ) : null
+        ),
+        duration: duration,
+        closable: true,
+        onClose: args.onClose,
+        key: args.key,
+        style: (0, _objectAssign2["default"])({}, style),
+        className: className
+    });
+}
+var api = {
+    open: function open(args) {
+        notice(args);
+    },
+    close: function close(key) {
+        if (notificationInstance[defaultPlacement]) {
+            notificationInstance[defaultPlacement].removeNotice(key);
+        }
+    },
+    config: function config(options) {
+        var duration = options.duration,
+            placement = options.placement,
+            bottom = options.bottom,
+            top = options.top,
+            getContainer = options.getContainer;
+
+        if (placement !== undefined) {
+            defaultPlacement = placement;
+        }
+        if (bottom !== undefined) {
+            defaultBottom = bottom;
+        }
+        if (top !== undefined) {
+            defaultTop = top;
+        }
+        if (getContainer !== undefined) {
+            defaultGetContainer = getContainer;
+        }
+        // delete notificationInstance
+        if (placement !== undefined || bottom !== undefined || top !== undefined) {
+            var notify = notificationInstance[defaultPlacement];
+            if (notify) {
+                notify.destroy();
+            }
+            notificationInstance[defaultPlacement] = null;
+        }
+        if (duration !== undefined) {
+            defaultDuration = duration;
+        }
+    },
+    destroy: function destroy() {
+        Object.keys(notificationInstance).forEach(function (key) {
+            notificationInstance[key].destroy();
+            delete notificationInstance[key];
+        });
+    }
+};
+['success', 'info', 'warning', 'error'].forEach(function (type) {
+    api[type] = function (args) {
+        return api.open((0, _objectAssign2["default"])({}, args, { type: type }));
+    };
+});
+api.warn = api.warning;
+exports["default"] = api;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./node_modules/antd/lib/notification/style/css.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__("./node_modules/antd/lib/style/index.css");
+
+__webpack_require__("./node_modules/antd/lib/notification/style/index.css");
+
+/***/ }),
+
+/***/ "./node_modules/antd/lib/notification/style/index.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/antd/lib/notification/style/index.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/style-loader/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(true) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("./node_modules/css-loader/index.js!./node_modules/antd/lib/notification/style/index.css", function() {
+			var newContent = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/antd/lib/notification/style/index.css");
+			if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
 /***/ "./node_modules/antd/lib/pagination/MiniSelect.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9153,6 +9407,314 @@ if(true) {
 	if(!content.locals) {
 		module.hot.accept("./node_modules/css-loader/index.js!./node_modules/antd/lib/tabs/style/index.css", function() {
 			var newContent = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/antd/lib/tabs/style/index.css");
+			if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ "./node_modules/antd/lib/tag/CheckableTag.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = undefined;
+
+var _extends2 = __webpack_require__("./node_modules/babel-runtime/helpers/extends.js");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__("./node_modules/babel-runtime/helpers/defineProperty.js");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _classCallCheck2 = __webpack_require__("./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__("./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__("./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _classnames = __webpack_require__("./node_modules/classnames/index.js");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
+
+var CheckableTag = function (_React$Component) {
+    (0, _inherits3["default"])(CheckableTag, _React$Component);
+
+    function CheckableTag() {
+        (0, _classCallCheck3["default"])(this, CheckableTag);
+
+        var _this = (0, _possibleConstructorReturn3["default"])(this, _React$Component.apply(this, arguments));
+
+        _this.handleClick = function () {
+            var _this$props = _this.props,
+                checked = _this$props.checked,
+                onChange = _this$props.onChange;
+
+            if (onChange) {
+                onChange(!checked);
+            }
+        };
+        return _this;
+    }
+
+    CheckableTag.prototype.render = function render() {
+        var _classNames;
+
+        var _a = this.props,
+            _a$prefixCls = _a.prefixCls,
+            prefixCls = _a$prefixCls === undefined ? 'ant-tag' : _a$prefixCls,
+            className = _a.className,
+            checked = _a.checked,
+            restProps = __rest(_a, ["prefixCls", "className", "checked"]);
+        var cls = (0, _classnames2["default"])(prefixCls, (_classNames = {}, (0, _defineProperty3["default"])(_classNames, prefixCls + '-checkable', true), (0, _defineProperty3["default"])(_classNames, prefixCls + '-checkable-checked', checked), _classNames), className);
+        delete restProps.onChange; // TypeScript cannot check delete now.
+        return _react2["default"].createElement('div', (0, _extends3["default"])({}, restProps, { className: cls, onClick: this.handleClick }));
+    };
+
+    return CheckableTag;
+}(_react2["default"].Component);
+
+exports["default"] = CheckableTag;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./node_modules/antd/lib/tag/index.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = undefined;
+
+var _extends2 = __webpack_require__("./node_modules/babel-runtime/helpers/extends.js");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _defineProperty2 = __webpack_require__("./node_modules/babel-runtime/helpers/defineProperty.js");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _classCallCheck2 = __webpack_require__("./node_modules/babel-runtime/helpers/classCallCheck.js");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _possibleConstructorReturn2 = __webpack_require__("./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__("./node_modules/babel-runtime/helpers/inherits.js");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _rcAnimate = __webpack_require__("./node_modules/rc-animate/lib/index.js");
+
+var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
+
+var _classnames = __webpack_require__("./node_modules/classnames/index.js");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _omit = __webpack_require__("./node_modules/omit.js/index.js");
+
+var _omit2 = _interopRequireDefault(_omit);
+
+var _objectAssign = __webpack_require__("./node_modules/object-assign/index.js");
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
+
+var _icon2 = _interopRequireDefault(_icon);
+
+var _CheckableTag = __webpack_require__("./node_modules/antd/lib/tag/CheckableTag.js");
+
+var _CheckableTag2 = _interopRequireDefault(_CheckableTag);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var __rest = undefined && undefined.__rest || function (s, e) {
+    var t = {};
+    for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+    }if (s != null && typeof Object.getOwnPropertySymbols === "function") for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+        if (e.indexOf(p[i]) < 0) t[p[i]] = s[p[i]];
+    }return t;
+};
+
+var Tag = function (_React$Component) {
+    (0, _inherits3["default"])(Tag, _React$Component);
+
+    function Tag(props) {
+        (0, _classCallCheck3["default"])(this, Tag);
+
+        var _this = (0, _possibleConstructorReturn3["default"])(this, _React$Component.call(this, props));
+
+        _this.close = function (e) {
+            var onClose = _this.props.onClose;
+            if (onClose) {
+                onClose(e);
+            }
+            if (e.defaultPrevented) {
+                return;
+            }
+            var dom = _reactDom2["default"].findDOMNode(_this);
+            dom.style.width = dom.getBoundingClientRect().width + 'px';
+            // It's Magic Code, don't know why
+            dom.style.width = dom.getBoundingClientRect().width + 'px';
+            _this.setState({
+                closing: true
+            });
+        };
+        _this.animationEnd = function (_, existed) {
+            if (!existed && !_this.state.closed) {
+                _this.setState({
+                    closed: true,
+                    closing: false
+                });
+                var afterClose = _this.props.afterClose;
+                if (afterClose) {
+                    afterClose();
+                }
+            }
+        };
+        _this.state = {
+            closing: false,
+            closed: false
+        };
+        return _this;
+    }
+
+    Tag.prototype.isPresetColor = function isPresetColor(color) {
+        return (/^(pink|red|yellow|orange|cyan|green|blue|purple)(-inverse)?$/.test(color)
+        );
+    };
+
+    Tag.prototype.render = function render() {
+        var _classNames;
+
+        var _a = this.props,
+            prefixCls = _a.prefixCls,
+            closable = _a.closable,
+            color = _a.color,
+            className = _a.className,
+            children = _a.children,
+            style = _a.style,
+            otherProps = __rest(_a, ["prefixCls", "closable", "color", "className", "children", "style"]);
+        var closeIcon = closable ? _react2["default"].createElement(_icon2["default"], { type: 'cross', onClick: this.close }) : '';
+        var isPresetColor = this.isPresetColor(color);
+        var classString = (0, _classnames2["default"])(prefixCls, (_classNames = {}, (0, _defineProperty3["default"])(_classNames, prefixCls + '-' + color, isPresetColor), (0, _defineProperty3["default"])(_classNames, prefixCls + '-has-color', color && !isPresetColor), (0, _defineProperty3["default"])(_classNames, prefixCls + '-close', this.state.closing), _classNames), className);
+        // fix https://fb.me/react-unknown-prop
+        var divProps = (0, _omit2["default"])(otherProps, ['onClose', 'afterClose']);
+        var tagStyle = (0, _objectAssign2["default"])({
+            backgroundColor: color && !isPresetColor ? color : null
+        }, style);
+        var tag = this.state.closed ? null : _react2["default"].createElement(
+            'div',
+            (0, _extends3["default"])({ 'data-show': !this.state.closing }, divProps, { className: classString, style: tagStyle }),
+            _react2["default"].createElement(
+                'span',
+                { className: prefixCls + '-text' },
+                children
+            ),
+            closeIcon
+        );
+        return _react2["default"].createElement(
+            _rcAnimate2["default"],
+            { component: '', showProp: 'data-show', transitionName: prefixCls + '-zoom', transitionAppear: true, onEnd: this.animationEnd },
+            tag
+        );
+    };
+
+    return Tag;
+}(_react2["default"].Component);
+
+exports["default"] = Tag;
+
+Tag.CheckableTag = _CheckableTag2["default"];
+Tag.defaultProps = {
+    prefixCls: 'ant-tag',
+    closable: false
+};
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./node_modules/antd/lib/tag/style/css.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+__webpack_require__("./node_modules/antd/lib/style/index.css");
+
+__webpack_require__("./node_modules/antd/lib/tag/style/index.css");
+
+/***/ }),
+
+/***/ "./node_modules/antd/lib/tag/style/index.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/antd/lib/tag/style/index.css");
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__("./node_modules/style-loader/addStyles.js")(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(true) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("./node_modules/css-loader/index.js!./node_modules/antd/lib/tag/style/index.css", function() {
+			var newContent = __webpack_require__("./node_modules/css-loader/index.js!./node_modules/antd/lib/tag/style/index.css");
 			if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
 			update(newContent);
 		});
@@ -18041,6 +18603,21 @@ exports.push([module.i, "@font-face {\n  font-family: \"Helvetica Neue For Numbe
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/antd/lib/notification/style/index.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "@font-face {\n  font-family: \"Helvetica Neue For Number\";\n  src: local(\"Helvetica Neue\");\n  unicode-range: U+30-39;\n}\n.ant-notification {\n  position: fixed;\n  z-index: 1010;\n  width: 335px;\n  margin-right: 24px;\n}\n.ant-notification-topLeft,\n.ant-notification-bottomLeft {\n  margin-left: 24px;\n  margin-right: 0;\n}\n.ant-notification-topLeft .ant-notification-fade-enter.ant-notification-fade-enter-active,\n.ant-notification-bottomLeft .ant-notification-fade-enter.ant-notification-fade-enter-active,\n.ant-notification-topLeft .ant-notification-fade-appear.ant-notification-fade-appear-active,\n.ant-notification-bottomLeft .ant-notification-fade-appear.ant-notification-fade-appear-active {\n  -webkit-animation-name: NotificationLeftFadeIn;\n          animation-name: NotificationLeftFadeIn;\n}\n.ant-notification-notice {\n  padding: 16px;\n  border-radius: 4px;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);\n  background: #fff;\n  line-height: 1.5;\n  position: relative;\n  margin-bottom: 10px;\n  overflow: hidden;\n}\n.ant-notification-notice-message {\n  font-size: 14px;\n  color: rgba(0, 0, 0, 0.85);\n  margin-bottom: 4px;\n  line-height: 20px;\n  display: inline-block;\n}\n.ant-notification-notice-message-single-line-auto-margin {\n  width: calc(335px - 16px * 2 - 24px - 48px - 100%);\n  background-color: transparent;\n  pointer-events: none;\n  display: block;\n  max-width: 4px;\n}\n.ant-notification-notice-message-single-line-auto-margin:before {\n  content: '';\n  display: block;\n  padding-bottom: 100%;\n}\n.ant-notification-notice-description {\n  font-size: 12px;\n}\n.ant-notification-notice-closable .ant-notification-notice-message {\n  padding-right: 24px;\n}\n.ant-notification-notice-with-icon .ant-notification-notice-message {\n  font-size: 14px;\n  margin-left: 48px;\n  margin-bottom: 4px;\n}\n.ant-notification-notice-with-icon .ant-notification-notice-description {\n  margin-left: 48px;\n  font-size: 12px;\n}\n.ant-notification-notice-icon {\n  position: absolute;\n  font-size: 32px;\n  line-height: 32px;\n}\n.ant-notification-notice-icon-success {\n  color: #00a854;\n}\n.ant-notification-notice-icon-info {\n  color: #108ee9;\n}\n.ant-notification-notice-icon-warning {\n  color: #ffbf00;\n}\n.ant-notification-notice-icon-error {\n  color: #f04134;\n}\n.ant-notification-notice-close-x:after {\n  font-size: 12px;\n  content: \"\\E633\";\n  font-family: \"anticon\";\n  cursor: pointer;\n}\n.ant-notification-notice-close {\n  position: absolute;\n  right: 16px;\n  top: 10px;\n  color: rgba(0, 0, 0, 0.43);\n  outline: none;\n  text-decoration: none;\n}\n.ant-notification-notice-close:hover {\n  color: #404040;\n}\n.ant-notification-notice-btn {\n  float: right;\n  margin-top: 16px;\n}\n.ant-notification .notification-fade-effect {\n  -webkit-animation-duration: 0.24s;\n          animation-duration: 0.24s;\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n  -webkit-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);\n          animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);\n}\n.ant-notification-fade-enter,\n.ant-notification-fade-appear {\n  opacity: 0;\n  -webkit-animation-duration: 0.24s;\n          animation-duration: 0.24s;\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n  -webkit-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);\n          animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);\n  -webkit-animation-play-state: paused;\n          animation-play-state: paused;\n}\n.ant-notification-fade-leave {\n  -webkit-animation-duration: 0.24s;\n          animation-duration: 0.24s;\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n  -webkit-animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);\n          animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);\n  -webkit-animation-duration: 0.2s;\n          animation-duration: 0.2s;\n  -webkit-animation-play-state: paused;\n          animation-play-state: paused;\n}\n.ant-notification-fade-enter.ant-notification-fade-enter-active,\n.ant-notification-fade-appear.ant-notification-fade-appear-active {\n  -webkit-animation-name: NotificationFadeIn;\n          animation-name: NotificationFadeIn;\n  -webkit-animation-play-state: running;\n          animation-play-state: running;\n}\n.ant-notification-fade-leave.ant-notification-fade-leave-active {\n  -webkit-animation-name: NotificationFadeOut;\n          animation-name: NotificationFadeOut;\n  -webkit-animation-play-state: running;\n          animation-play-state: running;\n}\n@-webkit-keyframes NotificationFadeIn {\n  0% {\n    opacity: 0;\n    left: 335px;\n  }\n  100% {\n    left: 0;\n    opacity: 1;\n  }\n}\n@keyframes NotificationFadeIn {\n  0% {\n    opacity: 0;\n    left: 335px;\n  }\n  100% {\n    left: 0;\n    opacity: 1;\n  }\n}\n@-webkit-keyframes NotificationLeftFadeIn {\n  0% {\n    opacity: 0;\n    right: 335px;\n  }\n  100% {\n    right: 0;\n    opacity: 1;\n  }\n}\n@keyframes NotificationLeftFadeIn {\n  0% {\n    opacity: 0;\n    right: 335px;\n  }\n  100% {\n    right: 0;\n    opacity: 1;\n  }\n}\n@-webkit-keyframes NotificationFadeOut {\n  0% {\n    opacity: 1;\n    margin-bottom: 10px;\n    padding-top: 16px;\n    padding-bottom: 16px;\n    max-height: 150px;\n  }\n  100% {\n    opacity: 0;\n    margin-bottom: 0;\n    padding-top: 0;\n    padding-bottom: 0;\n    max-height: 0;\n  }\n}\n@keyframes NotificationFadeOut {\n  0% {\n    opacity: 1;\n    margin-bottom: 10px;\n    padding-top: 16px;\n    padding-bottom: 16px;\n    max-height: 150px;\n  }\n  100% {\n    opacity: 0;\n    margin-bottom: 0;\n    padding-top: 0;\n    padding-bottom: 0;\n    max-height: 0;\n  }\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/antd/lib/pagination/style/index.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18191,6 +18768,21 @@ exports.push([module.i, "@font-face {\n  font-family: \"Helvetica Neue For Numbe
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./node_modules/antd/lib/tag/style/index.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "@font-face {\n  font-family: \"Helvetica Neue For Number\";\n  src: local(\"Helvetica Neue\");\n  unicode-range: U+30-39;\n}\n.ant-tag {\n  display: inline-block;\n  line-height: 20px;\n  height: 22px;\n  padding: 0 8px;\n  border-radius: 4px;\n  border: 1px solid #e9e9e9;\n  background: #f7f7f7;\n  font-size: 12px;\n  transition: all 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);\n  opacity: 1;\n  margin-right: 8px;\n  cursor: pointer;\n  white-space: nowrap;\n}\n.ant-tag:hover {\n  opacity: 0.85;\n}\n.ant-tag,\n.ant-tag a,\n.ant-tag a:hover {\n  color: rgba(0, 0, 0, 0.65);\n}\n.ant-tag-text a:first-child:last-child {\n  display: inline-block;\n  margin: 0 -8px;\n  padding: 0 8px;\n}\n.ant-tag .anticon-cross {\n  display: inline-block;\n  font-size: 12px;\n  font-size: 10px \\9;\n  -webkit-transform: scale(0.83333333) rotate(0deg);\n      -ms-transform: scale(0.83333333) rotate(0deg);\n          transform: scale(0.83333333) rotate(0deg);\n  /* IE6-IE8 */\n  -ms-filter: \"progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1, M12=0, M21=0, M22=1)\";\n  zoom: 1;\n  cursor: pointer;\n  font-weight: bold;\n  margin-left: 3px;\n  transition: all 0.3s ease;\n  opacity: 0.66;\n}\n:root .ant-tag .anticon-cross {\n  -webkit-filter: none;\n          filter: none;\n}\n:root .ant-tag .anticon-cross {\n  font-size: 12px;\n}\n.ant-tag .anticon-cross:hover {\n  opacity: 1;\n}\n.ant-tag-has-color {\n  border-color: transparent;\n}\n.ant-tag-has-color,\n.ant-tag-has-color a,\n.ant-tag-has-color a:hover,\n.ant-tag-has-color .anticon-cross,\n.ant-tag-has-color .anticon-cross:hover {\n  color: #fff;\n}\n.ant-tag-checkable {\n  background-color: transparent;\n  border-color: transparent;\n}\n.ant-tag-checkable:hover,\n.ant-tag-checkable:active,\n.ant-tag-checkable-checked {\n  color: #fff;\n}\n.ant-tag-checkable:hover {\n  background-color: #49a9ee;\n}\n.ant-tag-checkable-checked {\n  background-color: #108ee9;\n}\n.ant-tag-checkable:active {\n  background-color: #0e77ca;\n}\n.ant-tag-close {\n  width: 0 !important;\n  padding: 0;\n  margin: 0;\n}\n.ant-tag-zoom-enter,\n.ant-tag-zoom-appear {\n  -webkit-animation: antFadeIn 0.2s cubic-bezier(0.78, 0.14, 0.15, 0.86);\n          animation: antFadeIn 0.2s cubic-bezier(0.78, 0.14, 0.15, 0.86);\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n}\n.ant-tag-zoom-leave {\n  -webkit-animation: antZoomOut 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);\n          animation: antZoomOut 0.3s cubic-bezier(0.78, 0.14, 0.15, 0.86);\n  -webkit-animation-fill-mode: both;\n          animation-fill-mode: both;\n}\n.ant-tag-pink {\n  color: #f5317f;\n  background: #fdd8e7;\n  border-color: #fdd8e7;\n}\n.ant-tag-pink-inverse {\n  background: #f5317f;\n  border-color: #f5317f;\n  color: #fff;\n}\n.ant-tag-red {\n  color: #f04134;\n  background: #fcdbd9;\n  border-color: #fcdbd9;\n}\n.ant-tag-red-inverse {\n  background: #f04134;\n  border-color: #f04134;\n  color: #fff;\n}\n.ant-tag-orange {\n  color: #f56a00;\n  background: #fde3cf;\n  border-color: #fde3cf;\n}\n.ant-tag-orange-inverse {\n  background: #f56a00;\n  border-color: #f56a00;\n  color: #fff;\n}\n.ant-tag-yellow {\n  color: #ffbf00;\n  background: #fff3cf;\n  border-color: #fff3cf;\n}\n.ant-tag-yellow-inverse {\n  background: #ffbf00;\n  border-color: #ffbf00;\n  color: #fff;\n}\n.ant-tag-cyan {\n  color: #00a2ae;\n  background: #cfedf0;\n  border-color: #cfedf0;\n}\n.ant-tag-cyan-inverse {\n  background: #00a2ae;\n  border-color: #00a2ae;\n  color: #fff;\n}\n.ant-tag-green {\n  color: #00a854;\n  background: #cfefdf;\n  border-color: #cfefdf;\n}\n.ant-tag-green-inverse {\n  background: #00a854;\n  border-color: #00a854;\n  color: #fff;\n}\n.ant-tag-blue {\n  color: #108ee9;\n  background: #d2eafb;\n  border-color: #d2eafb;\n}\n.ant-tag-blue-inverse {\n  background: #108ee9;\n  border-color: #108ee9;\n  color: #fff;\n}\n.ant-tag-purple {\n  color: #7265e6;\n  background: #e4e2fa;\n  border-color: #e4e2fa;\n}\n.ant-tag-purple-inverse {\n  background: #7265e6;\n  border-color: #7265e6;\n  color: #fff;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./node_modules/antd/lib/tooltip/style/index.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18206,21 +18798,6 @@ exports.push([module.i, "@font-face {\n  font-family: \"Helvetica Neue For Numbe
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./src/Css/Admin/AdminCenter.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/css-base.js")(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "", ""]);
-
-// exports
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/index.js!./src/Css/Admin/Index.css":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18229,7 +18806,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, ".admin-center>.container {\r\n    background-color: rgba(255, 255, 255, 0.8);\r\n    padding: 0 !important;\r\n}\r\n\r\n.admin-center>div>.router {\r\n    width: 80%;\r\n    margin: 5% auto 0 auto;\r\n}\r\n\r\n.admin-center>div>.router .ant-spin-nested-loading {\r\n    background-color: white;\r\n}\r\n\r\n.head {\r\n    min-height: 630px;\r\n}\r\n\r\nul li {\r\n    list-style: none;\r\n    color: white;\r\n}\r\n\r\n.navbar-header {\r\n    float: left;\r\n}\r\n\r\n.navbar-header a {\r\n    font-size: 25px;\r\n    padding-left: 20px;\r\n    font-family: \"Work Sans\", Arial, sans-serif;\r\n    color: white;\r\n}\r\n\r\n.menu {\r\n    background-color: #4ea5d6;\r\n}\r\n\r\n.menu ul {\r\n    text-align: right;\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\n\r\n.menu li {\r\n    display: inline-block;\r\n    padding: 10px;\r\n    cursor: pointer;\r\n}\r\n\r\n.menu li:hover {\r\n    background-color: #2d8abf;\r\n}\r\n\r\n.menu li a {\r\n    color: white;\r\n}\r\n\r\n.menu li a:checked {\r\n    text-decoration: none;\r\n}\r\n\r\n.custom-filter-dropdown {\r\n    padding: 8px;\r\n    border-radius: 6px;\r\n    background: #fff;\r\n    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);\r\n}\r\n\r\n.custom-filter-dropdown input {\r\n    width: 130px;\r\n    margin-right: 8px;\r\n}\r\n\r\n.highlight {\r\n    color: #f50;\r\n}", ""]);
+exports.push([module.i, ".admin-center>.container {\r\n    background-color: rgba(255, 255, 255, 0.8);\r\n    padding: 0 !important;\r\n}\r\n\r\n.admin-center>div>.router {\r\n    width: 80%;\r\n    margin: 5% auto 0 auto;\r\n}\r\n\r\n.admin-center>div>.router .ant-spin-nested-loading {\r\n    background-color: white;\r\n}\r\n\r\n.head {\r\n    min-height: 630px;\r\n}\r\n\r\n#main-menu ul li {\r\n    list-style: none;\r\n    color: white;\r\n}\r\n\r\n.user-answer-content ul {\r\n    margin-left: 20px;\r\n}\r\n\r\n.user-answer-content ul li {\r\n    list-style: square;\r\n}\r\n\r\n.navbar-header {\r\n    float: left;\r\n}\r\n\r\n.navbar-header a {\r\n    font-size: 25px;\r\n    padding-left: 20px;\r\n    font-family: \"Work Sans\", Arial, sans-serif;\r\n    color: white;\r\n}\r\n\r\n.menu {\r\n    background-color: #4ea5d6;\r\n}\r\n\r\n.menu ul {\r\n    text-align: right;\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\n\r\n.menu li {\r\n    display: inline-block;\r\n    padding: 10px;\r\n    cursor: pointer;\r\n}\r\n\r\n.menu li:hover {\r\n    background-color: #2d8abf;\r\n}\r\n\r\n.menu li a {\r\n    color: white;\r\n}\r\n\r\n.menu li a:checked {\r\n    text-decoration: none;\r\n}\r\n\r\n.custom-filter-dropdown {\r\n    padding: 8px;\r\n    border-radius: 6px;\r\n    background: #fff;\r\n    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);\r\n}\r\n\r\n.custom-filter-dropdown input {\r\n    width: 130px;\r\n    margin-right: 8px;\r\n}\r\n\r\n.highlight {\r\n    color: #f50;\r\n}", ""]);
 
 // exports
 
@@ -18319,7 +18896,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, ".quest header {\r\n    background-image: url(" + __webpack_require__("./src/Images/问卷.jpg") + ");\r\n    background-size: cover;\r\n    background-position: top center;\r\n    background-repeat: no-repeat;\r\n    height: 300px;\r\n}\r\n\r\n.choice-title {\r\n    color: black;\r\n}\r\n\r\n.quest-content,\r\n.quest header>div {\r\n    width: 80%;\r\n    margin: 0 auto;\r\n    padding: 20px 0px;\r\n}\r\n\r\n.quest-content ul {\r\n    width: 60%;\r\n    margin: 0 auto;\r\n}\r\n\r\n.checkbox-input {\r\n    padding-bottom: 10px;\r\n}\r\n\r\n.radio-input {\r\n    padding: 0px 80px 0px 0px;\r\n}\r\n\r\n.quest-content .choice-title {\r\n    margin: 30px 0px;\r\n}\r\n\r\n.quest .title-content {\r\n    font-size: 40px;\r\n    color: white;\r\n    text-align: center;\r\n}\r\n\r\n.quest-info {\r\n    text-align: right;\r\n}\r\n\r\n.quest-content {\r\n    min-height: 800px;\r\n    background-color: white;\r\n}\r\n\r\n.web-title {\r\n    font-size: 24px;\r\n    font-weight: 800;\r\n}\r\n\r\n.web-title a {\r\n    margin: 0px 20px;\r\n    color: white;\r\n}\r\n\r\n.web-title a:hover {\r\n    color: #108ee9;\r\n}\r\n\r\n.button {\r\n    margin-right: 60px;\r\n}\r\n\r\n.footer p {\r\n    margin: 0;\r\n    padding: 0;\r\n}", ""]);
+exports.push([module.i, ".quest header {\r\n    background-image: url(" + __webpack_require__("./src/Images/问卷.jpg") + ");\r\n    background-size: cover;\r\n    background-position: top center;\r\n    background-repeat: no-repeat;\r\n    height: 300px;\r\n}\r\n\r\n.choice-title {\r\n    color: black;\r\n}\r\n\r\n.quest-content,\r\n.quest header>div {\r\n    width: 80%;\r\n    margin: 0 auto;\r\n    padding: 20px 0px;\r\n}\r\n\r\n.quest-content ul {\r\n    width: 60%;\r\n    margin: 0 auto;\r\n}\r\n\r\n.checkbox-input {\r\n    padding-bottom: 10px;\r\n}\r\n\r\n.radio-input {\r\n    padding: 0px 80px 0px 0px;\r\n}\r\n\r\n.quest-content .choice-title {\r\n    margin: 30px 0px;\r\n}\r\n\r\n.quest .title-content {\r\n    font-size: 40px;\r\n    color: white;\r\n    text-align: center;\r\n}\r\n\r\n.quest-info {\r\n    text-align: right;\r\n    color: white;\r\n}\r\n\r\n.quest-content {\r\n    min-height: 800px;\r\n    background-color: white;\r\n}\r\n\r\n.web-title {\r\n    font-size: 24px;\r\n    font-weight: 800;\r\n}\r\n\r\n.web-title a {\r\n    margin: 0px 20px;\r\n    color: white;\r\n}\r\n\r\n.web-title a:hover {\r\n    color: #108ee9;\r\n}\r\n\r\n.button {\r\n    margin-right: 60px;\r\n}\r\n\r\n.footer p {\r\n    margin: 0;\r\n    padding: 0;\r\n}", ""]);
 
 // exports
 
@@ -78254,10 +78831,10 @@ var CreateChoice = function (_Component) {
     function CreateChoice(props) {
         _classCallCheck(this, CreateChoice);
 
-        var _this = _possibleConstructorReturn(this, (CreateChoice.__proto__ || Object.getPrototypeOf(CreateChoice)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (CreateChoice.__proto__ || Object.getPrototypeOf(CreateChoice)).call(this, props));
 
-        _this.state = { questId: props.questId };
-        return _this;
+        _this2.state = { questId: props.questId };
+        return _this2;
     }
 
     _createClass(CreateChoice, [{
@@ -78302,12 +78879,13 @@ var CreateChoice = function (_Component) {
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
-            var _this2 = this;
+            var _this3 = this;
 
             e.preventDefault();
+            var _this = this;
             this.props.form.validateFields(function (err, values) {
                 if (!err) {
-                    var questId = _this2.state.questId;
+                    var questId = _this3.state.questId;
                     if (questId == undefined) {
                         _message2.default.error("出错啦");
                         return false;
@@ -78316,7 +78894,7 @@ var CreateChoice = function (_Component) {
                     var type = values["switch"] == true ? true : false;
 
                     var options = new Array();
-                    var form = _this2.props.form;
+                    var form = _this3.props.form;
 
                     var keys = form.getFieldValue('keys');
                     if (keys.length <= 0) {
@@ -78337,6 +78915,7 @@ var CreateChoice = function (_Component) {
                         success: function success(data) {
                             if (data) {
                                 _message2.default.success("创建成功");
+                                _this.props.form.resetFields();
                                 return true;
                             }
                             _message2.default.error("创建失败,可能题数达到上限");
@@ -78351,7 +78930,7 @@ var CreateChoice = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this4 = this;
 
             var _props$form = this.props.form,
                 getFieldDecorator = _props$form.getFieldDecorator,
@@ -78382,7 +78961,7 @@ var CreateChoice = function (_Component) {
                     })(_react2.default.createElement(_input2.default, { placeholder: '\u9009\u9879\u5185\u5BB9', style: { width: '60%', marginRight: 8 } })),
                     _react2.default.createElement(_icon2.default, { className: 'dynamic-delete-button', type: 'minus-circle-o',
                         disabled: keys.length === 1, onClick: function onClick() {
-                            return _this3.remove(k);
+                            return _this4.remove(k);
                         } })
                 );
             });
@@ -78499,10 +79078,10 @@ var CreateCompletion = function (_Component) {
     function CreateCompletion(props) {
         _classCallCheck(this, CreateCompletion);
 
-        var _this = _possibleConstructorReturn(this, (CreateCompletion.__proto__ || Object.getPrototypeOf(CreateCompletion)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (CreateCompletion.__proto__ || Object.getPrototypeOf(CreateCompletion)).call(this, props));
 
-        _this.state = { questId: props.questId };
-        return _this;
+        _this2.state = { questId: props.questId };
+        return _this2;
     }
 
     _createClass(CreateCompletion, [{
@@ -78513,21 +79092,23 @@ var CreateCompletion = function (_Component) {
     }, {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
-            var _this2 = this;
+            var _this3 = this;
 
             e.preventDefault();
+            var _this = this;
             this.props.form.validateFields(function (err, values) {
                 if (!err) {
-                    var questId = _this2.state.questId;
+                    var questId = _this3.state.questId;
                     if (questId == undefined) {
                         _message2.default.error("出错啦");
                         return false;
                     }
                     var title = values["title"];
 
-                    _axios2.default.post('http://localhost:60842/api/Question/CreateCompletion', { QId: questId, Title: title }).then(function (data) {
-                        if (data) {
+                    _axios2.default.post('http://localhost:60842/api/Question/CreateCompletion', { QId: questId, Title: title }).then(function (response) {
+                        if (response.data) {
                             _message2.default.success("创建成功");
+                            _this.props.form.resetFields();
                             return true;
                         }
                         _message2.default.error("创建失败,可能题数达到上限");
@@ -78934,6 +79515,9 @@ var AdminInfo = function (_Component) {
             var _this = this;
             var token = _jquery2.default.cookie('token');
             var mytoken = JSON.parse(token);
+            if (mytoken == null) {
+                window.location.href = '/#/';
+            }
             _axios2.default.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
             _axios2.default.get('http://localhost:60842/api/Admin/GetAdminInfo').then(function (response) {
                 _this.setState({ account: { value: response.data.Account }, nick: { value: response.data.NickName } });
@@ -79535,6 +80119,7 @@ var CheckChoiceDetail = function (_Component) {
             var _this3 = this;
 
             e.preventDefault();
+            var _this = this;
             this.props.form.validateFields(function (err, values) {
                 if (!err) {
                     var choiceId = _this3.state.selectedChoice.ChoiceId;
@@ -79557,6 +80142,9 @@ var CheckChoiceDetail = function (_Component) {
 
                     var token = $.cookie('token');
                     var mytoken = JSON.parse(token);
+                    if (mytoken == null) {
+                        window.location.href = '/#/';
+                    }
                     $.ajax({
                         type: 'post',
                         url: 'http://localhost:60842/api/Question/CreateOption',
@@ -79566,6 +80154,7 @@ var CheckChoiceDetail = function (_Component) {
                         success: function success(data) {
                             if (data) {
                                 _message2.default.success("添加成功");
+                                _this.props.form.resetFields();
                                 return true;
                             }
                             _message2.default.error("添加失败");
@@ -79585,7 +80174,7 @@ var CheckChoiceDetail = function (_Component) {
     }, {
         key: 'onModifyChoice',
         value: function onModifyChoice(choice) {
-            this.setState({ selectedChoice: choice, selectedChoiceTitle: choice.ChoiceTitle, modifyChoiceModal: true });
+            this.setState({ selectedChoice: choice, choiceTypeInput: choice.Type, choiceTitleInput: choice.ChoiceTitle, selectedChoiceTitle: choice.ChoiceTitle, modifyChoiceModal: true });
         }
     }, {
         key: 'switchType',
@@ -79630,7 +80219,7 @@ var CheckChoiceDetail = function (_Component) {
         key: 'onDeleteChoice',
         value: function onDeleteChoice(choiceId) {
             var _this = this;
-            _axios2.default.post('http://localhost:60842/api/Question/DeleteChoiceQuestion', { "": choiceId }).then(function (response) {
+            _axios2.default.get('http://localhost:60842/api/Question/DeleteChoiceQuestion?id=' + choiceId).then(function (response) {
                 if (response.data) {
                     _message2.default.success('删除成功');
                     _this.update(_this.state.selectedChoice.QId);
@@ -79651,7 +80240,20 @@ var CheckChoiceDetail = function (_Component) {
                 getFieldDecorator = _props$form.getFieldDecorator,
                 getFieldValue = _props$form.getFieldValue;
 
-            var choiceColumns = [{ title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle' }, { title: '类型', dataIndex: 'Type', key: 'Type' }, {
+            var choiceColumns = [{ title: '题目', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle' }, {
+                title: '类型', dataIndex: 'Type', key: 'Type',
+                render: function render(text, record) {
+                    return record.Type ? _react2.default.createElement(
+                        'span',
+                        null,
+                        '\u591A\u9009'
+                    ) : _react2.default.createElement(
+                        'span',
+                        null,
+                        '\u5355\u9009'
+                    );
+                }
+            }, {
                 title: '操作', dataIndex: '',
                 render: function render(text, record) {
                     return _react2.default.createElement(
@@ -79756,7 +80358,7 @@ var CheckChoiceDetail = function (_Component) {
                         _react2.default.createElement(
                             FormItem,
                             _extends({ label: '\u591A\u9009\u9898' }, formItemLayout),
-                            _react2.default.createElement(_switch2.default, { onChange: this.switchType.bind(this), checked: this.state.selectedChoice.Type })
+                            _react2.default.createElement(_switch2.default, { onChange: this.switchType.bind(this), checked: this.state.choiceTypeInput })
                         ),
                         _react2.default.createElement(
                             FormItem,
@@ -79824,7 +80426,7 @@ exports.default = _form2.default.create()(CheckChoiceDetail);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -79871,8 +80473,8 @@ var ChoiceAnswer = function (_Component) {
         var _this2 = _possibleConstructorReturn(this, (ChoiceAnswer.__proto__ || Object.getPrototypeOf(ChoiceAnswer)).call(this, props));
 
         _this2.state = {
-            questId: props.questId,
-            data: data
+            questId: _this2.props.questId,
+            data: []
         };
         return _this2;
     }
@@ -79881,9 +80483,13 @@ var ChoiceAnswer = function (_Component) {
         key: 'componentWillMount',
         value: function componentWillMount() {
             this.update(this.props.questId);
-            var token = $.cookie('token');
-            var mytoken = JSON.parse(token);
-            _axios2.default.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var questId = nextProps.questId;
+            this.setState({ questId: questId });
+            this.update(questId);
         }
     }, {
         key: 'update',
@@ -79896,15 +80502,22 @@ var ChoiceAnswer = function (_Component) {
             });
         }
     }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
-        }
-    }, {
         key: 'render',
         value: function render() {
-            var choiceColumns = [{ title: '题目名', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle' }, { title: '选项数量', dataIndex: 'OptionCount', key: 'OptionCount' }];
+            var choiceColumns = [{ title: '题目名', dataIndex: 'ChoiceTitle', key: 'ChoiceTitle' }, {
+                title: '类型', dataIndex: 'Type', key: 'Type',
+                render: function render(text, record) {
+                    return record.Type ? _react2.default.createElement(
+                        'span',
+                        null,
+                        '\u591A\u9009'
+                    ) : _react2.default.createElement(
+                        'span',
+                        null,
+                        '\u5355\u9009'
+                    );
+                }
+            }, { title: '选项数量', dataIndex: 'OptionCount', key: 'OptionCount' }];
             return _react2.default.createElement(
                 'div',
                 null,
@@ -79927,7 +80540,6 @@ var ChoiceAnswer = function (_Component) {
 }(_react.Component);
 
 exports.default = ChoiceAnswer;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -79971,8 +80583,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = [{ CompletionId: 1, Title: 'John Brown', OptionNum: 20, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { CompletionId: 2, Title: 'Jim Green', OptionNum: 12, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { CompletionId: 3, Title: 'Joe Black', OptionNum: 22 }];
-
 var CompletionAnswer = function (_Component) {
     _inherits(CompletionAnswer, _Component);
 
@@ -79982,8 +80592,8 @@ var CompletionAnswer = function (_Component) {
         var _this2 = _possibleConstructorReturn(this, (CompletionAnswer.__proto__ || Object.getPrototypeOf(CompletionAnswer)).call(this, props));
 
         _this2.state = {
-            choiceId: props.choiceId,
-            data: data
+            questId: _this2.props.questId,
+            data: []
         };
         return _this2;
     }
@@ -79991,21 +80601,22 @@ var CompletionAnswer = function (_Component) {
     _createClass(CompletionAnswer, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            this.update(this.props.choiceId);
-        }
-    }, {
-        key: 'update',
-        value: function update(choiceId) {
-            var _this = this;
-            _axios2.default.get('http://localhost:60842/api/Question/GetAllCompletion?choiceId' + choiceId).then(function (response) {
-                _this.setState({ data: response.data });
-            }).catch(function (error) {});
+            this.update(this.props.questId);
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            var choiceId = nextProps.choiceId;
-            this.setState({ choiceId: choiceId });
+            var questId = nextProps.questId;
+            this.setState({ questId: questId });
+            this.update(questId);
+        }
+    }, {
+        key: 'update',
+        value: function update(questId) {
+            var _this = this;
+            _axios2.default.get('http://localhost:60842/api/Question/GetAllCompletion?questId=' + questId).then(function (response) {
+                _this.setState({ data: response.data });
+            }).catch(function (error) {});
         }
     }, {
         key: 'render',
@@ -80162,7 +80773,7 @@ var CompletionDetail = function (_Component) {
     }, {
         key: 'handleSubmitModifyCompletion',
         value: function handleSubmitModifyCompletion() {
-            var id = this.state.selectedOption.OptionId;
+            var id = this.state.focusCompletion.CompletionId;
             var completionTitle = this.state.completionTitle;
             var _this = this;
             if (completionTitle == "" || /\s+/g.test(completionTitle)) {
@@ -80188,9 +80799,11 @@ var CompletionDetail = function (_Component) {
         }
     }, {
         key: 'onDeletCompletion',
-        value: function onDeletCompletion(key) {
-            _axios2.default.delete('http://localhost:60842/api/Question/DeleteCompletion', { "": id }).then(function (data) {
+        value: function onDeletCompletion(id) {
+            var _this = this;
+            _axios2.default.get('http://localhost:60842/api/Question/DeleteCompletion?id=' + id).then(function (data) {
                 if (data) {
+                    _this.update(_this.state.questId);
                     _message2.default.success('删除成功');
                     return true;
                 }
@@ -80224,7 +80837,7 @@ var CompletionDetail = function (_Component) {
                         _react2.default.createElement(
                             _popconfirm2.default,
                             { title: '\u786E\u5B9A\u8981\u5220\u9664\u8BE5\u95EE\u9898\uFF1F', onConfirm: function onConfirm() {
-                                    return _this3.onDeletCompletion(record.key);
+                                    return _this3.onDeletCompletion(record.CompletionId);
                                 }, okText: '\u5220\u9664' },
                             _react2.default.createElement(
                                 'a',
@@ -80340,7 +80953,7 @@ var OptionChart = function (_Component) {
 
         _this2.state = {
             choiceId: props.choiceId,
-            data: data
+            data: []
         };
         return _this2;
     }
@@ -80354,7 +80967,7 @@ var OptionChart = function (_Component) {
         key: 'update',
         value: function update(choiceId) {
             var _this = this;
-            _axios2.default.get('http://localhost:60842/api/Question?choiceId=' + choiceId).then(function (response) {
+            _axios2.default.get('http://localhost:60842/api/Admin/GetChoiceAnswer?choiceId=' + choiceId).then(function (response) {
                 _this.setState({ data: response.data });
             }).catch(function (error) {});
         }
@@ -80368,15 +80981,15 @@ var OptionChart = function (_Component) {
         key: 'render',
         value: function render() {
             var choiceColumns = [{ title: '选项名称', dataIndex: 'OptionContent', key: 'OptionContent', width: 100 }, {
-                title: '百分比', dataIndex: 'age', key: 'age', width: 100,
+                title: '百分比', dataIndex: 'Percent', key: 'Percent', width: 100,
                 render: function render(text, record, index) {
                     return _react2.default.createElement(
                         'div',
                         { style: { textAlign: "center" } },
-                        _react2.default.createElement(_progress2.default, { type: 'circle', percent: 20, width: 50 })
+                        _react2.default.createElement(_progress2.default, { type: 'circle', percent: record.Percent, width: 50 })
                     );
                 }
-            }, { title: '总数', dataIndex: 'num', key: 'num', width: 100 }];
+            }, { title: '总数', dataIndex: 'Count', key: 'Count', width: 100 }];
             return _react2.default.createElement(
                 'div',
                 null,
@@ -80905,7 +81518,7 @@ var QuestDetail = function (_Component) {
         key: 'onDeleteQuest',
         value: function onDeleteQuest(id) {
             var _this = this;
-            _axios2.default.delete('http://localhost:60842/api/Questionnaire/DeleteQuest', { "": id }).then(function (response) {
+            _axios2.default.get('http://localhost:60842/api/Questionnaire/DeleteQuest?qId=' + id).then(function (response) {
                 if (response.data) {
                     _message2.default.success('删除成功');
                     _this.update();
@@ -80930,10 +81543,9 @@ var QuestDetail = function (_Component) {
             var questTitle = form.getFieldValue("title");
             var maxNum = form.getFieldValue("maxNum");
             var _this = this;
-            if (form.getFieldError("title") /*questTitle == "" || /\s+/g.test(questTitle)*/) {
-
-                    return false;
-                }
+            if (questTitle == "" || /\s+/g.test(questTitle)) {
+                questTitle = this.state.focusQuestTitle;
+            }
             _axios2.default.post('http://localhost:60842/api/Questionnaire/ModifyQuest', { QId: qId, QuestTitle: questTitle, MaxQuestNum: maxNum }).then(function (response) {
                 if (response.data) {
                     _message2.default.success('修改成功');
@@ -81004,7 +81616,7 @@ var QuestDetail = function (_Component) {
                         return _this3.searchInput.focus();
                     });
                 }
-            }, { title: '最大题数', dataIndex: 'MaxQuestNum', key: 'MaxQuestNum', width: 100 }, { title: '创建时间', dataIndex: 'CreateTime', key: 'CreateTime', width: 100 }, {
+            }, { title: '最大题数', dataIndex: 'MaxQuestNum', key: 'MaxQuestNum', width: 100 }, { title: '现有题数', dataIndex: 'CurrentQuestNum', key: 'CurrentQuestNum', width: 100 }, { title: '创建时间', dataIndex: 'CreateTime', key: 'CreateTime', width: 100 }, {
                 title: '操作', key: '', width: 100,
                 render: function render(text, record, index) {
                     return _react2.default.createElement(
@@ -81075,7 +81687,7 @@ var QuestDetail = function (_Component) {
                                 FormItem,
                                 _extends({}, formItemLayout, { label: '\u6B63\u5728\u4FEE\u6539\u95EE\u5377:' }),
                                 _react2.default.createElement(
-                                    'label',
+                                    'h2',
                                     null,
                                     ' ',
                                     this.state.focusQuestTitle
@@ -81172,7 +81784,7 @@ exports.default = _form2.default.create()(QuestDetail);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -81261,9 +81873,15 @@ var Total = function (_Component) {
     }
 
     _createClass(Total, [{
-        key: 'componentWillMount',
-        value: function componentWillMount() {
+        key: 'componentDidMount',
+        value: function componentDidMount() {
             this.update();
+            var token = $.cookie('token');
+            var mytoken = JSON.parse(token);
+            if (mytoken === null) {
+                window.location.href = '/#/';
+            }
+            _axios2.default.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
         }
     }, {
         key: 'update',
@@ -81374,7 +81992,7 @@ var Total = function (_Component) {
                 _react2.default.createElement('br', null),
                 _react2.default.createElement(
                     _tabs2.default,
-                    { defaultActiveKey: '3' },
+                    { defaultActiveKey: '1' },
                     _react2.default.createElement(
                         TabPane,
                         { tab: _react2.default.createElement(
@@ -81414,10 +82032,121 @@ var Total = function (_Component) {
 }(_react.Component);
 
 exports.default = Total;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
 /***/ "./src/Components/QuestDetailsBox/UserAnswer.jsx":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _css = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+
+var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
+
+var _table2 = _interopRequireDefault(_table);
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__("./node_modules/react/react.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _axios = __webpack_require__("./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
+var _UserAnswerDetail = __webpack_require__("./src/Components/QuestDetailsBox/UserAnswerDetail.jsx");
+
+var _UserAnswerDetail2 = _interopRequireDefault(_UserAnswerDetail);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UserAnswer = function (_Component) {
+    _inherits(UserAnswer, _Component);
+
+    function UserAnswer(props) {
+        _classCallCheck(this, UserAnswer);
+
+        var _this2 = _possibleConstructorReturn(this, (UserAnswer.__proto__ || Object.getPrototypeOf(UserAnswer)).call(this, props));
+
+        _this2.state = {
+            questId: _this2.props.questId,
+            data: [],
+            selected: null
+        };
+        return _this2;
+    }
+
+    _createClass(UserAnswer, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.update(this.props.questId);
+        }
+    }, {
+        key: 'update',
+        value: function update(questId) {
+            var _this = this;
+            _axios2.default.get('http://localhost:60842/api/Admin/GetAnswers?questId=' + questId).then(function (response) {
+                _this.setState({ data: response.data });
+            }).catch(function (error) {});
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            var questId = nextProps.questId;
+            this.setState({ quest: questId });
+            this.update(questId);
+        }
+    }, {
+        key: 'handleChangeSelected',
+        value: function handleChangeSelected(record, index) {
+            this.setState({ selected: record.AnswerId });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var choiceColumns = [{ title: 'IpAddress', dataIndex: 'IpAddress', key: 'IpAddress', width: 100 }, { title: '创建时间', dataIndex: 'CreateTime', key: 'CreateTime', width: 100 }];
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(_table2.default, { rowKey: 'AnswerId',
+                    onRowClick: this.handleChangeSelected.bind(this),
+                    columns: choiceColumns,
+                    bordered: true,
+                    dataSource: this.state.data,
+                    title: function title() {
+                        return "参与者";
+                    } }),
+                _react2.default.createElement(_UserAnswerDetail2.default, { answerId: this.state.selected }),
+                _react2.default.createElement('br', null)
+            );
+        }
+    }]);
+
+    return UserAnswer;
+}(_react.Component);
+
+exports.default = UserAnswer;
+
+/***/ }),
+
+/***/ "./src/Components/QuestDetailsBox/UserAnswerDetail.jsx":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -81433,11 +82162,11 @@ var _card = __webpack_require__("./node_modules/antd/lib/card/index.js");
 
 var _card2 = _interopRequireDefault(_card);
 
-var _css2 = __webpack_require__("./node_modules/antd/lib/table/style/css.js");
+var _css2 = __webpack_require__("./node_modules/antd/lib/tag/style/css.js");
 
-var _table = __webpack_require__("./node_modules/antd/lib/table/index.js");
+var _tag = __webpack_require__("./node_modules/antd/lib/tag/index.js");
 
-var _table2 = _interopRequireDefault(_table);
+var _tag2 = _interopRequireDefault(_tag);
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -81459,8 +82188,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var data = [{ key: 1, name: 'John Brown', age: 32, address: 'New York No. 1 Lake Park', description: 'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.' }, { key: 2, name: 'Jim Green', age: 42, address: 'London No. 1 Lake Park', description: 'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.' }, { key: 3, name: 'Joe Black', age: 32, address: 'Sidney No. 1 Lake Park', description: 'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.' }];
-
 var UserAnswer = function (_Component) {
     _inherits(UserAnswer, _Component);
 
@@ -81470,8 +82197,10 @@ var UserAnswer = function (_Component) {
         var _this2 = _possibleConstructorReturn(this, (UserAnswer.__proto__ || Object.getPrototypeOf(UserAnswer)).call(this, props));
 
         _this2.state = {
-            questId: props.questId,
-            data: data
+            answerId: _this2.props.answerId,
+            IpAddress: null,
+            choices: [],
+            completions: []
         };
         return _this2;
     }
@@ -81479,55 +82208,126 @@ var UserAnswer = function (_Component) {
     _createClass(UserAnswer, [{
         key: 'componentWillMount',
         value: function componentWillMount() {
-            this.props.questId === undefined ? function () {} : this.update(this.props.questId);
+            this.update(this.props.answerId);
         }
     }, {
         key: 'update',
-        value: function update(questId) {
+        value: function update(answerId) {
             var _this = this;
-            _axios2.default.get('http://localhost:60842/api/Admin/GetAnswers?questId' + questId).then(function (response) {
-                _this.setState({ data: response.data });
+            if (answerId === null) {
+                return false;
+            }
+            _axios2.default.get('http://localhost:60842/api/Admin/GetAnswer?answerId=' + answerId).then(function (response) {
+                _this.setState({ IpAddress: response.data.IpAddress, choices: response.data.ChoicesAnswer, completions: response.data.CompletionsAnswer });
             }).catch(function (error) {});
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            var questId = nextProps.questId;
-            this.setState({ quest: questId });
+            var answerId = nextProps.answerId;
+            this.setState({ answerId: answerId });
+            this.update(answerId);
+        }
+    }, {
+        key: 'ChoiceAnswerItem',
+        value: function ChoiceAnswerItem(index, choice) {
+            return _react2.default.createElement(
+                _card2.default,
+                { key: choice.ChoiceId, title: "选择题" + (index + 1) + (choice.Type ? "(多选)" : "(单选)"), style: { display: 'inline-block', width: 270, padding: '8px', margin: '20px' } },
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    '\u9898\u76EE\u540D\uFF1A',
+                    choice.ChoiceTitle
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    '\u9009\u9879\uFF1A'
+                ),
+                _react2.default.createElement(
+                    'ul',
+                    null,
+                    choice.Options.map(function (value, index) {
+                        return _react2.default.createElement(
+                            'li',
+                            { key: value.OptionId },
+                            value.OptionContent
+                        );
+                    })
+                ),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    _react2.default.createElement(
+                        _tag2.default,
+                        { color: '#87d068' },
+                        '\u7B54\u6848'
+                    ),
+                    '\u2003',
+                    choice.Answers === null ? "" : choice.Answers.map(function (value, index) {
+                        return _react2.default.createElement(
+                            'span',
+                            { key: index },
+                            value,
+                            '\u3001'
+                        );
+                    })
+                )
+            );
+        }
+    }, {
+        key: 'CompletionAnswerItem',
+        value: function CompletionAnswerItem(index, completionAnswer) {
+            return _react2.default.createElement(
+                _card2.default,
+                { key: completionAnswer.CompletionId, title: "简答题", style: { display: 'inline-block', width: 270, padding: '8px', margin: '20px' } },
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    '\u9898\u76EE\u540D\uFF1A',
+                    completionAnswer.CompletionTitle
+                ),
+                _react2.default.createElement('br', null),
+                _react2.default.createElement(
+                    'p',
+                    null,
+                    _react2.default.createElement(
+                        _tag2.default,
+                        { color: '#87d068' },
+                        '\u7B54\u6848'
+                    ),
+                    '\u2003',
+                    completionAnswer.AnswerContent
+                )
+            );
         }
     }, {
         key: 'render',
         value: function render() {
-            var choiceColumns = [{ title: 'Name', dataIndex: 'name', key: 'name', width: 100 }, { title: 'Age', dataIndex: 'age', key: 'age', width: 100 }, { title: 'Address', dataIndex: 'address', key: 'address', width: 100 }];
+            var _this3 = this;
+
+            var choiceItems = this.state.choices.map(function (value, index) {
+                return _this3.ChoiceAnswerItem(index, value);
+            });
+            var completionItems = this.state.completions.map(function (value, index) {
+                return _this3.CompletionAnswerItem(index, value);
+            });
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement('br', null),
-                _react2.default.createElement(_table2.default, {
-                    columns: choiceColumns,
-                    bordered: true,
-                    dataSource: this.state.data,
-                    title: function title() {
-                        return "参与者";
-                    } }),
                 _react2.default.createElement(
-                    _card2.default,
-                    { title: 'Card title', bordered: false, style: { width: 300 } },
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        'Card content'
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        'Card content'
-                    ),
-                    _react2.default.createElement(
-                        'p',
-                        null,
-                        'Card content'
-                    )
+                    'h2',
+                    null,
+                    'IpAddress:\u2003',
+                    this.state.IpAddress
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'user-answer-content' },
+                    choiceItems,
+                    completionItems
                 )
             );
         }
@@ -81588,7 +82388,7 @@ var UserCompletionAnswer = function (_Component) {
 
         _this2.state = {
             completionId: props.completionId,
-            data: data
+            data: []
         };
         return _this2;
     }
@@ -81602,7 +82402,7 @@ var UserCompletionAnswer = function (_Component) {
         key: 'update',
         value: function update(completionId) {
             var _this = this;
-            _axios2.default.get('http://localhost:60842/api/Question?completionId=' + completionId).then(function (response) {
+            _axios2.default.get('http://localhost:60842/api/Admin/GetCompletionAnswer?completionId=' + completionId).then(function (response) {
                 _this.setState({ data: response.data });
             }).catch(function (error) {});
         }
@@ -81671,19 +82471,31 @@ var _col = __webpack_require__("./node_modules/antd/lib/col/index.js");
 
 var _col2 = _interopRequireDefault(_col);
 
-var _css5 = __webpack_require__("./node_modules/antd/lib/checkbox/style/css.js");
+var _css5 = __webpack_require__("./node_modules/antd/lib/icon/style/css.js");
+
+var _icon = __webpack_require__("./node_modules/antd/lib/icon/index.js");
+
+var _icon2 = _interopRequireDefault(_icon);
+
+var _css6 = __webpack_require__("./node_modules/antd/lib/notification/style/css.js");
+
+var _notification = __webpack_require__("./node_modules/antd/lib/notification/index.js");
+
+var _notification2 = _interopRequireDefault(_notification);
+
+var _css7 = __webpack_require__("./node_modules/antd/lib/checkbox/style/css.js");
 
 var _checkbox = __webpack_require__("./node_modules/antd/lib/checkbox/index.js");
 
 var _checkbox2 = _interopRequireDefault(_checkbox);
 
-var _css6 = __webpack_require__("./node_modules/antd/lib/radio/style/css.js");
+var _css8 = __webpack_require__("./node_modules/antd/lib/radio/style/css.js");
 
 var _radio = __webpack_require__("./node_modules/antd/lib/radio/index.js");
 
 var _radio2 = _interopRequireDefault(_radio);
 
-var _css7 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
+var _css9 = __webpack_require__("./node_modules/antd/lib/form/style/css.js");
 
 var _form = __webpack_require__("./node_modules/antd/lib/form/index.js");
 
@@ -81696,6 +82508,10 @@ var _react = __webpack_require__("./node_modules/react/react.js");
 var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
+
+var _axios = __webpack_require__("./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81722,7 +82538,8 @@ var QuestContent = function (_Component) {
         _this2.state = {
             questId: _this2.props.questId,
             choice: [],
-            completion: []
+            completion: [],
+            IsEmpty: true
         };
         return _this2;
     }
@@ -81731,7 +82548,6 @@ var QuestContent = function (_Component) {
         key: 'componentwillMount',
         value: function componentwillMount() {
             var questId = this.props.questId;
-            alert(questId);
             this.update(questId);
         }
     }, {
@@ -81744,8 +82560,12 @@ var QuestContent = function (_Component) {
                 data: { id: questId },
                 success: function success(data) {
                     _this.setState({
+                        IsEmpty: false,
                         choice: data.ChoiceQuestions,
                         completion: data.Completions
+                    });
+                    if (data.ChoiceQuestions.length == 0 && data.Completions.length == 0) _this.setState({
+                        IsEmpty: true
                     });
                 }, error: function error() {}
             });
@@ -81760,9 +82580,56 @@ var QuestContent = function (_Component) {
         key: 'handleSubmit',
         value: function handleSubmit(e) {
             e.preventDefault();
+            var _this = this;
             this.props.form.validateFields(function (err, values) {
                 if (!err) {
-                    console.log('Received values of form: ', values);
+                    var questId = _this.props.questId;
+                    var choices = _this.state.choice;
+                    var completions = _this.state.completion;
+                    for (var i = 0; i < choices.length; i++) {
+                        var choice = choices[i];
+                        if (choice.Type) {
+                            //多选
+                            choice.AnswerOptions = new Array();
+                            var optionIds = values["choice-" + choice.ChoiceId];
+                            optionIds.forEach(function (optionId) {
+                                return choice.AnswerOptions.push(optionId);
+                            });
+                        } else {
+                            //单选
+                            var optionId = values["choice-" + choice.ChoiceId];
+                            choice.AnswerOption = optionId;
+                        }
+                    }
+                    for (var i = 0; i < completions.length; i++) {
+                        var completion = completions[i];
+                        var content = values["completion-" + completion.CompletionId];
+                        completion.Answer = content;
+                    }
+                    _axios2.default.post('http://localhost:60842/api/Questionnaire/SubmitAnswer', { QId: questId, ChoiceQuestions: choices, Completions: completions }).then(function (response) {
+                        if (response.data) {
+                            _notification2.default.open({
+                                placement: 'topleft',
+                                message: '谢谢参与',
+                                description: '感谢您的参与，您的选择已经保存！',
+                                icon: _react2.default.createElement(_icon2.default, { type: 'smile-circle', style: { color: '#108ee9' } })
+                            });
+                        } else {
+                            _notification2.default.open({
+                                placement: 'topleft',
+                                message: '谢谢参与',
+                                description: '对不起，系统检测到您已提交过该问卷，不能重复提交，谢谢您的参与！',
+                                icon: _react2.default.createElement(_icon2.default, { type: 'frown-circle', style: { color: 'red' } })
+                            });
+                        }
+                    }).catch(function (error) {
+                        _notification2.default.open({
+                            placement: 'topleft',
+                            message: '出错啦',
+                            description: '对不起，提交失败，请重试！',
+                            icon: _react2.default.createElement(_icon2.default, { type: 'frown-circle', style: { color: 'red' } })
+                        });
+                    });
                 }
             });
         }
@@ -81779,7 +82646,7 @@ var QuestContent = function (_Component) {
             return choice.Type ? _react2.default.createElement(
                 FormItem,
                 null,
-                getFieldDecorator('radio-group-' + choice.ChoiceId, {
+                getFieldDecorator('choice-' + choice.ChoiceId, {
                     rules: [{ required: true, message: '请将所有题做完!' }]
                 })(_react2.default.createElement(
                     CheckboxGroup,
@@ -81803,7 +82670,7 @@ var QuestContent = function (_Component) {
             ) : _react2.default.createElement(
                 FormItem,
                 null,
-                getFieldDecorator('radio-group-' + choice.ChoiceId, {
+                getFieldDecorator('choice-' + choice.ChoiceId, {
                     rules: [{ required: true, message: '请将所有题做完!' }]
                 })(_react2.default.createElement(
                     RadioGroup,
@@ -81864,7 +82731,7 @@ var QuestContent = function (_Component) {
                 _react2.default.createElement(
                     FormItem,
                     null,
-                    getFieldDecorator('completion-group-' + currentIndex, {
+                    getFieldDecorator('completion-' + completion.CompletionId, {
                         rules: [{ required: true, message: '请将所有题做完!' }]
                     })(_react2.default.createElement(_input2.default, { className: 'completion-input', type: 'textarea', placeholder: '\u8BF7\u6839\u636E\u9898\u76EE\u53D1\u8868\u60A8\u7684\u610F\u89C1', autosize: { minRows: 3, maxRows: 6 } }))
                 )
@@ -81905,7 +82772,7 @@ var QuestContent = function (_Component) {
                         { wrapperCol: { span: 12, offset: 6 } },
                         _react2.default.createElement(
                             _button2.default,
-                            { className: 'button', type: 'primary', htmlType: 'submit' },
+                            { className: 'button', type: 'primary', htmlType: 'submit', disabled: this.state.IsEmpty },
                             '\u63D0\u4EA4'
                         ),
                         _react2.default.createElement(
@@ -82110,7 +82977,7 @@ var QuestMenu = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 null,
-                                quest.Num
+                                quest.CurrentQuestNum
                             )
                         ),
                         _react2.default.createElement(
@@ -82121,7 +82988,7 @@ var QuestMenu = function (_Component) {
                             _react2.default.createElement(
                                 'span',
                                 null,
-                                quest.Count
+                                quest.UserNum
                             )
                         ),
                         _react2.default.createElement(
@@ -82292,7 +83159,7 @@ module.exports = Footer;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -82312,6 +83179,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__("./node_modules/react-dom/index.js");
 
+var _axios = __webpack_require__("./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -82330,6 +83201,22 @@ var Header = function (_Component) {
     }
 
     _createClass(Header, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            try {
+                var token = $.cookie('token');
+                var mytoken = JSON.parse(token);
+            } catch (error) {
+                window.location.href = '/#/';
+            }
+        }
+    }, {
+        key: 'handleLogout',
+        value: function handleLogout() {
+            $.cookie('token', null);
+            window.location.href = '/#/';
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(
@@ -82380,6 +83267,16 @@ var Header = function (_Component) {
                                 _react2.default.createElement(_icon2.default, { type: 'line-chart' }),
                                 '\u7EDF\u8BA1'
                             )
+                        ),
+                        _react2.default.createElement(
+                            'li',
+                            null,
+                            _react2.default.createElement(
+                                'a',
+                                { onClick: this.handleLogout.bind(this) },
+                                _react2.default.createElement(_icon2.default, { type: 'logout' }),
+                                '\u6CE8\u9500'
+                            )
                         )
                     )
                 ),
@@ -82392,38 +83289,7 @@ var Header = function (_Component) {
 }(_react.Component);
 
 exports.default = Header;
-
-/***/ }),
-
-/***/ "./src/Css/Admin/AdminCenter.css":
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__("./node_modules/css-loader/index.js!./src/Css/Admin/AdminCenter.css");
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__("./node_modules/style-loader/addStyles.js")(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(true) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("./node_modules/css-loader/index.js!./src/Css/Admin/AdminCenter.css", function() {
-			var newContent = __webpack_require__("./node_modules/css-loader/index.js!./src/Css/Admin/AdminCenter.css");
-			if(typeof newContent === 'string') newContent = [[module.i, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
 
@@ -83598,8 +84464,10 @@ var Questionnaire = function (_Component) {
                         _react2.default.createElement(
                             'p',
                             { className: 'quest-info' },
-                            '\u53C2\u4E0E\u8005\uFF1A',
+                            '\u9898\u76EE\u6570\u91CF\uFF1A',
                             this.state.quest.CurrentQuestNum,
+                            '\u2003\u53C2\u4E0E\u8005\uFF1A',
+                            this.state.quest.UserNum,
                             '\u2003\u521B\u5EFA\u65F6\u95F4\uFF1A',
                             this.state.quest.CreateTime
                         )
@@ -83786,25 +84654,28 @@ var entry = function (_Component) {
     function entry(props) {
         _classCallCheck(this, entry);
 
-        var _this = _possibleConstructorReturn(this, (entry.__proto__ || Object.getPrototypeOf(entry)).call(this, props));
+        var _this2 = _possibleConstructorReturn(this, (entry.__proto__ || Object.getPrototypeOf(entry)).call(this, props));
 
-        _this.state = {
+        _this2.state = {
             data: null,
-            visible: false
+            visible: false,
+            isLogin: false
         };
-        return _this;
+        return _this2;
     }
 
     _createClass(entry, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            // axios.get("http://localhost:60842/api/values")
-            // .then(function (data) {
-            //      this.setState({ data: data })
-            // })
-            // .catch(function(error){
-            //     alert(error);
-            // });
+            var _this = this;
+            var token = _jquery2.default.cookie('token');
+            var mytoken = JSON.parse(token);
+            _axios2.default.defaults.headers.common['Authorization'] = "Bearer " + mytoken.access_token;
+            _axios2.default.get('http://localhost:60842/api/Admin/GetAdminInfo').then(function (response) {
+                _this.setState({ data: response.data, isLogin: true });
+            }).catch(function (response) {
+                console.log(response);
+            });
         }
     }, {
         key: 'onLogin',
@@ -83817,9 +84688,16 @@ var entry = function (_Component) {
             this.setState({ visible: false });
         }
     }, {
+        key: 'handleLogout',
+        value: function handleLogout() {
+            _jquery2.default.cookie('token', null);
+            this.setState({ data: null, isLogin: false });
+            window.location.reload();
+        }
+    }, {
         key: 'render',
         value: function render() {
-            var isLogin = this.state.data !== null ? _react2.default.createElement(
+            var isLogin = this.state.isLogin ? _react2.default.createElement(
                 'ul',
                 null,
                 _react2.default.createElement(
@@ -83836,7 +84714,7 @@ var entry = function (_Component) {
                     null,
                     _react2.default.createElement(
                         'a',
-                        null,
+                        { href: '/#/adminCenter/adminInfo' },
                         '\u7BA1\u7406\u4E2D\u5FC3'
                     )
                 ),
@@ -83845,7 +84723,7 @@ var entry = function (_Component) {
                     null,
                     _react2.default.createElement(
                         'a',
-                        null,
+                        { href: '/#/adminCenter/questDetail' },
                         '\u95EE\u5377\u8BE6\u60C5'
                     )
                 ),
@@ -83854,7 +84732,7 @@ var entry = function (_Component) {
                     null,
                     _react2.default.createElement(
                         'a',
-                        null,
+                        { href: '/#/adminCenter/questDetail' },
                         '\u7EDF\u8BA1'
                     )
                 ),
@@ -83863,7 +84741,7 @@ var entry = function (_Component) {
                     null,
                     _react2.default.createElement(
                         'a',
-                        null,
+                        { onClick: this.handleLogout.bind(this) },
                         '\u6CE8\u9500'
                     )
                 )
@@ -83888,7 +84766,7 @@ var entry = function (_Component) {
                         _react2.default.createElement(
                             'span',
                             null,
-                            'Login'
+                            '\u767B\u5F55'
                         )
                     )
                 )
@@ -83945,7 +84823,7 @@ var entry = function (_Component) {
                                             { id: 'fh5co-logo' },
                                             _react2.default.createElement(
                                                 'a',
-                                                { href: 'index.html' },
+                                                { href: '/#/' },
                                                 '\u4E91\u7FF3',
                                                 _react2.default.createElement(
                                                     'span',
@@ -84072,8 +84950,6 @@ var _axios2 = _interopRequireDefault(_axios);
 var _MyRouter = __webpack_require__("./src/Router/MyRouter.jsx");
 
 var _MyRouter2 = _interopRequireDefault(_MyRouter);
-
-__webpack_require__("./src/Css/Admin/AdminCenter.css");
 
 __webpack_require__("./src/Css/Admin/Index.css");
 
